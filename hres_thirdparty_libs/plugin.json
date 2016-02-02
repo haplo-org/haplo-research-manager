@@ -1,0 +1,14 @@
+{
+  "pluginName": "hres_thirdparty_libs",
+  "pluginAuthor": "Library authors",
+  "pluginVersion": 1,
+  "displayName": "Third party libraries",
+  "displayDescription": "Third party libraries used by Haplo RM plugins",
+  "apiVersion": 4,
+  "loadPriority": 1501,
+  "load": [
+      "js/thirdparty/sax.js",
+      "js/thirdparty/xml.js",
+      "js/hres_thirdparty_libs.js"
+    ]
+}

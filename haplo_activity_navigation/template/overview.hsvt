@@ -1,0 +1,34 @@
+std:plugin:resources("activities.css")
+
+if(statistics) {
+  render(statistics)
+}
+
+if(adminMode) {
+  <div class="activities_admin_nav_container">
+    <a class="activities_admin_nav_container_dashboards" href="#" style="display:none" data-actkind="menu">
+      "&laquo; Dashboards"
+    </a>
+    <a class="activities_admin_nav_container_guides" href="#" data-actkind="guides"> "Guides &raquo;" </a>
+  </div>
+}
+
+<div data-actkind="guides" class="activities_admin_nav_page" style=if(adminMode){"display:none"}>
+  if(overviewDoc) {
+    std:text:document(overviewDoc)
+  }
+  if(canEdit) {
+    <p class="activities_overview_text_edit">
+      <a href=["/do/activity/edit-overview/" activity.name]> "Edit" </a>
+    </p>
+  }
+</div>
+
+if(adminMode) {
+  std:plugin:resources("overview-menu.js")
+  <div data-actkind="menu" class="activities_admin_nav_page">
+    if(adminMenu) {
+      render(adminMenu)
+    }
+  </div>
+}

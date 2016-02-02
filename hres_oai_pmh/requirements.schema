@@ -1,0 +1,6 @@
+
+attribute dc:attribute:author as Author
+attribute dc:attribute:date as Date
+attribute dc:attribute:publisher as Publisher
+attribute dc:attribute:subject as Subject
+

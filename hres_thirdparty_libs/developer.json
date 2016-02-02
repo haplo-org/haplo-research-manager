@@ -1,0 +1,6 @@
+{
+    "excludeFromSyntaxCheck": [
+        "js/thirdparty/sax.js",
+        "js/thirdparty/xml.js"
+    ]
+}

@@ -1,0 +1,24 @@
+<p> "Enter the University structure below, then click the \"Create\" button." </p>
+
+<p> "Research Institutes are hierarchical. Indent by * characters to indicate hierarchy." </p>
+
+<form method="POST"> std:form:token()
+
+<textarea name="structure" style="width:90%" rows="20"> "University of Example
+* Science and Technology
+* * Computer Science
+* * Engineering
+* * Life Sciences
+* Humanities
+* * English
+* * Law
+* * Politics
+* * History
+* Media
+* * Art and Design
+* * Journalism
+* * Music"
+</textarea>
+
+<p> <input type="submit" value="Create test Research Institutes"> </p>
+</form>

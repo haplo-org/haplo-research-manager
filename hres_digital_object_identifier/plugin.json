@@ -1,0 +1,12 @@
+{
+  "pluginName": "hres_digital_object_identifier",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "DOI",
+  "displayDescription": "Support for Digital Object Identifiers",
+  "apiVersion": 4,
+  "loadPriority": 5500,
+  "load": [
+      "js/hres_digital_object_identifier.js"
+    ]
+}

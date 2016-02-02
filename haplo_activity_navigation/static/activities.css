@@ -1,0 +1,58 @@
+/* Haplo Research Manager                             http://haplo.org
+ * (c) Haplo Services Ltd 2006 - 2016    http://www.haplo-services.com
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
+
+
+/* Sidebar on overview page */
+
+.actvities_sidebar h2 {
+    margin-top: 48px;
+}
+
+/* edit link for activities */
+.documentation_edit a,
+.activities_overview_text_edit a {
+    text-transform: uppercase;
+    background: #eee;
+    padding: 4px 8px;
+    font-size: 10px;
+    color: #666;
+}
+
+/* admin mode navigation */
+.activities_admin_nav_container {
+    margin: 20px 0 32px 0;
+    /* autoclear */ overflow: auto; width: 100%;
+}
+.activities_admin_nav_container a {
+    display:block;
+    width: 30%;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #666;
+}
+.activities_admin_nav_container a:hover {
+    color: #000;
+}
+
+.activities_admin_nav_container_dashboards {
+    float: left;
+    padding-left: 24px;
+}
+
+.activities_admin_nav_container_guides {
+    text-align: right;
+    float: right;
+    padding-right: 24px;
+}
+
+/* text on overview page */
+.activities_overview_text {
+    margin-top: 32px;
+}

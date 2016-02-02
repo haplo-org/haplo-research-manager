@@ -1,0 +1,7 @@
+
+attribute hres:attribute:digital-object-identifier-doi as DigitalObjectIdentifierDOI
+    title: Digital Object Identifier (DOI)
+    search-name: doi
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:doi

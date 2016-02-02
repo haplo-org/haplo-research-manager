@@ -1,0 +1,11 @@
+{
+  "pluginName": "hres_ex_simple_rdm_permissions",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Example RM simple permissions",
+  "displayDescription": "An example permissions scheme for a simple RDM repository",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_ex_simple_rdm_permissions.js"
+    ]
+}

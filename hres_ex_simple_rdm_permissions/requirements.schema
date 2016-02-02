@@ -1,0 +1,32 @@
+
+# --------- Groups ----------------------------------------
+
+group hres:group:research-data-managers as ResearchDataManagers
+    title: Research Data Managers
+
+group href:group:classification-editors as ClassificationEditors
+    title: Classification Editors
+
+
+# --------- Labels ----------------------------------------
+
+label std:label:common as COMMON
+label std:label:concept as CONCEPT
+label std:label:structure as STRUCTURE
+
+label hres:label:accepted-into-repository as AcceptedIntoRepository
+    title: Accepted into repository
+    category: Haplo RM
+
+
+# --------- Types -----------------------------------------
+
+type std:type:label as Label
+
+type hres:type:dataset as Dataset
+
+
+# --------- Attributes ------------------------------------
+
+attribute dc:attribute:author as Author
+

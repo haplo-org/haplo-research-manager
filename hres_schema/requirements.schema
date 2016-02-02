@@ -1,0 +1,211 @@
+
+# -------- Features --------------------------------
+
+feature std:page:home
+    element: std:group:everyone right std:action_panel {"panel":"home_page"}
+
+
+# -------- Modifications to Haplo minimal schema ---
+
+feature std:page:home
+    REMOVE element: std:group:everyone right std:quick_links
+
+type std:type:person
+    REMOVE attribute std:attribute:works-for
+    REMOVE attribute std:attribute:member-of
+    REMOVE attribute std:attribute:first-contact-via
+    REMOVE attribute std:aliased-attribute:expertise
+    REMOVE attribute std:attribute:relationship-manager
+    REMOVE attribute std:attribute:notes
+    REMOVE label-applicable std:label:common
+
+
+# -------- Schema templates --------------------
+
+# Type definition for a "List"
+schema-template hres:template-type:list
+    behaviour classification
+    attribute dc:attribute:title
+    attribute std:attribute:parent
+    attribute std:attribute:notes
+    attribute std:attribute:configured-behaviour
+    render-type classification
+    render-icon: E501,1,f
+    render-category 0
+    label-base std:label:concept
+    create-position never
+
+
+# -------- Groups ------------------------------
+
+group hres:group:researchers as Researchers
+    title: Researchers
+
+group hres:group:admin-staff as AdminStaff
+    title: Admin Staff
+
+# -------- Qualifiers ------------------------------
+
+
+# -------- Attributes ------------------------------
+
+attribute hres:attribute:research-institute as ResearchInstitute
+    title: Research institute
+    search-name: research-institute
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:research-institute
+
+attribute hres:attribute:head as Head
+    title: Head
+    search-name: head-of-department
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:research-administrator as ResearchAdministrator
+    title: Research Administrator
+    search-name: research-administrator
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:description as Description
+    title: Description
+    search-name: description
+    qualifier std:qualifier:null
+    relevancy 0.75
+    data-type text-document
+
+
+attribute hres:attribute:committee-member as CommitteeMember
+    title: Committee member
+    search-name: member
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:committee-representative as CommitteeRepresentative
+    title: Committee representative
+    search-name: committee-representative
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+
+# -------- Aliased attributes ----------------------
+
+aliased-attribute hres:aliased-attribute:university as University
+    title: University
+    search-name: university
+    alias-of std:attribute:parent
+
+aliased-attribute hres:aliased-attribute:faculty as Faculty
+    title: Faculty
+    search-name: faculty
+    alias-of std:attribute:parent
+
+aliased-attribute hres:aliased-attribute:dean as Dean
+    title: Dean
+    search-name: dean
+    alias-of hres:attribute:head
+
+
+# -------- Types -----------------------------------
+
+type std:type:person
+    attribute hres:attribute:research-institute
+
+type hres:type:person:researcher as Researcher
+    title: Researcher
+    parent-type std:type:person
+    search-name: researcher
+    render-category 3
+    render-icon: E228,2,f
+    element: std:group:everyone right std:action_panel {"panel":"researcher"} [sort=14000]
+
+# Don't use std:type:staff because it's a subtly different meaning than the intent of the default schema
+type hres:type:person:staff as Staff
+    title: Staff
+    parent-type std:type:person
+    search-name: staff
+    render-category 4
+    render-icon: E21A,1,f E21B,3,f
+    element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
+
+
+type hres:type:research-institute as ResearchInstitute
+    title: Research Institute
+    search-name: research institute
+    attribute dc:attribute:title [sort=10000]
+    attribute dc:attribute:type [sort=10100]
+    attribute hres:aliased-attribute:university [sort=10101]
+    attribute hres:aliased-attribute:faculty [sort=10102]
+    attribute hres:attribute:research-institute [sort=10300]
+    attribute std:attribute:address [sort=11000]
+    attribute std:attribute:telephone [sort=11100]
+    attribute hres:attribute:head [sort=12000]
+    attribute hres:aliased-attribute:dean [sort=12001]
+    attribute hres:attribute:research-administrator [sort=13000]
+    attribute hres:attribute:description [sort=20000]
+    render-icon: E521,1,f E522,1,f E524,1,f E523,4,f
+    render-category 0
+    default-subtype hres:type:research-institute:department
+    create-show-subtype no
+    create-position infrequent
+    element: std:group:everyone right std:action_panel {"panel":"research_institute"} [sort=14000]
+
+type hres:type:research-institute:university as University
+    title: University
+    parent-type hres:type:research-institute
+    search-name: university
+    attribute dc:attribute:title
+    attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:head
+    attribute-hide hres:aliased-attribute:dean
+    element: std:group:everyone right std:action_panel {"panel":"university"} [sort=14000]
+
+type hres:type:research-institute:faculty as Faculty
+    title: Faculty
+    parent-type hres:type:research-institute
+    search-name: faculty
+    attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:head
+    element: std:group:everyone right std:action_panel {"panel":"faculty"} [sort=14000]
+
+type hres:type:research-institute:department as Department
+    title: Department
+    parent-type hres:type:research-institute
+    search-name: department
+    attribute-hide hres:aliased-attribute:dean
+    attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:attribute:research-institute
+    element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
+
+type hres:type:research-institute:research-group as ResearchGroup
+    title: Research Group
+    parent-type hres:type:research-institute
+    search-name: research group
+    attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:aliased-attribute:dean
+    attribute-hide hres:aliased-attribute:university
+    element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
+
+
+type hres:type:committee as Committee
+    title: Committee
+    search-name: committee
+    attribute dc:attribute:title [sort=10000]
+    attribute dc:attribute:type [sort=10100]
+    attribute hres:attribute:research-institute [sort=11000]
+    attribute hres:attribute:committee-member [sort=12000]
+    attribute hres:attribute:committee-representative [sort=12100]
+    attribute hres:attribute:description [sort=20000]
+    render-icon: E414,5,f,y E20C,1,f
+    render-category 0
+    default-subtype hres:type:committee
+    create-position infrequent
+

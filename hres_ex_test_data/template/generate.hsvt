@@ -1,0 +1,2 @@
+std:ui:notice("This tool should only be used in test and development applications.")
+template:std:ui:choose()

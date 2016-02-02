@@ -1,0 +1,14 @@
+{
+  "pluginName": "haplo_activity_navigation",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Activity navigation",
+  "displayDescription": "User interface for main activity user interface and menus",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
+  "load": [
+      "js/haplo_activity_navigation.js",
+      "js/activity_overview.js"
+    ],
+  "respond": ["/do/activity"]
+}
