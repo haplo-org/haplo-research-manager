@@ -1,0 +1,20 @@
+{
+  "pluginName": "hres_ex_ingest_approval",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Example RM Ingest Approval",
+  "displayDescription": "Example data ingest approval workflow",
+  "apiVersion": 4,
+  "use": [
+      "std:workflow"
+    ],
+  "privilegesRequired": ["pDatabase"],
+  "load": [
+      "js/hres_ex_ingest_approval.js",
+      "js/ia_workflow.js",
+      "js/ia_text.js",
+      "js/ia_forms.js",
+      "js/ia_reporting.js"
+    ],
+  "respond": ["/do/ingest-approval"]
+}
