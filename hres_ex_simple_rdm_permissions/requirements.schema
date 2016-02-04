@@ -4,7 +4,7 @@
 group hres:group:research-data-managers as ResearchDataManagers
     title: Research Data Managers
 
-group href:group:classification-editors as ClassificationEditors
+group hres:group:classification-editors as ClassificationEditors
     title: Classification Editors
 
 
