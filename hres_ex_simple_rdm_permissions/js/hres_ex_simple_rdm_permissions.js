@@ -52,10 +52,9 @@ var addLabels = function(changes, object) {
         // No other labels needed for datasets, access is controlled
         // via the Type and AcceptedIntoRepository labels
     } else {
-        // Label with common, unless it's a classification object
-        var info = SCHEMA.getTypeInfo(object.firstType());
-        if(!info || (-1 === info.behaviours.indexOf("classification"))) {
-            changes.add(Label.COMMON);
+        // Label with Output if it's an output
+        if(O.service("hres:outputs:is_output", object)) {
+            changes.add(Label.Output);
         }
     }
 };
@@ -65,8 +64,6 @@ P.hook("hUserPermissionRules", function(response, user) {
     // Explicitly state rules for system and classification (eg Subject) objects
     response.rules.add(Label.STRUCTURE, O.STATEMENT_ALLOW, O.PERM_READ);
     response.rules.add(Label.CONCEPT, O.STATEMENT_ALLOW, O.PERM_READ);
-    // Allow everyone access to Common
-    response.rules.add(Label.COMMON, O.STATEMENT_ALLOW, O.PERM_READ);
     // Allow classification editors to edit taxonomies etc
     if(user.isMemberOf(Group.ClassificationEditors)) {
         response.rules.add(Label.CONCEPT, O.STATEMENT_ALLOW, O.PERM_ALL);
@@ -85,6 +82,11 @@ P.hook("hUserPermissionRules", function(response, user) {
         // Just allow accepted items submitted by other users to be read
         response.rules.add(Label.AcceptedIntoRepository, O.STATEMENT_ALLOW, O.PERM_READ);
     }
+    // Everyone can create outputs
+    response.rules.add(Label.Output, O.STATEMENT_ALLOW, O.PERM_READ | O.PERM_CREATE);
+    // Everyone can read people and organisations
+    response.rules.add(T.Person, O.STATEMENT_ALLOW, O.PERM_READ);
+    response.rules.add(T.Organisation, O.STATEMENT_ALLOW, O.PERM_READ);
 });
 
 // --------------------------------------------------------------------------

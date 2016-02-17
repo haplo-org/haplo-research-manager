@@ -2,6 +2,14 @@
 type hres:type:research-institute:research-group as ResearchGroup
 
 # ---------------------------------------------------------------------------
+#   Label definition for permissions
+# ---------------------------------------------------------------------------
+
+label hres:label:output as Output
+    title: Output
+    category: Haplo RM
+
+# ---------------------------------------------------------------------------
 #   Common output type schema template
 # ---------------------------------------------------------------------------
 
@@ -10,6 +18,7 @@ type hres:type:research-institute:research-group as ResearchGroup
 # types.
 
 schema-template hres:template-type:output
+    annotation hres:annotation:output
     search-name: output
     attribute hres:attribute:author-citation [sort=10200]
     attribute hres:attribute:abstract [sort=10500]

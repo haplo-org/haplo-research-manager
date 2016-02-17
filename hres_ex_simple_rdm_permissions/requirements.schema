@@ -18,10 +18,13 @@ label hres:label:accepted-into-repository as AcceptedIntoRepository
     title: Accepted into repository
     category: Haplo RM
 
+label hres:label:output as Output
 
 # --------- Types -----------------------------------------
 
 type std:type:label as Label
+type std:type:person as Person
+type std:type:organisation as Organisation
 
 type hres:type:dataset as Dataset
 

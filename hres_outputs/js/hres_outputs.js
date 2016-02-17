@@ -5,27 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
-var OUTPUT_TYPES = [
-    T.Book,
-    T.BookChapter,
-    T.ConferenceItem,
-    T.JournalArticle,
-    T.Artefact,
-    T.Audio,
-    T.Composition,
-    T.Dataset,
-    T.Design,
-    T.DevicesAndProducts,
-    T.DigitalOrVisualMedia,
-    T.Exhibition,
-    T.OnlineEducationalResource,
-    T.Patent,
-    T.Performance,
-    T.Report,
-    T.Software,
-    T.Thesis,
-    T.Video
-];
+var OUTPUT_TYPES = SCHEMA.getTypesWithAnnotation('hres:annotation:output');
 
 var OUTPUTS_TYPE_LOOKUP = O.refdictHierarchical();
 OUTPUT_TYPES.forEach(function(type) { OUTPUTS_TYPE_LOOKUP.set(type, true); });
@@ -44,7 +24,7 @@ P.implementService("hres:outputs:each_output_type", function(iterator) {
 });
 
 P.implementService("hres:outputs:is_output", function(object) {
-    var isOutput = true;
+    var isOutput = false;
     object.each(A.Type, function(t) {
         if(OUTPUTS_TYPE_LOOKUP.get(t)) { isOutput = true; }
     });
