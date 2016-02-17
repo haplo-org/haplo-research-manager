@@ -26,6 +26,7 @@ type std:type:label as Label
 type std:type:person as Person
 type std:type:organisation as Organisation
 
+type hres:type:research-institute as ResearchInstitute
 type hres:type:dataset as Dataset
 
 

@@ -84,9 +84,10 @@ P.hook("hUserPermissionRules", function(response, user) {
     }
     // Everyone can create outputs
     response.rules.add(Label.Output, O.STATEMENT_ALLOW, O.PERM_READ | O.PERM_CREATE);
-    // Everyone can read people and organisations
+    // Everyone can read people, research institutes, and organisations
     response.rules.add(T.Person, O.STATEMENT_ALLOW, O.PERM_READ);
     response.rules.add(T.Organisation, O.STATEMENT_ALLOW, O.PERM_READ);
+    response.rules.add(T.ResearchInstitute, O.STATEMENT_ALLOW, O.PERM_READ);
 });
 
 // --------------------------------------------------------------------------
