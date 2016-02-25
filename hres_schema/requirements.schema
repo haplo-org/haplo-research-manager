@@ -49,6 +49,20 @@ group hres:group:admin-staff as AdminStaff
 
 # -------- Attributes ------------------------------
 
+attribute hres:attribute:researcher as Researcher
+    title: Researcher
+    search-name researcher
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:project-dates as ProjectDates
+    title: Project dates
+    search-name: dates
+    qualifier std:qualifier:null
+    data-type datetime
+    ui-options d,n,y,n,n
+
 attribute hres:attribute:research-institute as ResearchInstitute
     title: Research institute
     search-name: research-institute
