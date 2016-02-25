@@ -13,10 +13,7 @@ OUTPUT_TYPES.forEach(function(type) { OUTPUTS_TYPE_LOOKUP.set(type, true); });
 // --------------------------------------------------------------------------
 
 P.implementService("hres:outputs:store_query", function() {
-    var q = O.query();
-    var sq = q.or();
-    OUTPUT_TYPES.forEach(function(type) { sq.link(type, A.Type); });
-    return q;
+    return O.query().link(OUTPUT_TYPES, A.Type);
 });
 
 P.implementService("hres:outputs:each_output_type", function(iterator) {
