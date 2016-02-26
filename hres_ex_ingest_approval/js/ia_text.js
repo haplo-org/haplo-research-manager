@@ -18,32 +18,32 @@ P.IngestWorkflow.text({
 
     // Notification emails
     "notification-status:wait_rdm_team": "Ingest approval pending",
-    "notification-notes:returned": "Please make the ammendments requested by the Research Data Management team.",
+    "notification-notes:returned": "Please make the ammendments requested by the Repository team.",
 
     // Task list
-    "status-list:wait_submit": "Please submit the dataset and submission forms for approval",
-    "status-list:wait_rdm_team": "Please review the dataset and metadata for ingestion",
-    "status-list:wait_returned": "Please make the required amendments to the dataset and metadata",
+    "status-list:wait_submit": "Please submit the output and submission forms for approval",
+    "status-list:wait_rdm_team": "Please review the output and metadata for ingestion",
+    "status-list:wait_returned": "Please make the required amendments to the output and metadata",
 
     "action-label": "Proceed with ingest",
 
     // Transitions
     "transition:submit": "Submit",
     "transition-indicator:submit": "primary",
-    "transition-notes:submit": "Confirm submission of dataset for approval.",
+    "transition-notes:submit": "Confirm submission of output for approval.",
     
     "transition:approve": "Approve",
     "transition-indicator:approve": "primary",
-    "transition-notes:approve": "Confirm approval of dataset for ingestion.",
+    "transition-notes:approve": "Confirm approval of output for ingestion.",
     
     "transition:return": "Return",
     "transition-indicator:return": "secondary",
-    "transition-notes:return": "Return the dataset to the researcher for amendments. Please add notes explaining "+
+    "transition-notes:return": "Return the output to the researcher for amendments. Please add notes explaining "+
             "the changes required for approval.",
 
     // Timeline
-    "timeline-entry:START": "uploaded the dataset",
-    "timeline-entry:submit": "submitted the dataset for approval",
-    "timeline-entry:return": "returned the dataset for amendments",
-    "timeline-entry:approve": "approved the dataset"
+    "timeline-entry:START": "uploaded the output",
+    "timeline-entry:submit": "submitted the output for approval",
+    "timeline-entry:return": "returned the output for amendments",
+    "timeline-entry:approve": "approved the output"
 });

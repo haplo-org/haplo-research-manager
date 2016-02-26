@@ -2,12 +2,29 @@
 type hres:type:research-institute:research-group as ResearchGroup
 
 # ---------------------------------------------------------------------------
-#   Label definition for permissions
+#   Labels & groups for permissions
 # ---------------------------------------------------------------------------
 
 label hres:label:output as Output
     title: Output
     category: Haplo RM
+
+label hres:label:accepted-into-repository as AcceptedIntoRepository
+    title: Accepted into repository
+    category: Haplo RM
+
+group hres:group:output-editors as OutputEditors
+    title: Output Editors
+
+group std:group:everyone as Everyone
+
+
+# ---------------------------------------------------------------------------
+#   Standard schema
+# ---------------------------------------------------------------------------
+
+attribute dc:attribute:author as Author
+
 
 # ---------------------------------------------------------------------------
 #   Common output type schema template

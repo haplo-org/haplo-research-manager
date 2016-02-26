@@ -5,12 +5,21 @@ feature std:page:home
     element: std:group:everyone right std:action_panel {"panel":"home_page"}
 
 
+# -------- Labels ------------------------------
+
+label std:label:concept as CONCEPT
+
+label hres:label:identity as ActivityIdentity
+    title: Identity
+    category: Activity
+
+
 # -------- Modifications to Haplo minimal schema ---
 
 feature std:page:home
     REMOVE element: std:group:everyone right std:quick_links
 
-type std:type:person
+type std:type:person as Person
     REMOVE attribute std:attribute:works-for
     REMOVE attribute std:attribute:member-of
     REMOVE attribute std:attribute:first-contact-via
@@ -37,6 +46,12 @@ schema-template hres:template-type:list
 
 
 # -------- Groups ------------------------------
+
+group std:group:everyone as Everyone
+group std:group:administrators as Administrators
+
+group hres:group:classification-editors as ClassificationEditors
+    title: Classification Editors
 
 group hres:group:researchers as Researchers
     title: Researchers
@@ -126,6 +141,9 @@ aliased-attribute hres:aliased-attribute:dean as Dean
 
 
 # -------- Types -----------------------------------
+
+type std:type:organisation as Organisation
+type std:type:intranet-page as IntranetPage
 
 type std:type:person
     attribute hres:attribute:research-institute

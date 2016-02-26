@@ -5,10 +5,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
-var OUTPUT_TYPES = SCHEMA.getTypesWithAnnotation('hres:annotation:output');
+var OUTPUT_TYPES = P.OUTPUT_TYPES = SCHEMA.getTypesWithAnnotation('hres:annotation:output');
 
 var OUTPUTS_TYPE_LOOKUP = O.refdictHierarchical();
 OUTPUT_TYPES.forEach(function(type) { OUTPUTS_TYPE_LOOKUP.set(type, true); });
+
+// --------------------------------------------------------------------------
+
+// Creates link on the homepage action panel to a reporting and guides area
+P.implementService("haplo_activity_navigation:discover", function(activity) {
+    activity(40, "outputs", "Outputs", "E226,1,f",
+        function(user) { user.isMemberOf(Group.OutputEditors); }
+    );
+});
 
 // --------------------------------------------------------------------------
 

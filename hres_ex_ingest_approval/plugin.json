@@ -2,8 +2,8 @@
   "pluginName": "hres_ex_ingest_approval",
   "pluginAuthor": "Haplo Services",
   "pluginVersion": 1,
-  "displayName": "Example RM Ingest Approval",
-  "displayDescription": "Example data ingest approval workflow",
+  "displayName": "Example RM Outputs Approval",
+  "displayDescription": "Example research output ingest approval workflow",
   "apiVersion": 4,
   "use": [
       "std:workflow"
