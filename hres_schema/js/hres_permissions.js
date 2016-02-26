@@ -24,4 +24,7 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.groupPermission(Group.Everyone, "read", T.Committee);
     // Classification editors
     setup.groupPermission(Group.ClassificationEditors, "read-write", Label.CONCEPT);
+
+    // Roles
+    setup.attributeRole("Head", T.ResearchInstitute, A.Head);
 });

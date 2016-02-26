@@ -26,6 +26,6 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     // anything that they wrote (Author labelling above) or submitted
     // (labelWithCreator above).
     setup.groupPermission(Group.Everyone, "create", Label.Output);
-    setup.groupPersonalRoles(Group.Everyone, "Is: Output Author");
+    setup.groupPersonalRole(Group.Everyone, "Is: Output Author");
     setup.rolePermission("Is: Output Author", "read-write", [Label.Output]);
 });
