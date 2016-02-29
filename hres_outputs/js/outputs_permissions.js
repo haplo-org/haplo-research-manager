@@ -24,8 +24,9 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.groupPermission(Group.OutputEditors, "read-write", Label.Output);
     // Setup role & permission which allows users to add outputs and then edit
     // anything that they wrote (Author labelling above) or submitted
-    // (labelWithCreator above).
+    // (labelWithCreator above). Use an oversight role permission because there
+    // will only ever be one label for this permission.
     setup.groupPermission(Group.Everyone, "create", Label.Output);
     setup.groupPersonalRole(Group.Everyone, "Is: Output Author");
-    setup.rolePermission("Is: Output Author", "read-write", [Label.Output]);
+    setup.roleOversightPermission("Is: Output Author", "read-write", [Label.Output]);
 });

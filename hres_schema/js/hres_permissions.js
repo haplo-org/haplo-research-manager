@@ -10,6 +10,13 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
         labels: [Label.ActivityIdentity],
         labelWith: [A.ResearchInstitute]
     });
+
+    type(T.Committee, {
+        selfLabelling: true,
+        labels: [Label.ActivityIdentity],
+        labelWith: [A.ResearchInstitute]
+    });
+    
 });
 
 P.implementService("haplo:user_roles_permissions:setup", function(setup) {
@@ -26,5 +33,13 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.groupPermission(Group.ClassificationEditors, "read-write", Label.CONCEPT);
 
     // Roles
-    setup.attributeRole("Head", T.ResearchInstitute, A.Head);
+    setup.groupPersonalRole(Group.Researchers,      "Is: Researcher");
+    setup.groupPersonalRole(Group.AdminStaff,       "Is: Admin staff");
+    setup.attributeRole("Head",                     T.ResearchInstitute,    A.Head);
+    setup.attributeRole("Research Administrator",   T.ResearchInstitute,    A.ResearchAdministrator);
+    setup.attributeRole("Committee Member",         T.Committee,            A.CommitteeMember);
+    setup.attributeRole("Committee Representative", T.Committee,            A.CommitteeRepresentative);
+
+    // Role permissions
+    setup.roleOversightPermission("Research Administrator", "read-edit", [T.ResearchInstitute]);
 });
