@@ -10,6 +10,7 @@
   "load": [
       "js/hres_schema.js",
       "js/hres_permissions.js",
+      "js/hres_reporting_permissions.js",
       "js/hres_reporting_researchers.js"
     ]
 }

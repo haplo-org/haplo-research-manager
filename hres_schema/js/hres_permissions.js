@@ -43,3 +43,10 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     // Role permissions
     setup.roleOversightPermission("Research Administrator", "read-edit", [T.ResearchInstitute]);
 });
+
+// --------------------------------------------------------------------------
+
+// Allow Administrators and IT Support group to do everything.
+O.action("std:action:administrator_override").
+    allow("group", Group.Administrators).
+    allow("group", Group.ITSupport);

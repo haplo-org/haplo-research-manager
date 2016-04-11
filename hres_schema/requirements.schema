@@ -59,6 +59,9 @@ group hres:group:researchers as Researchers
 group hres:group:admin-staff as AdminStaff
     title: Admin Staff
 
+group hres:group:it-support as ITSupport
+    title: IT Support
+
 # -------- Qualifiers ------------------------------
 
 
