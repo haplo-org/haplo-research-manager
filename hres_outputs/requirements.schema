@@ -25,6 +25,8 @@ group std:group:everyone as Everyone
 
 attribute dc:attribute:author as Author
 
+type std:type:organisation as Organisation
+
 
 # ---------------------------------------------------------------------------
 #   Common output type schema template

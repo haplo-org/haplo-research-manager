@@ -7,6 +7,7 @@
   "apiVersion": 4,
   "load": [
       "js/hres_outputs.js",
+      "js/outputs_test_data.js",
       "js/outputs_permissions.js"
     ],
   "respond": ["/do/outputs"]
