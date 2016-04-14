@@ -13,7 +13,7 @@ var ensurePermitted = function() { if(!permitted()) { O.stop("Not permitted"); }
 P.implementService("std:action_panel:home_page", function(display, builder) {
     if(permitted()) {
         builder.panel(10000).
-            link("default", '/do/hres-ex-test-data/generate', 'Generate test data');
+            link("default", '/do/hres-ex-test-data/generate', '(old) Generate test data');
     }
 });
 
