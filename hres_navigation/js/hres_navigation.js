@@ -52,7 +52,7 @@ P.implementService("std:action_panel:faculty_navigation", function(display, buil
         if(departments.length) {
             var exclude = (O.application.config["hres_navigation:remove_institutes_from_navigation"] || []);
             var numberOfLinks = 0;
-            builder.panel(300).element("default", {title:SCHEMA.getTypeInfo(T.Department).name+"s"});
+            builder.panel(300).element("default", {title:NAME('+Department')});
             _.each(departments, function(dept) {
                 if(exclude.indexOf(dept.ref.toString()) === -1) {
                     numberOfLinks++; 
@@ -77,7 +77,7 @@ P.implementService("std:action_panel:faculty_navigation", function(display, buil
         }).
         sortByTitle().limit(MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION+1).execute();
     if(researchGroups.length) {
-        builder.panel(400).element("default", {title:SCHEMA.getTypeInfo(T.ResearchGroup).name+"s"});
+        builder.panel(400).element("default", {title:NAME('+ResearchGroup')});
         _.each(researchGroups, function(rg) {
             builder.panel(400).link("default", rg.url(), rg.title);
         });

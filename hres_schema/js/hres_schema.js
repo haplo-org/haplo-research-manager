@@ -10,8 +10,8 @@ P.implementService("std:reporting:collection_category:hres:people:setup", functi
         fact("nameFirst",  "text", "First").
         fact("nameLast",   "text", "Last").
         fact("nameTitle",  "text", "Title").
-        indexedFact("faculty", "ref", SCHEMA.getTypeInfo(T.Faculty).name).
-        indexedFact("department", "ref", SCHEMA.getTypeInfo(T.Department).name);
+        indexedFact("faculty", "ref", NAME('Faculty')).
+        indexedFact("department", "ref", NAME('Department'));
 });
 
 P.implementService("std:reporting:collection_category:hres:people:get_facts_for_object", function(object, row) {
@@ -51,7 +51,7 @@ var makePersonDashboardColumns = function(spec) {
             type:"join",
             style:"medium",
             joinWith:" : ",
-            heading:SCHEMA.getTypeInfo(T.Faculty).name+" : "+SCHEMA.getTypeInfo(T.Department).name,
+            heading:NAME('Faculty')+" : "+NAME('Department'),
             columns: [
                 {fact:"faculty", shortestTitle:true},
                 {fact:"department", shortestTitle:true}
