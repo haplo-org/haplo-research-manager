@@ -221,7 +221,7 @@ type hres:type:research-institute:department as Department
     element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
 
 type hres:type:research-institute:school as School
-    title: Department
+    title: School
     parent-type hres:type:research-institute
     search-name: school
     attribute-hide hres:aliased-attribute:dean
