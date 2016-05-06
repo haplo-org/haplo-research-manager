@@ -67,6 +67,8 @@ group hres:group:it-support as ITSupport
 
 # -------- Attributes ------------------------------
 
+attribute std:attribute:project as Project
+
 attribute hres:attribute:researcher as Researcher
     title: Researcher
     search-name researcher
