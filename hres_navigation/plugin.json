@@ -4,6 +4,9 @@
   "pluginVersion": 1,
   "displayName": "Haplo RM Navigation",
   "displayDescription": "Basic navigation UI for Haplo Research Manager",
+  "depend": [
+      "std_action_panel"
+    ],
   "apiVersion": 4,
   "load": [
       "js/hres_navigation.js"

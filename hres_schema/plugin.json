@@ -6,6 +6,10 @@
   "displayDescription": "Basic institution schema and utilities for Haplo Research Manager",
   "apiVersion": 4,
   "loadPriority": 6000,
+  "depend": [
+      "std_workflow",
+      "std_reporting"
+    ],
   "use": ["std:reporting", "std:workflow"],
   "load": [
       "js/hres_schema.js",

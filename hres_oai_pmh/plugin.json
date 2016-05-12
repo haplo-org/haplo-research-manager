@@ -5,6 +5,10 @@
   "displayName": "OAI-PMH",
   "displayDescription": "Support for the Open Archives Initiative formats and protocols, including OAI-PMH at /api/oai2",
   "apiVersion": 4,
+  "depend": [
+      "hres_thirdparty_libs",
+      "hres_outputs"
+    ],
   "load": [
       "js/hres_oai_pmh.js"
     ],

@@ -5,6 +5,12 @@
   "displayName": "Example RM Outputs Approval",
   "displayDescription": "Example research output ingest approval workflow",
   "apiVersion": 4,
+  "depend": [
+      "std_action_panel",
+      "std_workflow",
+      "std_reporting",
+      "std_document_store"
+    ],
   "use": [
       "std:workflow"
     ],
