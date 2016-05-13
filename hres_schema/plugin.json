@@ -8,7 +8,9 @@
   "loadPriority": 6000,
   "depend": [
       "std_workflow",
-      "std_reporting"
+      "std_reporting",
+      "haplo_descriptive_object_labelling",
+      "haplo_user_roles_permissions"
     ],
   "use": ["std:reporting", "std:workflow"],
   "load": [
