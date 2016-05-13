@@ -9,7 +9,8 @@
       "std_action_panel",
       "std_workflow",
       "std_reporting",
-      "std_document_store"
+      "std_document_store",
+      "hres_schema"
     ],
   "use": [
       "std:workflow"

@@ -6,7 +6,8 @@
   "displayDescription": "Outputs schema and display for Haplo Research Manager",
   "apiVersion": 4,
   "depend": [
-      "haplo_activity_navigation"
+      "haplo_activity_navigation",
+      "hres_schema"
     ],
   "load": [
       "js/hres_outputs.js",
