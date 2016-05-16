@@ -29,6 +29,7 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     // Research types
     setup.groupPermission(Group.Everyone, "read", T.ResearchInstitute);
     setup.groupPermission(Group.Everyone, "read", T.Committee);
+    setup.groupPermission(Group.Everyone, "read", T.AcademicYear);
     // Classification editors
     setup.groupPermission(Group.ClassificationEditors, "read-write", Label.CONCEPT);
 

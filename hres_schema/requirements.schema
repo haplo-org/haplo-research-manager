@@ -67,6 +67,7 @@ group hres:group:it-support as ITSupport
 
 # -------- Attributes ------------------------------
 
+attribute dc:attribute:date as Date
 attribute std:attribute:project as Project
 
 attribute hres:attribute:researcher as Researcher
@@ -112,6 +113,15 @@ attribute hres:attribute:description as Description
     data-type text-document
 
 
+attribute hres:attribute:academic-year as AcademicYear
+    title: Academic year
+    search-name: academic-year
+    qualifier std:qualifier:null
+    data-type link
+    ui-options dropdown
+    linked-type hres:type:academic-year
+
+
 attribute hres:attribute:committee-member as CommitteeMember
     title: Committee member
     search-name: member
@@ -144,6 +154,12 @@ aliased-attribute hres:aliased-attribute:dean as Dean
     search-name: dean
     alias-of hres:attribute:head
 
+aliased-attribute hres:aliased-attribute:academic-year-dates as AcademicYearDates
+    title: Academic year dates
+    search-name: academic-year-dates
+    alias-of dc:attribute:date
+    ui-options d,n,y,n,n
+    on-data-type datetime
 
 # -------- Types -----------------------------------
 
@@ -239,6 +255,17 @@ type hres:type:research-institute:research-group as ResearchGroup
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
     element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
+
+
+type hres:type:academic-year as AcademicYear
+    title: Academic year
+    search-name: academic-year
+    behaviour classification
+    attribute dc:attribute:title
+    attribute hres:aliased-attribute:academic-year-dates
+    render-category 0
+    default-subtype hres:type:academic-year
+    create-position normal
 
 
 type hres:type:committee as Committee
