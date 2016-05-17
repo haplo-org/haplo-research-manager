@@ -52,6 +52,8 @@ var makeResearchInstituteGetter = function(name) {
 var HRES_ENTITIES = {
     'researcher': ['object', A.Researcher],
 
+    'academicYear': ['object', A.AcademicYear],
+
     "project": ["object", A.Project],
 
     "researchInstitute": ["researcher", A.ResearchInstitute],
@@ -71,5 +73,28 @@ var HRES_ENTITIES = {
 P.workflow.registerWorkflowFeature("hres:entities", function(workflow, entities) {
     workflow.
         use("std:entities", HRES_ENTITIES).
+        use("std:entities:tags", "department", "faculty", "academicYear").
         use("std:entities:add_entities", entities);
+});
+
+var refColumnTagToName = function(tag) {
+    var r = O.ref(tag);
+    return r ? r.load().shortestTitle : '';
+};
+
+// for configurationService in std:dashboard:states specifications
+P.implementService("hres:schema:workflow:dashboard:states:configure", function(spec) {
+    spec.columnTag = "faculty";
+    spec.columnTagToName = refColumnTagToName;
+    var setup = spec.setup;
+    spec.setup = function(dashboard, E) {
+        if(setup) { setup(dashboard, E); }
+        var currentYear = O.ref(E.request.parameters.year);
+        var year = currentYear ?
+            O.service("hres:academic_year:year_info", currentYear) :
+            O.service("hres:academic_year:for_date", new Date());
+        dashboard.addQueryFilter(function(query) { query.tag('academicYear', year.ref.toString()); });
+        dashboard.addLinkParameter("year", year.ref.toString());
+        dashboard.addHeaderDeferred(P.template("academic-year-navigation").deferredRender(year));
+    };
 });

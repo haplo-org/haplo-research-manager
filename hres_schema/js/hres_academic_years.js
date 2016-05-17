@@ -21,6 +21,17 @@
         annotation hres:annotation:academic-year:update-on-edit
 
 
+    Workflows
+    =========
+
+    use("hres:schema") to set up entities and tags.
+
+    use("std:dashboard:states", {
+        configurationService: "hres:schema:workflow:dashboard:states:configure",
+        // rest ofstd:dashboard:states specification
+    });
+
+
     Permissions
     ===========
 

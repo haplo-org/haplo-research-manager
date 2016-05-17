@@ -1,0 +1,6 @@
+
+<div data-year=ref style="text-align:right">
+  std:ui:navigation:arrow("left" url(?year=previous.ref))
+  " " title " "
+  std:ui:navigation:arrow("right" url(?year=next.ref))
+</div>
