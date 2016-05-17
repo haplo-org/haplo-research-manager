@@ -4,6 +4,8 @@
 feature std:page:home
     element: std:group:everyone right std:action_panel {"panel":"home_page"}
 
+feature std:navigation
+    entry: plugin hres:institutes
 
 # -------- Labels ------------------------------
 
@@ -241,6 +243,8 @@ type hres:type:research-institute:faculty as Faculty
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
     element: std:group:everyone right std:action_panel {"panel":"faculty"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"faculty_navigation","style":"links"} [sort=20000]
+
 
 type hres:type:research-institute:department as Department
     title: Department
