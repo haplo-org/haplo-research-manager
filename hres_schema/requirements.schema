@@ -191,6 +191,14 @@ type hres:type:person:staff as Staff
     render-icon: E21A,1,f E21B,3,f
     element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
 
+type hres:type:person:staff-past as StaffPast
+    title: Staff (past)
+    parent-type std:type:person
+    search-name: staff past
+    search-name: past staff
+    render-category 4
+    render-icon: E21A,1,f E21B,3,f E413,1,f,y
+    element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
 
 type hres:type:research-institute as ResearchInstitute
     title: Research Institute
