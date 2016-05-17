@@ -19,9 +19,11 @@ var makeResearchInstituteGetter = function(name) {
             entityNameFromType.each(function(key, value) {
                 lists[value] = [];
             });
-            var scan, researcher;
-            for(var i = this.researcher_list.length-1; i >= 0; i--) {
-                researcher = this.researcher_list[i];
+            var scan, researcher,
+                researcher_list = this.researcher_list,
+                rllen = researcher_list.length;
+            for(var i = 0; i < rllen; i++) {
+                researcher = researcher_list[i];
                 if(researcher && (scan = researcher.first(A.ResearchInstitute))) { 
                     var safety = 32;
                     while(scan && (--safety)) {
