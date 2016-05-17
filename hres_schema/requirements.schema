@@ -136,6 +136,11 @@ attribute hres:attribute:committee-representative as CommitteeRepresentative
     data-type link
     linked-type std:type:person
 
+attribute hres:attribute:student-id as StudentId
+    title: Student ID
+    search-name: id
+    qualifier std:qualifier:null
+    data-type text
 
 # -------- Aliased attributes ----------------------
 
