@@ -12,11 +12,15 @@ OUTPUT_TYPES.forEach(function(type) { OUTPUTS_TYPE_LOOKUP.set(type, true); });
 
 // --------------------------------------------------------------------------
 
+var CanEditOutputsActivityOverview = O.action("hres:action:outputs:can_edit_activity_overview").
+    title("Can edit Outputs activity overview text").
+    allow("group", Group.OutputEditors);
+
+// --------------------------------------------------------------------------
+
 // Creates link on the homepage action panel to a reporting and guides area
 P.implementService("haplo_activity_navigation:discover", function(activity) {
-    activity(40, "outputs", "Outputs", "E226,1,f",
-        function(user) { user.isMemberOf(Group.OutputEditors); }
-    );
+    activity(40, "outputs", "Outputs", "E226,1,f", CanEditOutputsActivityOverview);
 });
 
 // --------------------------------------------------------------------------

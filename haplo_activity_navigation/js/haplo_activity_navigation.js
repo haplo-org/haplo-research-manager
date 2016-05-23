@@ -55,6 +55,11 @@
 
 // --------------------------------------------------------------------------
 
+var DefaultEditAction = O.action("haplo_activity_navigation:default_allow_edit").
+    title("Default edit permission for activity overview");
+
+// --------------------------------------------------------------------------
+
 var activities;
 var activityByName;
 
@@ -63,11 +68,11 @@ P._ensureDiscovered = function() {
     if(O.serviceImplemented("haplo_activity_navigation:discover")) {
         var discovered = [];
         activityByName = {};
-        O.service("haplo_activity_navigation:discover", function(sort, name, title, icon, userCanEdit) {
+        O.service("haplo_activity_navigation:discover", function(sort, name, title, icon, editAction) {
             if(!/^[a-z0-9\-]+$/.test(name)) {
                 throw new Error("Invalid activity name");
             }
-            var activity = new Activity(sort, name, title, icon, userCanEdit);
+            var activity = new Activity(sort, name, title, icon, editAction);
             discovered.push(activity);
             activityByName[name] = activity;
         });
@@ -94,13 +99,12 @@ P.validateActivityName = function(name) {
 
 // --------------------------------------------------------------------------
 
-var Activity = function(sort, name, title, icon, userCanEdit) {
+var Activity = function(sort, name, title, icon, editAction) {
     this.sort = sort;
     this.name = name;
     this.title = title;
     this.icon = icon;
-    // TODO: More restrictive default permissions for Activity editing
-    this.userCanEdit = userCanEdit || function() { return true; };
+    this.editAction = editAction || DefaultEditAction;
     var nameForService = name.replace(/-/g,'_');
     this._editOverviewAction = "activity:edit_overview:"+nameForService;
     this._myItemsActionPanelName = "activity:my_items:"+nameForService;

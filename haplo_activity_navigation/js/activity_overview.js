@@ -37,7 +37,7 @@ P.respond("GET", "/do/activity", [
     var view = {
         pageTitle: activity.title,
         activity: activity,
-        canEdit: activity.userCanEdit(O.currentUser),
+        canEdit: O.currentUser.allowed(activity.editAction),
         adminMode: adminMode,
         adminMenu: menuBuilder ? menuBuilder.deferredRender() : undefined
     };
@@ -119,7 +119,7 @@ P.respond("GET,POST", "/do/activity/edit-overview", [
     {pathElement:0, as:"string", validate:P.validateActivityName}
 ], function(E, activityName) {
     var activity = P.getActivity(activityName);
-    if(!activity.userCanEdit(O.currentUser)) { O.stop("Not permitted"); }
+    activity.editAction.enforce();
 
     // Get overview text & contacts
     var overviewq = P.db.overview.select().where("name","=",activityName).order("updated",true).limit(1);
