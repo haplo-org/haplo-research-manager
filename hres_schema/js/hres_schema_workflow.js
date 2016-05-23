@@ -6,7 +6,7 @@
 
 
 var entityNameFromType = O.refdict();
-entityNameFromType.set(T.School, "school");
+entityNameFromType.set(T.School,     "school");
 entityNameFromType.set(T.Department, "department");
 entityNameFromType.set(T.Faculty,    "faculty");
 entityNameFromType.set(T.University, "university");

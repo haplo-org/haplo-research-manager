@@ -11,7 +11,8 @@ P.implementService("std:reporting:collection_category:hres:people:setup", functi
         fact("nameLast",   "text", "Last").
         fact("nameTitle",  "text", "Title").
         indexedFact("faculty", "ref", NAME('Faculty')).
-        indexedFact("department", "ref", NAME('Department'));
+        indexedFact("department", "ref", NAME('Department')).   // facts included regardless of institute depth for consistency
+        indexedFact("school", "ref", NAME('School'));
 });
 
 P.implementService("std:reporting:collection_category:hres:people:get_facts_for_object", function(object, row) {
@@ -25,20 +26,25 @@ P.implementService("std:reporting:collection_category:hres:people:get_facts_for_
     } else {
         row.nameLast = title.toString();
     }
-    var departmentRef = object.first(A.ResearchInstitute);
-    if(departmentRef) {
-        row.department = departmentRef;
-        var department = departmentRef.load();
-        var facultyRef = department.first(A.Parent);
-        if(facultyRef) {
-            row.faculty = facultyRef;
+    var institute = object.first(A.ResearchInstitute), safety = 256;
+    while(institute && (safety--) > 0) {
+        var i = institute.load();
+        if(i.isKindOf(T.Faculty)) {
+            row.faculty = institute;
+        } else if(i.isKindOf(T.Department)) {
+            row.department = institute;
+        } else if(i.isKindOf(T.School)) {
+            row.school = institute;
         }
+        institute = i.firstParent();
     }
 });
 
 // --------------------------------------------------------------------------
 
-var PERSON_EXPORT_COLUMNS = ["nameLast", "nameFirst", "nameTitle", "faculty", "department"];
+var PERSON_EXPORT_COLUMNS = ["nameLast", "nameFirst", "nameTitle", "faculty"];
+if(P.INSTITUTE_DEPTH > 1) { PERSON_EXPORT_COLUMNS.push("department"); }
+if(P.INSTITUTE_DEPTH > 2) { PERSON_EXPORT_COLUMNS.push("school"); }
 
 var makePersonDashboardColumns = function(spec) {
     var columns = [
@@ -46,8 +52,10 @@ var makePersonDashboardColumns = function(spec) {
             type:"linked",
             style:"wide",
             column:{type:"join", joinWith:", ", heading:(spec.heading || "Name"), columns:["nameLast", "nameFirst"]}
-        },
-        {
+        }
+    ];
+    if(P.INSTITUTE_DEPTH > 1) {
+        columns.push({
             type:"join",
             style:"medium",
             joinWith:" : ",
@@ -56,8 +64,10 @@ var makePersonDashboardColumns = function(spec) {
                 {fact:"faculty", shortestTitle:true},
                 {fact:"department", shortestTitle:true}
             ]
-        }
-    ];
+        });
+    } else {
+        columns.push({fact:"faculty", shortestTitle:true});
+    }
     return columns;
 };
 
@@ -66,6 +76,8 @@ P.reporting.registerReportingFeature("hres:person_name_column", function(dashboa
         columns(10, dashboard.isExporting ? PERSON_EXPORT_COLUMNS : makePersonDashboardColumns(spec || {})).
         order("nameLast", "nameFirst").
         use("std:row_text_filter", {facts:["nameLast", "nameFirst"], placeholder:"Search by name"}).
-        use("std:row_object_filter", {fact:"faculty", objects:T.Faculty}).
-        use("std:row_object_filter", {fact:"department", objects:T.Department});
+        use("std:row_object_filter", {fact:"faculty", objects:T.Faculty});
+    if(P.INSTITUTE_DEPTH > 1) {
+        dashboard.use("std:row_object_filter", {fact:"department", objects:T.Department});
+    }
 });

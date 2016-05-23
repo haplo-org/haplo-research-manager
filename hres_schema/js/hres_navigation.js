@@ -7,8 +7,6 @@
 
 var MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION = 7;
 
-var INSTITUTES_ARE_ONE_LEVEL = !!O.application.config["hres:institutes_are_one_level"];
-
 // --------------------------------------------------------------------------
 
 P.hook('hNavigationPosition', function(response, name) {
@@ -35,16 +33,14 @@ P.hook('hNavigationPosition', function(response, name) {
     }
 });
 
-P.hook("hPostObjectChange", function(response, object, operation) {
-    if(object.isKindOf(T.ResearchInstitute)) {
-         O.reloadNavigation();
-    }
+P.onResearchInstituteChange.push(function() {
+    O.reloadNavigation();
 });
 
 // --------------------------------------------------------------------------
 
 P.implementService("std:action_panel:faculty_navigation", function(display, builder) {
-    if(!INSTITUTES_ARE_ONE_LEVEL) {
+    if(P.INSTITUTE_DEPTH > 1) {
         var departments = O.query().
             link(T.Department, A.Type).
             link(display.object.ref, A.Parent).
