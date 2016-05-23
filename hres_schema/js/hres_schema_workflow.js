@@ -66,7 +66,7 @@ var HRES_ENTITIES = {
     'university': makeResearchInstituteGetter('university'),
 
     'researchAdministrator': function(context) {
-        return this._hresFindRoleInResearchInstitute(A.ResearchAdministrator);
+        return this._hresFindRoleInResearchInstitute(A.ResearchAdministrator, context);
     },
 
     'schoolHead': ['faculty', A.Head],
