@@ -56,25 +56,49 @@ var HRES_ENTITIES = {
 
     'academicYear': ['object', A.AcademicYear],
 
-    "project": ["object", A.Project],
+    'project': ['object', A.Project],
 
-    "researchInstitute": ["researcher", A.ResearchInstitute],
+    'researchInstitute': ['researcher', A.ResearchInstitute],
 
     'school': makeResearchInstituteGetter('school'),
     'department': makeResearchInstituteGetter('department'),
     'faculty':    makeResearchInstituteGetter('faculty'),
     'university': makeResearchInstituteGetter('university'),
 
+    'researchAdministrator': function(context) {
+        return this._hresFindRoleInResearchInstitute(A.ResearchAdministrator);
+    },
+
     'schoolHead': ['faculty', A.Head],
     'facultyHead': ['faculty', A.Head],
     'departmentHead': ['department', A.Head]
+};
+
+var _hresFindRoleInResearchInstitute = function(desc, context) {
+    var insts = P.INSTITUTE_PROPERTIES_IN_ORDER;
+    for(var x = insts.length - 1; x >= 0; --x) { // reverse order, search from lowest
+        var property = insts[x];
+        // Use the proper getter so all relevant objects are in the schema for workflow automove.
+        var institute = this[property+'_maybe'];
+        if(institute) {
+            var values = institute.every(desc);
+            if(values.length) {
+                return (context === "list") ? values : values[0];
+            }
+        }
+    }
+    // Not found
+    return (context === "list") ? [] : undefined;
+};
+var SETUP_ENTITY_PROTOTYPE = function(prototype) {
+    prototype._hresFindRoleInResearchInstitute = _hresFindRoleInResearchInstitute;
 };
 
 // --------------------------------------------------------------------------
 
 P.workflow.registerWorkflowFeature("hres:entities", function(workflow, entities) {
     workflow.
-        use("std:entities", HRES_ENTITIES).
+        use("std:entities", HRES_ENTITIES, SETUP_ENTITY_PROTOTYPE).
         use("std:entities:tags", "department", "faculty", "academicYear").
         use("std:entities:add_entities", entities);
 });

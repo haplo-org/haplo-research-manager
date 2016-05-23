@@ -24,6 +24,15 @@ if(!P.INSTITUTE_DEPTH) {
     P.data.instituteDepth = P.INSTITUTE_DEPTH = depth;
 }
 
+// A list of property names for the institutions
+P.INSTITUTE_PROPERTIES_IN_ORDER = ["university", "faculty"];
+if(P.INSTITUTE_DEPTH > 1) {
+    P.INSTITUTE_PROPERTIES_IN_ORDER.push("department");
+    if(P.INSTITUTE_DEPTH > 2) {
+        P.INSTITUTE_PROPERTIES_IN_ORDER.push("school");
+    }
+}
+
 // Other plugins can obtain the institute depth with
 // ... a feature the depth is available at plugin load time...
 P.provideFeature("hres:schema:institute_depth", function(plugin) {
