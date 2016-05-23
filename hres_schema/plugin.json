@@ -15,11 +15,11 @@
     ],
   "use": ["std:reporting", "std:workflow"],
   "load": [
-      "js/hres_schema.js",
       "js/hres_names.js",
       "js/hres_permissions.js",
       "js/hres_schema_workflow.js",
       "js/hres_academic_years.js",
+      "js/hres_reporting.js",
       "js/hres_reporting_permissions.js",
       "js/hres_reporting_researchers.js",
       "js/hres_navigation.js"
