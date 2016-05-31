@@ -52,7 +52,7 @@ var rolesForMyLinks = function() {
         });
     }
     return rolesForMyLinksList;
-}
+};
 
 P.implementService("std:action_panel:home_page_my_links", function(display, builder) {
     var roles = O.service("haplo:permissions:user_roles", O.currentUser);
