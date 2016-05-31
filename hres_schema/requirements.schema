@@ -2,6 +2,7 @@
 # -------- Features --------------------------------
 
 feature std:page:home
+    element: std:group:everyone right hres_schema:home_nav
     element: std:group:everyone right std:action_panel {"panel":"home_page"}
 
 feature std:navigation

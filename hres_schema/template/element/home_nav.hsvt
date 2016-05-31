@@ -1,0 +1,8 @@
+
+// My Record link
+within(myRecord) { template:std:ui:panel() }
+
+// Links to useful links relevant to this user below it
+<div style="position:relative;top:-16px;padding:0 0 0 16px">
+    within(myLinks) { template:std:element() }
+</div>
