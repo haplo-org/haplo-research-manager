@@ -22,6 +22,9 @@ if(adminMode) {
       <a href=["/do/activity/edit-overview/" activity.name]> "Edit" </a>
     </p>
   }
+  each(overviewDeferreds) {
+    render(deferred)
+  }
 </div>
 
 if(adminMode) {

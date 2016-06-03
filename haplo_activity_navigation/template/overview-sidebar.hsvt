@@ -1,7 +1,7 @@
 std:plugin:resources("activities.css")
 
 <div class="activities_sidebar">
-  each(sidebarElements) {
+  each(deferreds) {
     render(deferred)
   }
 </div>

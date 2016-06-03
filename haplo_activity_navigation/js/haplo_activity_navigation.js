@@ -29,12 +29,14 @@
         (services below use ACTIVITY_NAME for the name of the activity with s/-/_/g)
     * Implement std:action_panel:activity:my_items:ACTIVITY_NAME to add the important "My items"
         link to the overview page.
-    * To add tiles to the overview page, implement std:action_panel:activity:overview:ACTIVITY_NAME
+    * To add links to the overview page, implement std:action_panel:activity:overview:ACTIVITY_NAME
+    * To add things to to the overview page, implement haplo_activity_navigation:overview:ACTIVITY_NAME
+        or haplo_activity_navigation:overview to add items to all pages.
     * To add things to the sidebar on the overview page, implement
-        haplo_activity_navigation:overview:sidebar:ACTIVITY_NAME (or without ACTIVITY_NAME if you want
-        to insert on everything or implement your own selective logic)
+        haplo_activity_navigation:overview:sidebar:ACTIVITY_NAME or
+        haplo_activity_navigation:overview:sidebar to insert on everything or implement your own selective logic)
     * To add links to the menu, implement std:action_panel:activity:menu:ACTIVITY_NAME
-    * To add statitics to the top of the menu mage, implement std:action_panel:activity:statistics:ACTIVITY_NAME
+    * To add statistics to the top of the menu page, implement std:action_panel:activity:statistics:ACTIVITY_NAME
 
     Things to watch out for:
 

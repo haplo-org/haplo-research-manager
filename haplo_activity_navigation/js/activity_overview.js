@@ -47,16 +47,19 @@ P.respond("GET", "/do/activity", [
     var overview = overviewq.length ? JSON.parse(overviewq[0].json) : {};
     view.overviewDoc = overview.text ? O.text(O.T_TEXT_DOCUMENT,overview.text).toString() : '';
 
-    // Sidebar is composed of various elements
-    var sidebarElements = [];
-    var addSidebarElement = function(sort, deferred) { sidebarElements.push({sort:sort,deferred:deferred}); };
-    var serviceNames = [
-            "haplo_activity_navigation:overview:sidebar",
-            "haplo_activity_navigation:overview:sidebar:"+activity.name
-        ];
-    serviceNames.forEach(function(service) {
-        if(O.serviceImplemented(service)) { O.service(service, activity, addSidebarElement); }
-    });
+    // Implement services for getting pages from other plugins
+    var collectDeferreds = function(serviceName) {
+        var elements = [];
+        var add = function(sort, deferred) { elements.push({sort:sort,deferred:deferred}); };
+        [serviceName, serviceName+":"+activity.name].forEach(function(service) {
+            if(O.serviceImplemented(service)) { O.service(service, activity, add); }
+        });
+        return elements;
+    };
+
+    // Ask other plugins to for things to display on the page
+    view.overviewDeferreds = _.sortBy(collectDeferreds("haplo_activity_navigation:overview"),"sort");
+    var sidebarDeferreds = collectDeferreds("haplo_activity_navigation:overview:sidebar");
 
     // My links
     var profileObject = O.currentUser.ref ? O.currentUser.ref.load() : undefined;
@@ -66,24 +69,25 @@ P.respond("GET", "/do/activity", [
             options: {"highlight":"primary"}
         });
         if(myLinksBuilder.anyBuilderShouldBeRendered()) {
-            addSidebarElement(0, myLinksBuilder.deferredRender());
+            sidebarDeferreds.push({sort:0, deferred:myLinksBuilder.deferredRender()});
         }
     }
 
     // Generate 'links' action panel for right hand column of overview page
-    var tilesBuilder = O.service("std_action_panel:build_panel", activity._linksActionPanelName, {
+    var linksBuilder = O.service("std_action_panel:build_panel", activity._linksActionPanelName, {
         style: "links",
         options: {
             category: "activity:overview",
             "haplo:activity": activity.name
         }
     });
-    tilesBuilder.title("Useful links"); // default title for sidebar
-    if(tilesBuilder.anyBuilderShouldBeRendered()) {
-        addSidebarElement(1005, tilesBuilder.deferredRender());
+    linksBuilder.title("Useful links"); // default title for sidebar
+    if(linksBuilder.anyBuilderShouldBeRendered()) {
+        sidebarDeferreds.push({sort:1005, deferred:linksBuilder.deferredRender()});
     }
 
     // Admin mode displays more things
+    var overviewDeferreds = [];
     if(adminMode) {
         // Statistics menu
         var statisticsBuilder = O.service("std_action_panel:build_panel", activity._statisticsActionPanelName, {
@@ -99,7 +103,7 @@ P.respond("GET", "/do/activity", [
 
     // Finally render it into the page
     E.appendSidebarHTML(P.template("overview-sidebar").render({
-        sidebarElements: _.sortBy(sidebarElements,"sort")
+        deferreds: _.sortBy(sidebarDeferreds,"sort")
     }));
     E.render(view, "overview");
 });
