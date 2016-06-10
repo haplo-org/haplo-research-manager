@@ -99,6 +99,8 @@ P.validateActivityName = function(name) {
     return name in activityByName;
 };
 
+P.implementService("haplo_activity_navigation:get_activity", P.getActivity);
+
 // --------------------------------------------------------------------------
 
 var Activity = function(sort, name, title, icon, editAction) {

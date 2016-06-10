@@ -19,6 +19,8 @@ P.respond("GET", "/do/activity", [
 ], function(E, activityName) {
     var activity = P.getActivity(activityName);
 
+    var canEdit = O.currentUser.allowed(activity.editAction);
+
     // Admin display shows menus and statistics
     var adminMode = false;
 
@@ -29,6 +31,11 @@ P.respond("GET", "/do/activity", [
             category: "activity:menu"
         }
     });
+    if(canEdit) {
+        menuBuilder.
+            panel(99999).title("Customisation").
+            link("default", "/do/activity/edit-overview/"+activity.name, "Edit "+activity.title+" overview");
+    }
     if(menuBuilder.anyBuilderShouldBeRendered()) {
         adminMode = true;
     }
@@ -37,7 +44,7 @@ P.respond("GET", "/do/activity", [
     var view = {
         pageTitle: activity.title,
         activity: activity,
-        canEdit: O.currentUser.allowed(activity.editAction),
+        canEdit: canEdit,
         adminMode: adminMode,
         adminMenu: menuBuilder ? menuBuilder.deferredRender() : undefined
     };
