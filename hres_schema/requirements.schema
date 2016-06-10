@@ -124,20 +124,9 @@ attribute hres:attribute:academic-year as AcademicYear
     ui-options dropdown
     linked-type hres:type:academic-year
 
+attribute haplo:attribute:committee-member as CommitteeMember
 
-attribute hres:attribute:committee-member as CommitteeMember
-    title: Committee member
-    search-name: member
-    qualifier std:qualifier:null
-    data-type link
-    linked-type std:type:person
-
-attribute hres:attribute:committee-representative as CommitteeRepresentative
-    title: Committee representative
-    search-name: committee-representative
-    qualifier std:qualifier:null
-    data-type link
-    linked-type std:type:person
+attribute haplo:attribute:committee-representative as CommitteeRepresentative
 
 attribute hres:attribute:student-id as StudentId
     title: Student ID
@@ -286,17 +275,5 @@ type hres:type:academic-year as AcademicYear
     create-position normal
 
 
-type hres:type:committee as Committee
-    title: Committee
-    search-name: committee
-    attribute dc:attribute:title [sort=10000]
-    attribute dc:attribute:type [sort=10100]
-    attribute hres:attribute:research-institute [sort=11000]
-    attribute hres:attribute:committee-member [sort=12000]
-    attribute hres:attribute:committee-representative [sort=12100]
+type haplo:type:committee as Committee
     attribute hres:attribute:description [sort=20000]
-    render-icon: E414,5,f,y E20C,1,f
-    render-category 0
-    default-subtype hres:type:committee
-    create-position infrequent
-

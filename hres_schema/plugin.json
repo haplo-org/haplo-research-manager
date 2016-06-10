@@ -10,6 +10,7 @@
       "std_action_panel",
       "std_workflow",
       "std_reporting",
+      "haplo_committee_support",
       "haplo_descriptive_object_labelling",
       "haplo_user_roles_permissions"
     ],
