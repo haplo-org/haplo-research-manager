@@ -108,14 +108,6 @@ attribute hres:attribute:research-administrator as ResearchAdministrator
     data-type link
     linked-type std:type:person
 
-attribute hres:attribute:description as Description
-    title: Description
-    search-name: description
-    qualifier std:qualifier:null
-    relevancy 0.75
-    data-type text-document
-
-
 attribute hres:attribute:academic-year as AcademicYear
     title: Academic year
     search-name: academic-year
@@ -205,7 +197,7 @@ type hres:type:research-institute as ResearchInstitute
     attribute hres:attribute:head [sort=12000]
     attribute hres:aliased-attribute:dean [sort=12001]
     attribute hres:attribute:research-administrator [sort=13000]
-    attribute hres:attribute:description [sort=20000]
+    attribute haplo:attribute:description [sort=20000]
     render-icon: E521,1,f E522,1,f E524,1,f E523,4,f
     render-category 0
     default-subtype hres:type:research-institute:department
@@ -276,4 +268,3 @@ type hres:type:academic-year as AcademicYear
 
 
 type haplo:type:committee as Committee
-    attribute hres:attribute:description [sort=20000]
