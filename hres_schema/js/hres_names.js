@@ -18,15 +18,15 @@
     are discovered.
 */
 
-var TYPE_NOUNS = {
-    "Researcher": true,
-    "Staff": true,
-    "ResearchInstitute": true,
-    "University": true,
-    "Faculty": true,
-    "Department": true,
-    "School": true,
-    "ResearchGroup": true
+var NAMES = {
+    "Researcher":           ["getTypeInfo", T, "Researcher"],
+    "Staff":                ["getTypeInfo", T, "Staff"],
+    "Research Institute":   ["getTypeInfo", T, "ResearchInstitute"],
+    "University":           ["getTypeInfo", T, "University"],
+    "Faculty":              ["getTypeInfo", T, "Faculty"],
+    "Department":           ["getTypeInfo", T, "Department"],
+    "School":               ["getTypeInfo", T, "School"],
+    "Research Group":       ["getTypeInfo", T, "ResearchGroup"]
 };
 
 P.implementService("std:NAME", function(name) {
@@ -43,8 +43,9 @@ P.implementService("std:NAME", function(name) {
 });
 
 var maybeTranslate = function(name) {
-    if(name in TYPE_NOUNS) {
-        return SCHEMA.getTypeInfo(T[name]).name;
+    var i = NAMES[name];
+    if(i) {
+        return SCHEMA[i[0]](i[1][i[2]]).name;
     }
 };
 
@@ -55,3 +56,20 @@ var pluralise = function(name) {
     }
     return name+'s';
 };
+
+// --------------------------------------------------------------------------
+// Allow other plugins to add to the base schema NAMES
+
+var feature = {
+    pluralise: pluralise,
+    addTypeNamesFromSchema: function(pluginT, names) {
+        _.each(names, function(n) { NAMES[n[0]] = ['getTypeInfo', pluginT, n[1]]; });
+    },
+    addAttributeNamesFromSchema: function(pluginA, names) {
+        _.each(names, function(n) { NAMES[n[0]] = ['getAttributeInfo', pluginA, n[1]]; });
+    }
+};
+
+P.provideFeature("hres:schema:names", function(plugin) {
+    plugin.hresSchemaNAME = feature;
+});
