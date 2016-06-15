@@ -116,6 +116,12 @@ attribute hres:attribute:academic-year as AcademicYear
     ui-options dropdown
     linked-type hres:type:academic-year
 
+attribute hres:attribute:collaborating-institution as CollaboratingInstitution
+    title: Collaborating institution
+    search-name: collaborating-institution
+    qualifier std:qualifier:null
+    data-type text
+
 attribute haplo:attribute:committee-member as CommitteeMember
 
 attribute haplo:attribute:committee-representative as CommitteeRepresentative
