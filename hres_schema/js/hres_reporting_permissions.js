@@ -17,33 +17,7 @@ P.implementService("std:reporting:collection:*:setup", function(collection) {
 
 // Label the rows with instructions from the properties on the object
 P.implementService("std:reporting:collection:*:get_facts_for_object", function(object, row, collection) {
-    // All collections must set a property which describes which labels apply
-    var institutePath = collection.property("hres:row_permissions:institute_path") || [A.ResearchInstitute]; // useful default
-    var labels =        collection.property("hres:row_permissions:additional_labels"); // No default here to ensure configured
-    if(!(institutePath && labels)) {
-        var msg = "hres:labels_for_row_permissions property not set on collection "+collection.name;
-        console.log(msg);
-        throw new Error(msg);
-    }
-    // Start with fixed list of labels (specifies the 'type' for permissions)
-    var changes = O.labelChanges(labels);
-    // Follow the configured path to determine research institute labels
-    var objects = [object];
-    institutePath.forEach(function(desc) {
-        var nextObjects = [];
-        objects.forEach(function(o) {
-            o.every(desc, function(v,d,q) {
-                if(O.isRef(v)) {
-                    nextObjects.push(v.load());
-                }
-            });
-        });
-        objects = nextObjects;
-    });
-    objects.forEach(function(o) {
-        changes.add(o.ref, "with-parents");
-    });
-    // Apply to row
-    row.labels = changes.change(O.labelList());
+    var getLabelsForRow = collection.property("hres:row_permissions:get_labels");
+    row.labels = getLabelsForRow ? getLabelsForRow() : object.labels;
 });
 
