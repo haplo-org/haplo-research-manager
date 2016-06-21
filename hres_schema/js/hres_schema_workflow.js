@@ -58,6 +58,8 @@ var HRES_ENTITIES = {
 
     'project': ['object', A.Project],
 
+    "supervisor": ["project", A.Supervisor],
+
     'researchInstitute': ['researcher', A.ResearchInstitute],
 
     'school': makeResearchInstituteGetter('school'),
