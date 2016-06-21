@@ -206,6 +206,24 @@ P.implementService("hres:academic_year:all_year_info", function() {
 // ----------------------------------------------------------------------------------------------------------------
 // Basic reporting navigation
 
+P.reporting.registerReportingFeature("hres:schema:academic_year_navigation", function(dashboard, currentYear, fact) {
+    var year = currentYear ?
+        O.service("hres:academic_year:year_info", currentYear) :
+        O.service("hres:academic_year:for_date", new Date());
+    dashboard.filter(function(select) {
+        select.or(function(sq) {
+            if(!currentYear || currentYear == year.ref) { sq.where(fact, "=", null); }
+            sq.and(function(ssq) {
+                ssq.where(fact, ">=", year.start).
+                    where(fact, "<", year.end);
+            });
+        });
+    });
+    dashboard.navigationUI(function(dashboard) {
+        return P.template("academic-year-navigation").deferredRender(year);
+    });
+});
+
 P.reporting.registerReportingFeature("hres:schema:academic_year_navigation_for_json_columns", function(dashboard, currentYear) {
     var year = currentYear ?
         O.service("hres:academic_year:year_info", currentYear) :
