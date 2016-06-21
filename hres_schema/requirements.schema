@@ -126,6 +126,36 @@ attribute hres:attribute:student-id as StudentId
     qualifier std:qualifier:null
     data-type text
 
+attribute hres:attribute:chair as Chair
+    title: Chair
+    search-name: chair
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:examiner as Examiner
+    title: Examiner
+    search-name: examiner
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:supervisor as Supervisor
+    title: Supervisor
+    search-name supervisor
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:assessor as Assessor
+    title: Assessor
+    search-name: assessor
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+    linked-type hres:type:person:staff
+
+
 # -------- Aliased attributes ----------------------
 
 aliased-attribute hres:aliased-attribute:university as University
