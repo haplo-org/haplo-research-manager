@@ -18,6 +18,6 @@ P.implementService("std:reporting:collection:*:setup", function(collection) {
 // Label the rows with instructions from the properties on the object
 P.implementService("std:reporting:collection:*:get_facts_for_object", function(object, row, collection) {
     var getLabelsForRow = collection.property("hres:row_permissions:get_labels");
-    row.labels = getLabelsForRow ? getLabelsForRow() : object.labels;
+    row.labels = getLabelsForRow ? getLabelsForRow(object, row, collection) : object.labels;
 });
 
