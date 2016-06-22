@@ -11,7 +11,5 @@ P.implementService("std:reporting:discover_collections", function(discover) {
 
 P.implementService("std:reporting:collection:researchers:setup", function(collection) {
     collection.
-        currentObjectsOfType(T.Researcher).
-        property("hres:row_permissions:additional_labels",  [Label.ActivityIdentity]);
-        // TODO: Permissions for Researchers? Does it need different label lists for different purposes?
+        currentObjectsOfType(T.Researcher);
 });
