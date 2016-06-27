@@ -298,3 +298,4 @@ type hres:type:academic-year as AcademicYear
 
 
 type haplo:type:committee as Committee
+type hres:type:person:external-researcher as ExternalResearcher
