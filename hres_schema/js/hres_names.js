@@ -19,14 +19,15 @@
 */
 
 var NAMES = {
-    "Researcher":           ["getTypeInfo", T, "Researcher"],
-    "Staff":                ["getTypeInfo", T, "Staff"],
-    "Research Institute":   ["getTypeInfo", T, "ResearchInstitute"],
-    "University":           ["getTypeInfo", T, "University"],
-    "Faculty":              ["getTypeInfo", T, "Faculty"],
-    "Department":           ["getTypeInfo", T, "Department"],
-    "School":               ["getTypeInfo", T, "School"],
-    "Research Group":       ["getTypeInfo", T, "ResearchGroup"]
+    "Researcher":               ["getTypeInfo", T, "Researcher"],
+    "Staff":                    ["getTypeInfo", T, "Staff"],
+    "Research Institute":       ["getTypeInfo", T, "ResearchInstitute"],
+    "University":               ["getTypeInfo", T, "University"],
+    "Faculty":                  ["getTypeInfo", T, "Faculty"],
+    "Department":               ["getTypeInfo", T, "Department"],
+    "School":                   ["getTypeInfo", T, "School"],
+    "Research Group":           ["getTypeInfo", T, "ResearchGroup"],
+    "Research Administrator":   ["getAttributeInfo", A, "ResearchAdministrator"]
 };
 
 P.implementService("std:NAME", function(name) {
