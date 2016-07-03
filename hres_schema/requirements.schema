@@ -299,3 +299,16 @@ type hres:type:academic-year as AcademicYear
 
 type haplo:type:committee as Committee
 type hres:type:person:external-researcher as ExternalResearcher
+
+
+# -------- Restrictions ----------------------------
+
+label hres:label:allow-person-administrative-attributes as AllowPersonAdministrativeAttributes
+    title: Allow Person Administrative Attributes
+    category: Restriction
+
+restriction hres:restriction:person-administrative-attributes
+    title: Person Administrative Attributes
+    restrict-type std:type:person
+    label-unrestricted hres:label:allow-person-administrative-attributes
+    attribute-restricted hres:attribute:student-id
