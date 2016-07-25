@@ -46,7 +46,13 @@ P.implementService("std:NAME", function(name) {
 var maybeTranslate = function(name) {
     var i = NAMES[name];
     if(i) {
-        return SCHEMA[i[0]](i[1][i[2]]).name;
+        var fnname = i[0];
+        var ivalue = i[1][i[2]];
+        if(fnname === "GROUP") {
+            return O.group(ivalue).name;
+        } else {
+            return SCHEMA[fnname](ivalue).name;
+        }
     }
 };
 
@@ -68,6 +74,9 @@ var feature = {
     },
     addAttributeNamesFromSchema: function(pluginA, names) {
         _.each(names, function(n) { NAMES[n[0]] = ['getAttributeInfo', pluginA, n[1]]; });
+    },
+    addGroupNames: function(pluginGroup, names) {
+        _.each(names, function(n) { NAMES[n[0]] = ['GROUP', pluginGroup, n[1]]; });
     }
 };
 
