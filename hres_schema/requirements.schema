@@ -139,6 +139,7 @@ attribute hres:attribute:examiner as Examiner
     qualifier std:qualifier:null
     data-type link
     linked-type hres:type:person:researcher
+    linked-type hres:type:person:external-researcher
 
 attribute hres:attribute:supervisor as Supervisor
     title: Supervisor
