@@ -169,6 +169,11 @@ aliased-attribute hres:aliased-attribute:faculty as Faculty
     search-name: faculty
     alias-of std:attribute:parent
 
+aliased-attribute hres:aliased-attribute:department as Department
+    title: Department
+    search-name: department
+    alias-of std:attribute:parent
+
 aliased-attribute hres:aliased-attribute:dean as Dean
     title: Dean
     search-name: dean
@@ -222,6 +227,7 @@ type hres:type:research-institute as ResearchInstitute
     attribute dc:attribute:type [sort=10100]
     attribute hres:aliased-attribute:university [sort=10101]
     attribute hres:aliased-attribute:faculty [sort=10102]
+    attribute hres:aliased-attribute:department [sort=10103]
     attribute hres:attribute:research-institute [sort=10300]
     attribute std:attribute:address [sort=11000]
     attribute std:attribute:telephone [sort=11100]
@@ -243,6 +249,7 @@ type hres:type:research-institute:university as University
     attribute dc:attribute:title
     attribute-hide hres:aliased-attribute:university
     attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
     attribute-hide hres:aliased-attribute:dean
@@ -253,6 +260,7 @@ type hres:type:research-institute:faculty as Faculty
     parent-type hres:type:research-institute
     search-name: faculty
     attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
     element: std:group:everyone right std:action_panel {"panel":"faculty"} [sort=14000]
@@ -265,6 +273,7 @@ type hres:type:research-institute:department as Department
     search-name: department
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
 
@@ -274,6 +283,7 @@ type hres:type:research-institute:school as School
     search-name: school
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:aliased-attribute:faculty
     attribute-hide hres:attribute:research-institute
     element: std:group:everyone right std:action_panel {"panel":"school"} [sort=14000]
 
