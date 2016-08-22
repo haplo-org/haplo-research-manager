@@ -12,3 +12,13 @@ P.hook("hPostObjectChange", function(response, object, operation) {
         P.onResearchInstituteChange.forEach(function(fn) { fn(object); });
     }
 });
+
+P.hook("hTempObjectAutocompleteTitle", function(response, object) {
+    if(object.isKindOf(T.Person)) {
+        var riRef = object.first(A.ResearchInstitute);
+        if(riRef) {
+            var ri = riRef.load();
+            response.title += " ("+ri.title+")";
+        }
+    }
+});
