@@ -75,6 +75,9 @@ var feature = {
     addAttributeNamesFromSchema: function(pluginA, names) {
         _.each(names, function(n) { NAMES[n[0]] = ['getAttributeInfo', pluginA, n[1]]; });
     },
+    addQualifierNamesFromSchema: function(pluginQ, names) {
+        _.each(names, function(n) { NAMES[n[0]] = ['getQualifierInfo', pluginQ, n[1]]; });
+    },
     addGroupNames: function(pluginGroup, names) {
         _.each(names, function(n) { NAMES[n[0]] = ['GROUP', pluginGroup, n[1]]; });
     }
