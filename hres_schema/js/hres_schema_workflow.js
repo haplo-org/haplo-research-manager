@@ -105,6 +105,13 @@ P.workflow.registerWorkflowFeature("hres:entities", function(workflow, entities)
         use("std:entities:add_entities", entities);
 });
 
+P.provideFeature("hres:schema:entities", function(plugin) {
+    plugin.hresStandaloneEntities = function(entities) {
+        return P.workflow.standaloneEntities(
+            _.extend({}, HRES_ENTITIES, entities || {}), SETUP_ENTITY_PROTOTYPE);
+    };
+});
+
 var refColumnTagToName = function(tag) {
     var r = O.ref(tag);
     return r ? r.load().shortestTitle : '';
