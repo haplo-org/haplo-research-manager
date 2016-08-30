@@ -276,6 +276,7 @@ type hres:type:research-institute:department as Department
     attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"department_navigation","style":"links"} [sort=20000]
 
 type hres:type:research-institute:school as School
     title: School
@@ -286,6 +287,7 @@ type hres:type:research-institute:school as School
     attribute-hide hres:aliased-attribute:faculty
     attribute-hide hres:attribute:research-institute
     element: std:group:everyone right std:action_panel {"panel":"school"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"school_navigation","style":"links"} [sort=20000]
 
 type hres:type:research-institute:research-group as ResearchGroup
     title: Research Group
@@ -295,6 +297,7 @@ type hres:type:research-institute:research-group as ResearchGroup
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
     element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"research_group_navigation","style":"links"} [sort=20000]
 
 
 type hres:type:academic-year as AcademicYear

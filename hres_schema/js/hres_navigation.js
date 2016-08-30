@@ -39,49 +39,78 @@ P.onResearchInstituteChange.push(function() {
 
 // --------------------------------------------------------------------------
 
-P.implementService("std:action_panel:faculty_navigation", function(display, builder) {
-    if(P.INSTITUTE_DEPTH > 1) {
-        var departments = O.query().
-            link(T.Department, A.Type).
-            link(display.object.ref, A.Parent).
-            sortByTitle().execute();
-        if(departments.length) {
-            var exclude = (O.application.config["hres_navigation:remove_institutes_from_navigation"] || []);
-            var numberOfLinks = 0;
-            builder.panel(300).element("default", {title:NAME('+Department')});
-            _.each(departments, function(dept) {
-                if(exclude.indexOf(dept.ref.toString()) === -1) {
-                    numberOfLinks++; 
-                    if(numberOfLinks < MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) {
-                        builder.panel(300).link("default", dept.url(), dept.title);
+var institutePeopleLinks;
+
+var researchInstituteLinksActionPanel = function(name, childType, childTitle, level) {
+    P.implementService(name, function(display, builder) {
+        // People
+        if(!institutePeopleLinks) {
+            institutePeopleLinks = [
+                {sort:1000, type:T.Researcher, name:NAME("+Researcher")},
+                {sort:9000, type:T.Staff,      name:NAME("+Staff")}
+            ];
+            O.serviceMaybe("hres:navigation:people_types_for_research_institute_navigation", institutePeopleLinks);
+        }
+        var peopleBase = display.object.url()+'/linked/'+T.Person+'?sort=title&type=';
+        var peoplePanel = builder.panel(200);
+        institutePeopleLinks.forEach(function(p) {
+            // TODO: Make this check for people a bit quicker?
+            var q = O.query().link(display.object.ref).link(p.type,A.Type).limit(1).setSparseResults(true).execute();
+            if(q.length) {
+                peoplePanel.link(p.sort, peopleBase+p.type, p.name);
+            }
+        });
+        if(!peoplePanel.empty) { peoplePanel.element(0, {title:"People"}); }
+        // Child institute
+        if(childType && (P.INSTITUTE_DEPTH > level)) {
+            var childInstitutes = O.query().
+                link(childType, A.Type).
+                link(display.object.ref, A.Parent).
+                sortByTitle().execute();
+            if(childInstitutes.length) {
+                var exclude = (O.application.config["hres_navigation:remove_institutes_from_navigation"] || []);
+                var numberOfLinks = 0;
+                builder.panel(300).element("default", {title:NAME(childTitle)});
+                _.each(childInstitutes, function(inst) {
+                    if(exclude.indexOf(inst.ref.toString()) === -1) {
+                        numberOfLinks++; 
+                        if(numberOfLinks < MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) {
+                            builder.panel(300).link("default", inst.url(), inst.title);
+                        }
                     }
+                });
+                if(numberOfLinks > MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) { 
+                    builder.panel(300).link("default",
+                        display.object.url()+'/linked/'+T.ResearchInstitute+'?sort=title&type='+childType,
+                        "More..."
+                    );
                 }
-            });
-            if(numberOfLinks > MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) { 
-                builder.panel(300).link("default",
-                    display.object.url()+'/linked/'+T.ResearchInstitute+'?sort=title&type='+T.Department,
-                    "More..."
-                );
             }
         }
-    }
-    var researchGroups = O.query().
-        link(T.ResearchGroup, A.Type).
-        or(function(sq) {
-            sq.link(display.object.ref, A.ResearchInstitute).
-                link(display.object.ref, A.Parent);
-        }).
-        sortByTitle().limit(MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION+1).execute();
-    if(researchGroups.length) {
-        builder.panel(400).element("default", {title:NAME('+ResearchGroup')});
-        _.each(researchGroups, function(rg) {
-            builder.panel(400).link("default", rg.url(), rg.title);
-        });
-        if(researchGroups.length > MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) { 
-            builder.panel(400).link("default",
-                display.object.url()+'/linked/'+T.ResearchInstitute+'?sort=title&type='+T.ResearchGroup,
-                "More..."
-            ); 
+        // Research groups
+        var researchGroups = O.query().
+            link(T.ResearchGroup, A.Type).
+            or(function(sq) {
+                sq.link(display.object.ref, A.ResearchInstitute).
+                    link(display.object.ref, A.Parent);
+            }).
+            sortByTitle().limit(MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION+1).execute();
+        if(researchGroups.length) {
+            builder.panel(400).element("default", {title:NAME('+ResearchGroup')});
+            _.each(researchGroups, function(rg) {
+                builder.panel(400).link("default", rg.url(), rg.title);
+            });
+            if(researchGroups.length > MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) { 
+                builder.panel(400).link("default",
+                    display.object.url()+'/linked/'+T.ResearchInstitute+'?sort=title&type='+T.ResearchGroup,
+                    "More..."
+                ); 
+            }
         }
-    }
-});
+    });
+};
+
+researchInstituteLinksActionPanel("std:action_panel:faculty_navigation", T.Department, "+Department", 1);
+researchInstituteLinksActionPanel("std:action_panel:department_navigation", T.School, "+School", 2);
+researchInstituteLinksActionPanel("std:action_panel:school_navigation");
+researchInstituteLinksActionPanel("std:action_panel:research_group_navigation");

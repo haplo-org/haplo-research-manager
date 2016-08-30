@@ -61,6 +61,7 @@ var pluralise = function(name) {
     if(match) {
         return match[1]+'ies';
     }
+    if(/ff$/.test(name)) { return name; }
     return name+'s';
 };
 
