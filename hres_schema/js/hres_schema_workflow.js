@@ -131,5 +131,7 @@ P.implementService("hres:schema:workflow:dashboard:states:configure", function(s
         dashboard.addQueryFilter(function(query) { query.tag('academicYear', year.ref.toString()); });
         dashboard.addLinkParameter("year", year.ref.toString());
         dashboard.addHeaderDeferred(P.template("academic-year-navigation").deferredRender(year));
+        // TODO: Perform permission enforcement without using this temporary API
+        dashboard.addQueryFilter(function(query) { query._temp_refPermitsReadByUser(O.currentUser); });
     };
 });
