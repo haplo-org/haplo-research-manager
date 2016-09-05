@@ -94,6 +94,12 @@ attribute hres:attribute:research-institute as ResearchInstitute
     data-type link
     linked-type hres:type:research-institute
 
+attribute hres:attribute:collaborating-institution as CollaboratingInstitution
+    title: Collaborating Institution
+    search-name: collaborating-institution
+    qualifier std:qualifier:null
+    data-type text
+
 attribute hres:attribute:head as Head
     title: Head
     search-name: head-of-department
