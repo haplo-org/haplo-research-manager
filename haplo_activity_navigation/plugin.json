@@ -9,7 +9,8 @@
   "privilegesRequired": ["pDatabase"],
   "load": [
       "js/haplo_activity_navigation.js",
-      "js/activity_overview.js"
+      "js/activity_overview.js",
+      "js/activity_guides.js"
     ],
   "respond": ["/do/activity"]
 }

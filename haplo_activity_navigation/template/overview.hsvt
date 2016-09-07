@@ -19,7 +19,7 @@ if(adminMode) {
   }
   if(canEdit) {
     <p class="activities_overview_text_edit">
-      <a href=["/do/activity/edit-overview/" activity.name]> "Edit" </a>
+      <a href=["/do/activity/edit-overview/" activity.name]> "Edit summary" </a>
     </p>
   }
   each(overviewDeferreds) {

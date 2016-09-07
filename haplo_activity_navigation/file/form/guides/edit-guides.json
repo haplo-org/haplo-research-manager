@@ -1,0 +1,40 @@
+{
+    "specificationVersion": 0,
+    "formId": "guides",
+    "formTitle": "Guides",
+    "elements": [
+        {"type":"text",          "path":"title", "label":"Section title", "required":true},
+        {"type":"document-text", "path":"intro", "label":"Introduction"},
+        {
+            "type": "section",
+            "heading": "Guides",
+            "elements": [
+                {"type":"static", "text":"This section is intended for guides on how to use the features, with versions for on-screen reading and printing."},
+                {
+                    "type": "repeating-section",
+                    "path": "guides",
+                    "elements": [
+                        {"type":"text", "path":"title",  "label":"Title",            "required":true},
+                        {"type":"file", "path":"screen", "label":"Screen version"},
+                        {"type":"file", "path":"print",  "label":"Printable version"}
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "heading": "Files",
+            "elements": [
+                {"type":"static", "text":"This section is intended for related materials, for example, forms and regulations. If you don't include any guides in this section, you can create a section purely for providing files."},
+                {
+                    "type": "repeating-section",
+                    "path": "files",
+                    "elements": [
+                        {"type":"text", "path":"title", "label":"Title", "required":true},
+                        {"type":"file", "path":"file",                   "required":true}
+                    ]
+                }
+            ]
+        }
+    ]
+}
