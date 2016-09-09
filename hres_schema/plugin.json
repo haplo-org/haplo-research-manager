@@ -30,6 +30,7 @@
       "js/hres_schema_institute_choices.js"
     ],
   "respond": [
-      "/do/hres-navigation"
+      "/do/hres-navigation",
+      "/do/hres-schema-admin"
     ]
 }

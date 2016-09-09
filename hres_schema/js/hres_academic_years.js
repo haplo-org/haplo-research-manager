@@ -46,6 +46,8 @@ var START_DAY = 1;      // first day of August
 var END_MONTH = 6;      // July
 var END_DAY = 31;       // last day of July, because platform date ranges include last day
 
+var ENSURE_AT_LEAST_YEARS_IN_FUTURE = 2;
+
 // An array of objects representing academic years in order, keys:
 //   ref: of academic year object
 //   title: "2014 - 2015"
@@ -239,4 +241,28 @@ P.reporting.registerReportingFeature("hres:schema:academic_year_navigation_for_j
     dashboard.navigationUI(function(dashboard) {
         return P.template("academic-year-navigation").deferredRender(year);
     });
+});
+
+// ----------------------------------------------------------------------------------------------------------------
+// There must exist at least a few academic years in the future
+
+var ensureAcademicYearsInFutureAvailable = function() {
+    var d = new Date();
+    for(var i = 0; i <= ENSURE_AT_LEAST_YEARS_IN_FUTURE; ++i) {
+        forDate(d);
+        d.setFullYear(d.getFullYear()+1);
+    }
+};
+
+// Check every morning to keep them updated
+P.hook('hScheduleDailyEarly', function() {
+    ensureAcademicYearsInFutureAvailable();
+});
+
+// Handler to check right now (useful when setting up new applications)
+P.respond("GET", "/do/hres-schema-admin/ensure-academic-years", [
+], function(E) {
+    if(!O.currentUser.isMemberOf(Group.Administrators)) { O.stop("Not permitted"); }
+    ensureAcademicYearsInFutureAvailable();
+    E.render({message:"Done", pageTitle:"Ensure academic years"}, "std:ui:notice");
 });
