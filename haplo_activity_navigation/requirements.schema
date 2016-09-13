@@ -9,4 +9,7 @@
 feature std:page:home
     element: std:group:everyone right std:action_panel {"panel":"home_activities", "highlight":"secondary"} [sort=1600]
 
+feature std:navigation
+    entry: plugin haplo:activity-navigation:guides [sort=99999999]
+
 type std:type:person as Person
