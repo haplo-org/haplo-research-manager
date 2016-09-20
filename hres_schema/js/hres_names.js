@@ -27,7 +27,8 @@ var NAMES = {
     "Department":               ["getTypeInfo", T, "Department"],
     "School":                   ["getTypeInfo", T, "School"],
     "Research Group":           ["getTypeInfo", T, "ResearchGroup"],
-    "Research Administrator":   ["getAttributeInfo", A, "ResearchAdministrator"]
+    "Research Administrator":   ["getAttributeInfo", A, "ResearchAdministrator"],
+    "Supervisor":               ["getAttributeInfo", A, "Supervisor"]
 };
 
 P.implementService("std:NAME", function(name) {
