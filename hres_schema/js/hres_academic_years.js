@@ -114,11 +114,15 @@ var forDate = function(date) {
             var obj = O.object();
             obj.appendType(T.AcademicYear);
             obj.appendTitle(""+academicStartYear+" - "+(academicStartYear+1));
-            obj.append(O.datetime(
+            var datetime = O.datetime(
                 new Date(academicStartYear,     START_MONTH, START_DAY),
                 new Date(academicStartYear + 1, END_MONTH,   END_DAY),
                 O.PRECISION_DAY
-            ), A.Date);
+            );
+            if(datetime.start.getFullYear() !== academicStartYear) {
+                O.stop("Date "+date+" not in range");
+            }
+            obj.append(datetime, A.Date);
             obj.save();
             // Flush all the runtimes because any other runtime will have an invalid cache
             O.reloadJavaScriptRuntimes();
