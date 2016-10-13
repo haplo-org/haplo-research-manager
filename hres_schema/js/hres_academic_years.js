@@ -108,6 +108,11 @@ var forDate = function(date) {
         O.impersonating(O.SYSTEM, function() {
             // Determine the first year of the relevant academic year
             var academicStartYear = date.getFullYear();
+            // Check if year is within reasonable range to avoid logic errors
+            // due to javascript date constructor
+            if(academicStartYear < 1970 || academicStartYear > 2100) {
+                O.stop("Year must be between 1970-2100, date given: "+date.toString());
+            }
             var cutOff = new Date(date.getFullYear(), START_MONTH, START_DAY);
             if(date < cutOff) { academicStartYear--; }
             // Make new object
@@ -119,9 +124,6 @@ var forDate = function(date) {
                 new Date(academicStartYear + 1, END_MONTH,   END_DAY),
                 O.PRECISION_DAY
             );
-            if(datetime.start.getFullYear() !== academicStartYear) {
-                O.stop("Date "+date+" not in range");
-            }
             obj.append(datetime, A.Date);
             obj.save();
             // Flush all the runtimes because any other runtime will have an invalid cache
