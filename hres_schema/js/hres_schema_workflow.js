@@ -105,12 +105,32 @@ P.workflow.registerWorkflowFeature("hres:entities", function(workflow, entities)
         use("std:entities:add_entities", entities);
 });
 
+// --------------------------------------------------------------------------
+
+var modifyEntities = function(entities, expected) {
+    _.each(entities, function(v,k) {
+        var actual = !!(k in HRES_ENTITIES);
+        if(expected !== actual) {
+            throw new Error((expected ? "Entity does not exist yet for modification: " : "Entity exists: ")+k);
+        }
+        HRES_ENTITIES[k] = v;
+    });
+};
+
+var WORKFLOW_ENTITIES_FEATURE = {
+    add:    function(entities) { modifyEntities(entities, false); },
+    modify: function(entities) { modifyEntities(entities, true ); }
+};
+
 P.provideFeature("hres:schema:entities", function(plugin) {
+    plugin.hresWorkflowEntities = WORKFLOW_ENTITIES_FEATURE;
     plugin.hresStandaloneEntities = function(entities) {
         return P.workflow.standaloneEntities(
             _.extend({}, HRES_ENTITIES, entities || {}), SETUP_ENTITY_PROTOTYPE);
     };
 });
+
+// --------------------------------------------------------------------------
 
 var refColumnTagToName = function(tag) {
     var r = O.ref(tag);
