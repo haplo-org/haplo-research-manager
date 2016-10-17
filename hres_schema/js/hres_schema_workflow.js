@@ -98,7 +98,7 @@ var SETUP_ENTITY_PROTOTYPE = function(prototype) {
 
 // --------------------------------------------------------------------------
 
-P.workflow.registerWorkflowFeature("hres:entities", function(workflow, entities) {
+P.workflow.registerWorkflowFeature("hres:combined_application_entities", function(workflow, entities) {
     workflow.
         use("std:entities", HRES_ENTITIES, SETUP_ENTITY_PROTOTYPE).
         use("std:entities:tags", "department", "faculty", "academicYear").
@@ -124,7 +124,7 @@ var WORKFLOW_ENTITIES_FEATURE = {
 
 P.provideFeature("hres:schema:entities", function(plugin) {
     plugin.hresWorkflowEntities = WORKFLOW_ENTITIES_FEATURE;
-    plugin.hresStandaloneEntities = function(entities) {
+    plugin.hresCombinedApplicationStandaloneEntities = function(entities) {
         return P.workflow.standaloneEntities(
             _.extend({}, HRES_ENTITIES, entities || {}), SETUP_ENTITY_PROTOTYPE);
     };
