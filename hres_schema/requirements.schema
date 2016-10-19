@@ -206,7 +206,8 @@ type hres:type:person:researcher as Researcher
     search-name: researcher
     render-category 3
     render-icon: E228,2,f
-    element: std:group:everyone right std:action_panel {"panel":"researcher"} [sort=14000]
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"researcher"}
+    element: std:group:everyone right std:action_panel {"panel":"researcher", "category":"hres:person"} [sort=14000]
 
 # Don't use std:type:staff because it's a subtly different meaning than the intent of the default schema
 type hres:type:person:staff as Staff
@@ -215,7 +216,8 @@ type hres:type:person:staff as Staff
     search-name: staff
     render-category 4
     render-icon: E21A,1,f E21B,3,f
-    element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
+    element: std:group:everyone right std:action_panel {"panel":"staff", "category":"hres:person"} [sort=14000]
 
 type hres:type:person:staff-past as StaffPast
     title: Staff (past)
@@ -224,7 +226,8 @@ type hres:type:person:staff-past as StaffPast
     search-name: past staff
     render-category 4
     render-icon: E21A,1,f E21B,3,f E413,1,f,y
-    element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
+    element: std:group:everyone right std:action_panel {"panel":"staff", "category":"hres:person"} [sort=14000]
 
 type hres:type:research-institute as ResearchInstitute
     title: Research Institute
