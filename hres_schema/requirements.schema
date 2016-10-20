@@ -31,6 +31,17 @@ type std:type:person as Person
     REMOVE attribute std:attribute:notes
     REMOVE label-applicable std:label:common
 
+type std:type:organisation as Organisation
+    REMOVE attribute dc:attribute:subject
+    REMOVE attribute std:attribute:relationship-manager
+    REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
+    REMOVE element: std:group:everyone bottom std:contact_notes
+
+attribute std:attribute:relationship-manager as RelationshipManager
+    # To avoid sending a list of all the person objects to the client in the object editor
+    REMOVE ui-options dropdown
+    ui-options lookup
+
 
 # -------- Schema templates --------------------
 
@@ -194,7 +205,6 @@ aliased-attribute hres:aliased-attribute:academic-year-dates as AcademicYearDate
 
 # -------- Types -----------------------------------
 
-type std:type:organisation as Organisation
 type std:type:intranet-page as IntranetPage
 
 type std:type:person
