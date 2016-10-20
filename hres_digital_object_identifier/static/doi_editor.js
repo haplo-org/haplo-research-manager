@@ -13,7 +13,7 @@
     _.extend(DOIEditorValue.prototype, {
         generateHTML: function() {
             var doi = this.doi;
-            var html = ['doi:<input type="text" size="20" value="', _.escape(doi), '" placeholder="eg: 10.1000/182">'];
+            var html = ['doi:<input type="text" size="20" value="', _.escape(doi), '" tabindex="1" placeholder="eg: 10.1000/182">'];
             return html.join('');
         },
         attach: function(container) {
