@@ -76,6 +76,8 @@ var HRES_ENTITIES = {
     'departmentHead': ['department', A.Head]
 };
 
+var HRES_SHARED_ROLES = [];
+
 var _hresFindRoleInResearchInstitute = function(desc, context) {
     var insts = P.INSTITUTE_PROPERTIES_IN_ORDER;
     for(var x = insts.length - 1; x >= 0; --x) { // reverse order, search from lowest
@@ -107,7 +109,13 @@ P.workflow.registerWorkflowFeature("hres:combined_application_entities", functio
     workflow.
         use("std:entities", HRES_ENTITIES, SETUP_ENTITY_PROTOTYPE).
         use("std:entities:tags", "department", "faculty", "academicYear").
-        use("std:entities:add_entities", entities);
+        use("std:entities:add_entities", entities).
+        use("std:entities:roles");
+    if(HRES_SHARED_ROLES.length) {
+        workflow.use("std:entities:entity_shared_roles", {
+            entities: HRES_SHARED_ROLES
+        });
+    }
 });
 
 // --------------------------------------------------------------------------
@@ -128,7 +136,14 @@ var modifyEntities = function(entities, expected) {
 
 var WORKFLOW_ENTITIES_FEATURE = {
     add:    function(entities) { modifyEntities(entities, false); },
-    modify: function(entities) { modifyEntities(entities, true ); }
+    modify: function(entities) { modifyEntities(entities, true ); },
+    sharedRoles: function(roles) {
+        _.each(roles, function(role) {
+            if(-1 === HRES_SHARED_ROLES.indexOf(role)) {
+                HRES_SHARED_ROLES.push(role);
+            }
+        });
+    }
 };
 
 P.provideFeature("hres:schema:entities", function(plugin) {
