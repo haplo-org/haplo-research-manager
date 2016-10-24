@@ -98,7 +98,12 @@ var SETUP_ENTITY_PROTOTYPE = function(prototype) {
 
 // --------------------------------------------------------------------------
 
+var haveUsedSchemaWorkflowFeature = false;
+var usageOrder = []; // track use of workflow & plugin features to give better error message
+
 P.workflow.registerWorkflowFeature("hres:combined_application_entities", function(workflow, entities) {
+    usageOrder.push("workflow "+workflow.plugin.pluginName);
+    haveUsedSchemaWorkflowFeature = true;
     workflow.
         use("std:entities", HRES_ENTITIES, SETUP_ENTITY_PROTOTYPE).
         use("std:entities:tags", "department", "faculty", "academicYear").
@@ -108,6 +113,10 @@ P.workflow.registerWorkflowFeature("hres:combined_application_entities", functio
 // --------------------------------------------------------------------------
 
 var modifyEntities = function(entities, expected) {
+    if(haveUsedSchemaWorkflowFeature) {
+        // Must do all modification before using it in workflows, otherwise you'd get different entities in different workflows.
+        throw new Error("Cannot modify hres:schema:entities after using the workflow feature. Adjust loadPriority of consuming plugins. Usage order: "+usageOrder.join(", "));
+    }
     _.each(entities, function(v,k) {
         var actual = !!(k in HRES_ENTITIES);
         if(expected !== actual) {
@@ -123,6 +132,7 @@ var WORKFLOW_ENTITIES_FEATURE = {
 };
 
 P.provideFeature("hres:schema:entities", function(plugin) {
+    usageOrder.push("plugin feature "+plugin.pluginName);
     plugin.hresWorkflowEntities = WORKFLOW_ENTITIES_FEATURE;
     plugin.hresCombinedApplicationStandaloneEntities = function(entities) {
         return P.workflow.standaloneEntities(
