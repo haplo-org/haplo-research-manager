@@ -9,7 +9,7 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
     P.OUTPUT_TYPES.forEach(function(outputType) {
         type(outputType, {
             labels: [Label.Output],
-            labelsFromLinked: [A.Author],
+            labelsFromLinked: [[A.Author, A.ResearchInstitute]],
             // Label with creator & authors so they can see their own outputs
             labelWithCreator: true,
             labelWith: [A.Author]

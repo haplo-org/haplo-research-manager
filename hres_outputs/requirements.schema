@@ -24,6 +24,7 @@ group std:group:everyone as Everyone
 # ---------------------------------------------------------------------------
 
 attribute dc:attribute:author as Author
+attribute hres:attribute:research-institute as ResearchInstitute
 
 type std:type:organisation as Organisation
 
