@@ -102,6 +102,7 @@ var SETUP_ENTITY_PROTOTYPE = function(prototype) {
 
 var haveUsedSchemaWorkflowFeature = false;
 var usageOrder = []; // track use of workflow & plugin features to give better error message
+var usesHresEntities = {};
 
 P.workflow.registerWorkflowFeature("hres:combined_application_entities", function(workflow, entities) {
     usageOrder.push("workflow "+workflow.plugin.pluginName);
@@ -116,6 +117,7 @@ P.workflow.registerWorkflowFeature("hres:combined_application_entities", functio
             entities: HRES_SHARED_ROLES
         });
     }
+    usesHresEntities[workflow.fullName] = true;
 });
 
 // --------------------------------------------------------------------------
@@ -154,6 +156,74 @@ P.provideFeature("hres:schema:entities", function(plugin) {
             _.extend({}, HRES_ENTITIES, entities || {}), SETUP_ENTITY_PROTOTYPE);
     };
 });
+
+// --------------------------------------------------------------------------
+
+// Make sure workflows have minimum entities before anything can happen.
+var requiredEntitiesMaybeProperties = {};  // calculated requirements
+var requiredEntitiesAdd = {};
+var requiredEntitiesRemove = {};
+var alwaysRequiredEntities = ['faculty']; // TODO: Is this a misfeature? Might there ever be a workflow which isn't relevant to a faculty?
+
+P.workflow.registerOnLoadCallback(function(workflows) {
+    workflows.forEach(function(workflow) {
+        var name = workflow.fullName;
+        if(usesHresEntities[name]) {
+            var required = [];
+            var remove = requiredEntitiesRemove[name] || [];
+            workflow.
+                getUsedActionableBy().
+                concat(requiredEntitiesAdd[name]).
+                concat(alwaysRequiredEntities).
+                forEach(function(actionableBy) {
+                    if(actionableBy in HRES_ENTITIES) {
+                        if(-1 === remove.indexOf(actionableBy)) {
+                            required.push(actionableBy+'_refMaybe');
+                        }
+                    }
+                });
+            requiredEntitiesMaybeProperties[name] = required;
+            if(required.length) {
+                workflow.actionPanel({closed:false}, hideActionPanelIfRequiredEntitiesMissing);
+            }
+        }
+    });
+});
+
+var defineRequiredEntitiesModifier = function(featureName, dict) {
+    P.workflow.registerWorkflowFeature(featureName, function(workflow, entities) {
+        dict[workflow.fullName] = (dict[workflow.fullName] || []).concat(entities);
+    });
+};
+// Workflows might require more entities to be defined to work, add them with:
+defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:add",    requiredEntitiesAdd);
+// Workflows might only use an entity in rare situations and check it itself, remove them from auto checks with:
+defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:remove", requiredEntitiesRemove);
+
+// TODO: Cache workflowHasMissingEntities if it's called in more than one place
+var workflowHasMissingEntities = function(M) {
+    var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+    if(requiredMaybeProps) {
+        var entities = M.entities; // will only get here if hres:schema:entities was used on the workflow
+        for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+            if(!(entities[requiredMaybeProps[i]])) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+// This is a bit of a hacky way of removing the UI, and doesn't really prevent anything,
+// but is a low impact and relatively efficient way of stopping bad things happening.
+var hideActionPanelIfRequiredEntitiesMissing = function(M, builder) {
+    if(workflowHasMissingEntities(M)) {
+        builder.hidePanel();
+        builder.panel(0).style("special").element(1, {
+            deferred: P.template("workflow/entity-requirements-not-met").deferredRender()
+        });
+    }
+};
 
 // --------------------------------------------------------------------------
 
