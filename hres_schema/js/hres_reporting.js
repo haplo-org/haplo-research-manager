@@ -44,12 +44,12 @@ if(P.INSTITUTE_DEPTH > 2) { PERSON_EXPORT_COLUMNS.push("school"); }
 
 var makePersonDashboardColumns = function(spec) {
     var columns = [
-        {fact:"ref", type:"ref-person-name", link:true, heading:(spec.heading || "Name")}
+        {fact:"ref", type:"ref-person-name", link:true, heading:(spec.heading || "Name"), style:(spec.personNameStyle || "small")}
     ];
     if(P.INSTITUTE_DEPTH > 1) {
         columns.push({
             type:"join",
-            style:"medium",
+            style:(spec.facultyDepartmentStyle || "medium"),
             joinWith:" : ",
             heading:NAME('Faculty')+" : "+NAME('Department'),
             columns: [
