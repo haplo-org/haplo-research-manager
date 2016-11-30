@@ -125,6 +125,14 @@ attribute hres:attribute:research-administrator as ResearchAdministrator
     data-type link
     linked-type std:type:person
 
+attribute hres:attribute:pro-vice-chancellor-for-research as ProViceChancellorForResearch
+    title: Pro Vice-Chancellor for Research
+    search-name: pro-vice-chancellor
+    search-name: pro-vice-chancellor-for-research
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
 attribute hres:attribute:academic-year as AcademicYear
     title: Academic year
     search-name: academic-year
@@ -253,6 +261,7 @@ type hres:type:research-institute as ResearchInstitute
     attribute hres:attribute:head [sort=12000]
     attribute hres:aliased-attribute:dean [sort=12001]
     attribute hres:attribute:research-administrator [sort=13000]
+    attribute hres:attribute:pro-vice-chancellor-for-research [sort=17000]
     attribute haplo:attribute:description [sort=20000]
     render-icon: E521,1,f E522,1,f E524,1,f E523,4,f
     render-category 0
@@ -282,6 +291,7 @@ type hres:type:research-institute:faculty as Faculty
     attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"faculty"} [sort=14000]
     element: std:group:everyone right std:action_panel {"panel":"faculty_navigation","style":"links"} [sort=20000]
 
@@ -294,6 +304,7 @@ type hres:type:research-institute:department as Department
     attribute-hide hres:aliased-attribute:university
     attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
     element: std:group:everyone right std:action_panel {"panel":"department_navigation","style":"links"} [sort=20000]
 
@@ -305,6 +316,7 @@ type hres:type:research-institute:school as School
     attribute-hide hres:aliased-attribute:university
     attribute-hide hres:aliased-attribute:faculty
     attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"school"} [sort=14000]
     element: std:group:everyone right std:action_panel {"panel":"school_navigation","style":"links"} [sort=20000]
 
@@ -315,6 +327,7 @@ type hres:type:research-institute:research-group as ResearchGroup
     attribute-hide hres:aliased-attribute:faculty
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
     element: std:group:everyone right std:action_panel {"panel":"research_group_navigation","style":"links"} [sort=20000]
 
