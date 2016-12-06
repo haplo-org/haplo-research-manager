@@ -125,6 +125,14 @@ attribute hres:attribute:research-administrator as ResearchAdministrator
     data-type link
     linked-type std:type:person
 
+attribute hres:attribute:research-director as ResearchDirector
+    title: Director of Research
+    search-name: research-director
+    search-name: director-of-research
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
 attribute hres:attribute:pro-vice-chancellor-for-research as ProViceChancellorForResearch
     title: Pro Vice-Chancellor for Research
     search-name: pro-vice-chancellor
@@ -261,6 +269,7 @@ type hres:type:research-institute as ResearchInstitute
     attribute hres:attribute:head [sort=12000]
     attribute hres:aliased-attribute:dean [sort=12001]
     attribute hres:attribute:research-administrator [sort=13000]
+    attribute hres:attribute:research-director [sort=15000]
     attribute hres:attribute:pro-vice-chancellor-for-research [sort=17000]
     attribute haplo:attribute:description [sort=20000]
     render-icon: E521,1,f E522,1,f E524,1,f E523,4,f

@@ -38,6 +38,7 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.groupPersonalRole(Group.AdminStaff,       "Is: Admin staff");
     setup.attributeRole("Head",                     T.ResearchInstitute,    A.Head);
     setup.attributeRole("Research Administrator",   T.ResearchInstitute,    A.ResearchAdministrator);
+    setup.attributeRole("Research Director",        T.ResearchInstitute,    A.ResearchDirector);
     setup.attributeRole("Committee Member",         T.Committee,            A.CommitteeMember);
     setup.attributeRole("Committee Representative", T.Committee,            A.CommitteeRepresentative);
 
