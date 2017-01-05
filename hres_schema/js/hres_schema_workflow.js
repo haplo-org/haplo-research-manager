@@ -230,6 +230,12 @@ var blockTransitionsIfRequiredEntitiesMissing = function(M, E, ui) {
     }
 };
 
+P.implementService("hres:schema:workflow:required_entities:have_missing", function(M, E) {
+    if(workflowHasMissingEntities(M)) {
+        return true;
+    }
+});
+
 // --------------------------------------------------------------------------
 
 var refColumnTagToName = function(tag) {
