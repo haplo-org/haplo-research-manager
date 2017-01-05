@@ -163,7 +163,6 @@ P.provideFeature("hres:schema:entities", function(plugin) {
 var requiredEntitiesMaybeProperties = {};  // calculated requirements
 var requiredEntitiesAdd = {};
 var requiredEntitiesRemove = {};
-var alwaysRequiredEntities = ['faculty']; // TODO: Is this a misfeature? Might there ever be a workflow which isn't relevant to a faculty?
 
 P.workflow.registerOnLoadCallback(function(workflows) {
     workflows.forEach(function(workflow) {
@@ -174,7 +173,6 @@ P.workflow.registerOnLoadCallback(function(workflows) {
             workflow.
                 getUsedActionableBy().
                 concat(requiredEntitiesAdd[name]).
-                concat(alwaysRequiredEntities).
                 forEach(function(actionableBy) {
                     if(actionableBy in HRES_ENTITIES) {
                         if(-1 === remove.indexOf(actionableBy)) {
@@ -185,6 +183,7 @@ P.workflow.registerOnLoadCallback(function(workflows) {
             requiredEntitiesMaybeProperties[name] = required;
             if(required.length) {
                 workflow.actionPanel({closed:false}, hideActionPanelIfRequiredEntitiesMissing);
+                workflow.transitionUI({closed:false}, blockTransitionsIfRequiredEntitiesMissing);
             }
         }
     });
@@ -222,6 +221,12 @@ var hideActionPanelIfRequiredEntitiesMissing = function(M, builder) {
         builder.panel(0).style("special").element(1, {
             deferred: P.template("workflow/entity-requirements-not-met").deferredRender()
         });
+    }
+};
+
+var blockTransitionsIfRequiredEntitiesMissing = function(M, E, ui) {
+    if(workflowHasMissingEntities(M)) {
+        ui.redirect(M.url);
     }
 };
 
