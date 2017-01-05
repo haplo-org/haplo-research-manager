@@ -217,6 +217,7 @@ var workflowHasMissingEntities = function(M) {
 // but is a low impact and relatively efficient way of stopping bad things happening.
 var hideActionPanelIfRequiredEntitiesMissing = function(M, builder) {
     if(workflowHasMissingEntities(M)) {
+        sendEntityMissingTask(M);
         builder.hidePanel();
         builder.panel(0).style("special").element(1, {
             deferred: P.template("workflow/entity-requirements-not-met").deferredRender()
@@ -226,8 +227,18 @@ var hideActionPanelIfRequiredEntitiesMissing = function(M, builder) {
 
 var blockTransitionsIfRequiredEntitiesMissing = function(M, E, ui) {
     if(workflowHasMissingEntities(M)) {
+        sendEntityMissingTask(M);
         ui.redirect(M.url);
     }
+};
+
+var sendEntityMissingTask = function(M) {
+    O.serviceMaybe("haplo:group_notification_queue:push", {
+        group: Group.CheckMissingEntities,
+        type: "entity_missing",
+        ref: M.entities.object_ref,
+        deduplicateOnRef: true
+    });
 };
 
 P.implementService("hres:schema:workflow:required_entities:have_missing", function(M, E) {
@@ -235,6 +246,27 @@ P.implementService("hres:schema:workflow:required_entities:have_missing", functi
         return true;
     }
 });
+
+P.implementService("std:action_panel:activity:menu:graduate_school",
+    function(display, builder) {
+        if(O.currentUser.isMemberOf(Group.CheckMissingEntities)) {
+            var link = O.service("haplo:group_notification_queue:url:action_page",
+                Group.CheckMissingEntities);
+            builder.panel("phd:graduate_school_menu:registry").
+                link("default", link, "Missing information");
+        }
+    }
+);
+
+P.implementService("haplo:group_notification_queue:queue_definition:"+
+    Group.CheckMissingEntities, function() {
+        return { pageTitle: "Missing information" };
+    }
+);
+
+P.implementService("haplo:group_notification_queue:task_definition:entity_missing",
+    function() { return { description: "Required information missing for application"}; }
+);
 
 // --------------------------------------------------------------------------
 
