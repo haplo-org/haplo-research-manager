@@ -236,15 +236,13 @@ var sendEntityMissingTask = function(M) {
     O.serviceMaybe("haplo:group_notification_queue:push", {
         group: Group.CheckMissingEntities,
         type: "entity_missing",
-        ref: M.entities.object_ref,
+        ref: M.workUnit.ref,
         deduplicateOnRef: true
     });
 };
 
-P.implementService("hres:schema:workflow:required_entities:have_missing", function(M, E) {
-    if(workflowHasMissingEntities(M)) {
-        return true;
-    }
+P.implementService("hres:schema:workflow:required_entities:have_missing", function(M) {
+    return !!workflowHasMissingEntities(M);
 });
 
 P.implementService("std:action_panel:activity:menu:graduate_school",
