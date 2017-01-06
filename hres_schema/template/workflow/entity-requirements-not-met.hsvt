@@ -1,1 +1,1 @@
-std:ui:notice("This workflow cannot proceed because there is some missing information. Please contact your administrators for assistance.")
+std:ui:notice("This workflow is on hold while awaiting information required to route this application. Your administrators have been informed.")

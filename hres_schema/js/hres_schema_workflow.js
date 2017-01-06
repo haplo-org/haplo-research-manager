@@ -265,8 +265,40 @@ P.implementService("haplo:group_notification_queue:queue_definition:"+
 );
 
 P.implementService("haplo:group_notification_queue:task_definition:entity_missing",
-    function() { return { description: "Required information missing for application"}; }
+    function(ref) {
+        return {
+            // description: "Required information missing for application"
+            deferredRenderDescription: P.template(
+                "workflow/entity-requirement-task-description").deferredRender({
+                    ref: ref.toString()
+                })
+        };
+    }
 );
+
+P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
+    {pathElement:0, as:"object"}
+], function(E, object) {
+    var wornUnitQuery = O.work.query().ref(object.ref);
+    var missingEntities = [];
+    if(wornUnitQuery.length > 0) {
+        var workUnit = wornUnitQuery[0];
+        var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
+        if(M) {
+            var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+            for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+                var entity = requiredMaybeProps[i];
+                if(!(M.entities[entity])) {
+                    missingEntities.push(entity.replace("_refMaybe", ""));
+                }
+            }
+        }
+    }
+    E.render({
+        object: object,
+        missingEntities: missingEntities
+    }, "workflow/show-missing-entities");
+});
 
 // --------------------------------------------------------------------------
 
