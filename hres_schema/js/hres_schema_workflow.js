@@ -167,6 +167,8 @@ var requiredEntitiesRemove = {};
 P.workflow.registerOnLoadCallback(function(workflows) {
     workflows.forEach(function(workflow) {
         var name = workflow.fullName;
+        // TODO using private variables, change to public api when available
+        var entityDefinitions = workflow.constructEntitiesObject.$Entities.prototype.$entityDefinitions;
         if(usesHresEntities[name]) {
             var required = [];
             var remove = requiredEntitiesRemove[name] || [];
@@ -174,7 +176,7 @@ P.workflow.registerOnLoadCallback(function(workflows) {
                 getUsedActionableBy().
                 concat(requiredEntitiesAdd[name]).
                 forEach(function(actionableBy) {
-                    if(actionableBy in HRES_ENTITIES) {
+                    if(actionableBy in entityDefinitions) {
                         if(-1 === remove.indexOf(actionableBy)) {
                             required.push(actionableBy+'_refMaybe');
                         }
