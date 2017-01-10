@@ -279,10 +279,13 @@ P.implementService("haplo:group_notification_queue:task_definition:entity_missin
 P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
     {pathElement:0, as:"object"}
 ], function(E, object) {
-    var wornUnitQuery = O.work.query().ref(object.ref);
+    if(!O.currentUser.isMemberOf(Group.CheckMissingEntities)) {
+        O.stop("Not permitted");
+    }
+    var workUnitQuery = O.work.query().ref(object.ref);
     var missingEntities = [];
-    if(wornUnitQuery.length > 0) {
-        var workUnit = wornUnitQuery[0];
+    if(workUnitQuery.length > 0) {
+        var workUnit = workUnitQuery[0];
         var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
         if(M) {
             var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
