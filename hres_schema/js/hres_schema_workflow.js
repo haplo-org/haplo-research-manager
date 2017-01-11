@@ -163,6 +163,7 @@ P.provideFeature("hres:schema:entities", function(plugin) {
 var requiredEntitiesMaybeProperties = {};  // calculated requirements
 var requiredEntitiesAdd = {};
 var requiredEntitiesRemove = {};
+var allowMissingEntityFns = {};
 
 P.workflow.registerOnLoadCallback(function(workflows) {
     workflows.forEach(function(workflow) {
@@ -200,6 +201,22 @@ var defineRequiredEntitiesModifier = function(featureName, dict) {
 defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:add",    requiredEntitiesAdd);
 // Workflows might only use an entity in rare situations and check it itself, remove them from auto checks with:
 defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:remove", requiredEntitiesRemove);
+// Workflows might want to allow a missing entity for some instances
+P.workflow.registerWorkflowFeature("hres:schema:workflow:required_entities:allow_missing_entity", function(workflow, fn) {
+    if(!allowMissingEntityFns[workflow.fullName]) { allowMissingEntityFns[workflow.fullName] = []; }
+    allowMissingEntityFns[workflow.fullName].push(fn);
+});
+
+var isMissingEntityAllowed = function(M, entity) {
+    var allow = false;
+    var fns = allowMissingEntityFns[M.workUnit.workType] || [];
+    for(var j = fns.length - 1; j >= 0; --j) {
+        if(fns[j](M, entity.replace("_refMaybe", ""))) {
+            allow = true;
+        }
+    }
+    return allow;
+};
 
 // TODO: Cache workflowHasMissingEntities if it's called in more than one place
 var workflowHasMissingEntities = function(M) {
@@ -208,7 +225,9 @@ var workflowHasMissingEntities = function(M) {
         var entities = M.entities; // will only get here if hres:schema:entities was used on the workflow
         for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
             if(!(entities[requiredMaybeProps[i]])) {
-                return true;
+                if(!isMissingEntityAllowed(M, requiredMaybeProps[i])) {
+                    return true;
+                }
             }
         }
     }
@@ -281,7 +300,9 @@ P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
             for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
                 var entity = requiredMaybeProps[i];
                 if(!(M.entities[entity])) {
-                    missingEntities.push(entity.replace("_refMaybe", ""));
+                    if(!isMissingEntityAllowed(M, entity)) {
+                        missingEntities.push(entity.replace("_refMaybe", ""));
+                    }
                 }
             }
         }
