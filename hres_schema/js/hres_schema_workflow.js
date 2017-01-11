@@ -220,6 +220,7 @@ var isMissingEntityAllowed = function(M, entity) {
 
 // TODO: Cache workflowHasMissingEntities if it's called in more than one place
 var workflowHasMissingEntities = function(M) {
+    if(O.application.config["hres:schema:workflow:required_entities:disable"]) { return false; }
     var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
     if(requiredMaybeProps) {
         var entities = M.entities; // will only get here if hres:schema:entities was used on the workflow
