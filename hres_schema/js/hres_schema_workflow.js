@@ -247,17 +247,6 @@ P.implementService("hres:schema:workflow:required_entities:have_missing", functi
     return !!workflowHasMissingEntities(M);
 });
 
-P.implementService("std:action_panel:activity:menu:graduate_school",
-    function(display, builder) {
-        if(O.currentUser.isMemberOf(Group.CheckMissingEntities)) {
-            var link = O.service("haplo:group_notification_queue:url:action_page",
-                Group.CheckMissingEntities);
-            builder.panel("phd:graduate_school_menu:registry").
-                link("default", link, "Missing information");
-        }
-    }
-);
-
 P.implementService("haplo:group_notification_queue:queue_definition:"+
     Group.CheckMissingEntities, function() {
         return { pageTitle: "Missing information" };
