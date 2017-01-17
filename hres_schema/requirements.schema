@@ -76,6 +76,9 @@ group hres:group:admin-staff as AdminStaff
 group hres:group:it-support as ITSupport
     title: IT Support
 
+group hres:group:senior-management as SeniorManagement
+    title: Senior Management
+
 # -------- Qualifiers ------------------------------
 
 
