@@ -86,6 +86,9 @@ group hres:group:senior-management as SeniorManagement
 
 attribute dc:attribute:date as Date
 attribute std:attribute:project as Project
+attribute std:attribute:job-title as JobTitle
+attribute std:attribute:email as EmailAddress
+attribute std:attribute:telephone as Telephone
 
 attribute hres:attribute:researcher as Researcher
     title: Researcher

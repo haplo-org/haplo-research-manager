@@ -20,6 +20,7 @@
       "js/hres_institute_structure.js",
       "js/hres_names.js",
       "js/hres_permissions.js",
+      "js/hres_schema_search_results_render.js",
       "js/hres_schema_workflow.js",
       "js/hres_academic_years.js",
       "js/hres_reporting.js",
