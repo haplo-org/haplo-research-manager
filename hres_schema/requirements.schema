@@ -37,6 +37,9 @@ type std:type:organisation as Organisation
     REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
     REMOVE element: std:group:everyone bottom std:contact_notes
 
+type std:type:project as Project
+    element: std:group:everyone right std:action_panel {"panel":"project"}
+
 attribute std:attribute:relationship-manager as RelationshipManager
     # To avoid sending a list of all the person objects to the client in the object editor
     REMOVE ui-options dropdown
