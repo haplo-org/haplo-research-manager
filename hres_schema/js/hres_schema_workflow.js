@@ -102,6 +102,7 @@ var SETUP_ENTITY_PROTOTYPE = function(prototype) {
 
 var haveUsedSchemaWorkflowFeature = false;
 var usageOrder = []; // track use of workflow & plugin features to give better error message
+var usesHresEntities = {};
 
 P.workflow.registerWorkflowFeature("hres:combined_application_entities", function(workflow, entities) {
     usageOrder.push("workflow "+workflow.plugin.pluginName);
@@ -116,6 +117,7 @@ P.workflow.registerWorkflowFeature("hres:combined_application_entities", functio
             entities: HRES_SHARED_ROLES
         });
     }
+    usesHresEntities[workflow.fullName] = true;
 });
 
 // --------------------------------------------------------------------------
@@ -153,6 +155,166 @@ P.provideFeature("hres:schema:entities", function(plugin) {
         return P.workflow.standaloneEntities(
             _.extend({}, HRES_ENTITIES, entities || {}), SETUP_ENTITY_PROTOTYPE);
     };
+});
+
+// --------------------------------------------------------------------------
+
+// Make sure workflows have minimum entities before anything can happen.
+var requiredEntitiesMaybeProperties = {};  // calculated requirements
+var requiredEntitiesAdd = {};
+var requiredEntitiesRemove = {};
+var allowMissingEntityFns = {};
+
+P.workflow.registerOnLoadCallback(function(workflows) {
+    workflows.forEach(function(workflow) {
+        var name = workflow.fullName;
+        // TODO using private variables, change to public api when available
+        var entityDefinitions = workflow.constructEntitiesObject.$Entities.prototype.$entityDefinitions;
+        if(usesHresEntities[name]) {
+            var required = [];
+            var remove = requiredEntitiesRemove[name] || [];
+            workflow.
+                getUsedActionableBy().
+                concat(requiredEntitiesAdd[name]).
+                forEach(function(actionableBy) {
+                    if(actionableBy in entityDefinitions) {
+                        if(-1 === remove.indexOf(actionableBy)) {
+                            required.push(actionableBy+'_refMaybe');
+                        }
+                    }
+                });
+            requiredEntitiesMaybeProperties[name] = required;
+            if(required.length) {
+                workflow.actionPanel({closed:false}, hideActionPanelIfRequiredEntitiesMissing);
+                workflow.transitionUI({closed:false}, blockTransitionsIfRequiredEntitiesMissing);
+            }
+        }
+    });
+});
+
+var defineRequiredEntitiesModifier = function(featureName, dict) {
+    P.workflow.registerWorkflowFeature(featureName, function(workflow, entities) {
+        dict[workflow.fullName] = (dict[workflow.fullName] || []).concat(entities);
+    });
+};
+// Workflows might require more entities to be defined to work, add them with:
+defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:add",    requiredEntitiesAdd);
+// Workflows might only use an entity in rare situations and check it itself, remove them from auto checks with:
+defineRequiredEntitiesModifier("hres:schema:workflow:required_entities:remove", requiredEntitiesRemove);
+// Workflows might want to allow a missing entity for some instances
+P.workflow.registerWorkflowFeature("hres:schema:workflow:required_entities:allow_missing_entity", function(workflow, fn) {
+    if(!allowMissingEntityFns[workflow.fullName]) { allowMissingEntityFns[workflow.fullName] = []; }
+    allowMissingEntityFns[workflow.fullName].push(fn);
+});
+
+var isMissingEntityAllowed = function(M, entity) {
+    var allow = false;
+    var fns = allowMissingEntityFns[M.workUnit.workType] || [];
+    for(var j = fns.length - 1; j >= 0; --j) {
+        if(fns[j](M, entity.replace("_refMaybe", ""))) {
+            allow = true;
+        }
+    }
+    return allow;
+};
+
+// TODO: Cache workflowHasMissingEntities if it's called in more than one place
+var workflowHasMissingEntities = function(M) {
+    if(!O.application.config["hres:schema:workflow:required_entities:enable"]) { return false; }
+    var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+    if(requiredMaybeProps) {
+        var entities = M.entities; // will only get here if hres:schema:entities was used on the workflow
+        for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+            if(!(entities[requiredMaybeProps[i]])) {
+                if(!isMissingEntityAllowed(M, requiredMaybeProps[i])) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+// This is a bit of a hacky way of removing the UI, and doesn't really prevent anything,
+// but is a low impact and relatively efficient way of stopping bad things happening.
+var hideActionPanelIfRequiredEntitiesMissing = function(M, builder) {
+    if(workflowHasMissingEntities(M)) {
+        sendEntityMissingTask(M);
+        builder.hidePanel();
+        builder.panel(0).style("special").element(1, {
+            deferred: P.template("workflow/entity-requirements-not-met").deferredRender()
+        });
+    }
+};
+
+var blockTransitionsIfRequiredEntitiesMissing = function(M, E, ui) {
+    if(workflowHasMissingEntities(M)) {
+        sendEntityMissingTask(M);
+        ui.redirect(M.url);
+    }
+};
+
+var sendEntityMissingTask = function(M) {
+    O.serviceMaybe("haplo:group_notification_queue:push", {
+        group: Group.CheckMissingEntities,
+        type: "entity_missing",
+        ref: M.workUnit.ref,
+        deduplicateOnRef: true
+    });
+};
+
+P.implementService("hres:schema:workflow:required_entities:have_missing", function(M) {
+    return !!workflowHasMissingEntities(M);
+});
+
+P.implementService("haplo:group_notification_queue:queue_definition:"+
+    Group.CheckMissingEntities, function() {
+        return {
+            pageTitle: "Missing information",
+            workUnitTitle: "Missing information required for applications"
+        };
+    }
+);
+
+P.implementService("haplo:group_notification_queue:task_definition:entity_missing",
+    function(ref) {
+        return {
+            // description: "Required information missing for application"
+            deferredRenderDescription: P.template(
+                "workflow/entity-requirement-task-description").deferredRender({
+                    ref: ref.toString()
+                })
+        };
+    }
+);
+
+P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
+    {pathElement:0, as:"object"}
+], function(E, object) {
+    if(!O.currentUser.isMemberOf(Group.CheckMissingEntities)) {
+        O.stop("Not permitted");
+    }
+    var workUnitQuery = O.work.query().ref(object.ref);
+    var missingEntities = [];
+    if(workUnitQuery.length > 0) {
+        var workUnit = workUnitQuery[0];
+        var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
+        if(M) {
+            var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+            for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+                var entity = requiredMaybeProps[i];
+                if(!(M.entities[entity])) {
+                    if(!isMissingEntityAllowed(M, entity)) {
+                        missingEntities.push(entity.replace("_refMaybe", ""));
+                    }
+                }
+            }
+        }
+    }
+    E.render({
+        object: object,
+        missingEntities: missingEntities
+    }, "workflow/show-missing-entities");
 });
 
 // --------------------------------------------------------------------------

@@ -12,7 +12,8 @@
       "std_reporting",
       "haplo_committee_support",
       "haplo_descriptive_object_labelling",
-      "haplo_user_roles_permissions"
+      "haplo_user_roles_permissions",
+      "haplo_group_notification_queue"
     ],
   "use": ["std:reporting", "std:workflow"],
   "load": [
@@ -32,6 +33,7 @@
     ],
   "respond": [
       "/do/hres-navigation",
-      "/do/hres-schema-admin"
+      "/do/hres-schema-admin",
+      "/do/hres-missing-entities"
     ]
 }

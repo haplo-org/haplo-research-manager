@@ -82,6 +82,11 @@ group hres:group:it-support as ITSupport
 group hres:group:senior-management as SeniorManagement
     title: Senior Management
 
+group hres:group:check-missing-entities as CheckMissingEntities
+    title: Check missing entities
+    member hres:group:it-support
+
+
 # -------- Qualifiers ------------------------------
 
 
