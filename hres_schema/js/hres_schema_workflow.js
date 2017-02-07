@@ -269,7 +269,10 @@ P.implementService("hres:schema:workflow:required_entities:have_missing", functi
 
 P.implementService("haplo:group_notification_queue:queue_definition:"+
     Group.CheckMissingEntities, function() {
-        return { pageTitle: "Missing information" };
+        return {
+            pageTitle: "Missing information",
+            workUnitTitle: "Missing information required for applications"
+        };
     }
 );
 
