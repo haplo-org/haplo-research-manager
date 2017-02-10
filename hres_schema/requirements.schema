@@ -32,12 +32,21 @@ type std:type:person as Person
     REMOVE label-applicable std:label:common
 
 type std:type:organisation as Organisation
+    attribute std:attribute:relationship-manager
     REMOVE attribute dc:attribute:subject
-    REMOVE attribute std:attribute:relationship-manager
     REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
     REMOVE element: std:group:everyone bottom std:contact_notes
 
 type std:type:project as Project
+    title: Project
+    search-name: project
+    attribute dc:attribute:title [sort=1000]
+    attribute hres:aliased-attribute:researchers [sort=1500]
+    REMOVE attribute std:attribute:client
+    REMOVE attribute std:attribute:project-leader
+    REMOVE attribute std:attribute:project-team
+    REMOVE attribute dc:attribute:subject
+    REMOVE attribute std:attribute:text
     element: std:group:everyone right std:action_panel {"panel":"project"}
 
 attribute std:attribute:relationship-manager as RelationshipManager
@@ -89,6 +98,13 @@ group hres:group:check-missing-entities as CheckMissingEntities
 
 # -------- Qualifiers ------------------------------
 
+qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
+    title: Principal Investigator
+    search-name: principal investigator
+
+qualifier hres:qualifier:co-investigator as CoInvestigator
+    title: Co-Investigator
+    search-name: co-investigator
 
 # -------- Attributes ------------------------------
 
@@ -104,6 +120,13 @@ attribute hres:attribute:researcher as Researcher
     qualifier std:qualifier:null
     data-type link
     linked-type hres:type:person:researcher
+
+aliased-attribute hres:aliased-attribute:researchers as Researchers
+    title: Researchers
+    search-name: researchers
+    alias-of hres:attribute:researcher
+    on-qualifier hres:qualifier:principal-investigator
+    on-qualifier hres:qualifier:co-investigator
 
 attribute hres:attribute:project-dates as ProjectDates
     title: Project dates
