@@ -167,6 +167,7 @@ var allowMissingEntityFns = {};
 
 P.workflow.registerOnLoadCallback(function(workflows) {
     workflows.forEach(function(workflow) {
+        if(!workflow.constructEntitiesObject) { return; }
         var name = workflow.fullName;
         // TODO using private variables, change to public api when available
         var entityDefinitions = workflow.constructEntitiesObject.$Entities.prototype.$entityDefinitions;
