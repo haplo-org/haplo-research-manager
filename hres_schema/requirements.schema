@@ -71,6 +71,16 @@ schema-template hres:template-type:list
     create-position never
 
 
+# -------- Application IDs -------------------------
+
+attribute hres:attribute:application-id
+    title: Application ID
+    search-name: application-id
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:appid
+
+
 # -------- Groups ------------------------------
 
 group std:group:everyone as Everyone
