@@ -17,7 +17,7 @@
         }
     });
 
-    Haplo.editor.registerTextType("vre:appid", function(value) {
+    Haplo.editor.registerTextType("hres:appid", function(value) {
         return new AppIdEditorValue(value);
     });
 
