@@ -17,6 +17,11 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
         labelWith: [A.ResearchInstitute]
     });
     
+    type(T.Project, {
+        selfLabelling: true,
+        labelWith: [A.Researcher],
+        labelsFromLinked: [[A.Researcher, A.ResearchInstitute]]
+    });
 });
 
 P.implementService("haplo:user_roles_permissions:setup", function(setup) {
@@ -41,6 +46,9 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.attributeRole("Research Director",        T.ResearchInstitute,    A.ResearchDirector);
     setup.attributeRole("Committee Member",         T.Committee,            A.CommitteeMember);
     setup.attributeRole("Committee Representative", T.Committee,            A.CommitteeRepresentative);
+
+    setup.attributeRole("Principal Investigator",   T.Project,      A.Researcher,   Q.PrincipalInvestigator);
+    setup.attributeRole("Co-Investigator",          T.Project,      A.Researcher,   Q.CoInvestigator);
 
     // Role permissions
     setup.roleOversightPermission("Research Administrator", "read-edit", [T.ResearchInstitute]);
