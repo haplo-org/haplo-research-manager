@@ -52,7 +52,7 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     // Role permissions
     setup.roleOversightPermission("Research Administrator", "read-edit", [T.ResearchInstitute]);
 
-    setup.roleProjectPermission("Principal Investigator",       "read-edit",        [T.Project]);
+    setup.roleProjectPermission("Principal Investigator",       "read-write",       [T.Project]);
     setup.roleProjectPermission("Co-Investigator",              "read-edit",        [T.Project]);
 });
 
