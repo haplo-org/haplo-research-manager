@@ -10,7 +10,7 @@
         },
         attach: function(container) {},
         getValue: function(container) {
-            return this.appid;
+            return [this.appid];
         },
         undoableDeletedText: function(container) {
             return this.appid;
