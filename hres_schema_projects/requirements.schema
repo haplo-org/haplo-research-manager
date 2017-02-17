@@ -1,0 +1,17 @@
+
+# -------- Groups ----------------------------------
+
+group std:group:everyone as Everyone
+
+# -------- Attributes ------------------------------
+
+attribute hres:attribute:researcher as Researcher
+
+# -------- Qualifiers ------------------------------
+
+qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
+qualifier hres:qualifier:co-investigator as CoInvestigator
+
+# -------- Types -----------------------------------
+
+type std:type:project as Project

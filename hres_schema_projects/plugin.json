@@ -1,0 +1,19 @@
+{
+  "pluginName": "hres_schema_projects",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo RM Projects",
+  "displayDescription": "Basic project UI and utilities for Haplo Research Manager",
+  "installSecret": "556f6ad2f709e49e376373808ae7bb42c943ee34",
+  "apiVersion": 4,
+  "depend": [
+    "hres_schema"
+  ],
+  "load": [
+      "js/hres_schema_projects.js"
+    ],
+  "respond": [
+    "/do/hres-navigation",
+    "/do/hres-schema-projects"
+  ]
+}
