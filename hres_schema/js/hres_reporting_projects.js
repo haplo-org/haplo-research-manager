@@ -12,7 +12,6 @@ P.implementService("std:reporting:discover_collections", function(discover) {
 P.implementService("std:reporting:collection:projects:setup", function(collection) {
     collection.
         currentObjectsOfType(T.Project).
-        fact("date",                        "date",     "Date").
         fact("principalInvestigator",       "ref",      "Principal Investigator");
 });
 
@@ -23,7 +22,6 @@ P.implementService("std:reporting:gather_collection_update_rules", function(rule
 P.implementService("std:reporting:collection:projects:get_facts_for_object", 
     function(object, row) {
         row.principalInvestigator = object.first(A.Researcher, Q.PrincipalInvestigator);
-        if(object.first(A.Date)) { row.date = object.first(A.Date).start; }
     });
 
 // --------------------------------------------------------------------------
@@ -59,8 +57,7 @@ P.respond("GET,POST", "/do/hres-navigation/researcher-projects", [
             sq.where("principalInvestigator", "=", researcher.ref);
         }).
         columns(100, [
-            {fact:"ref", heading:"Project", link:true},
-            "date"
+            {fact:"ref", heading:"Project", link:true}
         ]).
         deferredRender();
     E.render({
@@ -81,8 +78,6 @@ P.respond("GET", "/do/hres-navigation/new-project", [
     templateObj.appendType(T.Project);
     templateObj.append(researcher.ref,
         A.Researcher, Q.PrincipalInvestigator);
-    templateObj.append(O.datetime(
-        new Date(), undefined, O.PRECISION_DAY), A.Date);
     E.render({
         pageTitle: "Add new Project",
         backLink: "/do/hres-navigation/researcher-projects/"+researcher.ref,
