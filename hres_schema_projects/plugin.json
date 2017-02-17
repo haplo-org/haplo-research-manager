@@ -9,11 +9,10 @@
   "depend": [
     "hres_schema"
   ],
+  "use": ["std:reporting"],
   "load": [
-      "js/hres_schema_projects.js"
+      "js/hres_schema_projects.js",
+      "js/hres_schema_projects_reporting.js"
     ],
-  "respond": [
-    "/do/hres-navigation",
-    "/do/hres-schema-projects"
-  ]
+  "respond": ["/do/hres-projects"]
 }

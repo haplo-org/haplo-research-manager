@@ -11,21 +11,21 @@ P.CanViewResearcherProjectsDashboard = O.action("hres:action:view-researcher-pro
 P.implementService("std:action_panel:researcher", function(display, builder) {
     if(O.currentUser.allowed(P.CanViewResearcherProjectsDashboard)) {
         builder.panel(2000).link("default",
-            "/do/hres-navigation/researcher-projects/"+display.object.ref, "Projects");
+            "/do/hres-projects/researcher-projects/"+display.object.ref, "Projects");
     }
 });
 
 P.implementService("std:action_panel:home_page_my_links", function(display, builder) {
     var roles = O.service("haplo:permissions:user_roles", O.currentUser);
     if(roles.hasAnyRole("Principal Investigator")) {
-        builder.link(400, "/do/hres-navigation/researcher-projects/"+O.currentUser.ref,
+        builder.link(400, "/do/hres-projects/researcher-projects/"+O.currentUser.ref,
             "My Projects");
     }
 });
 
 // --------------------------------------------------------------------------
 
-P.respond("GET,POST", "/do/hres-navigation/researcher-projects", [
+P.respond("GET,POST", "/do/hres-projects/researcher-projects", [
     {pathElement:0, as:"object"}
 ], function(E, researcher) {
     P.CanViewResearcherProjectsDashboard.enforce();
@@ -53,7 +53,7 @@ P.respond("GET,POST", "/do/hres-navigation/researcher-projects", [
 
 // --------------------------------------------------------------------------
 
-P.respond("GET", "/do/hres-navigation/new-project", [
+P.respond("GET", "/do/hres-projects/new-project", [
     {pathElement:0, as:"object"}
 ], function(E, researcher) {
     var templateObj = O.object();
@@ -62,7 +62,7 @@ P.respond("GET", "/do/hres-navigation/new-project", [
         A.Researcher, Q.PrincipalInvestigator);
     E.render({
         pageTitle: "Add new Project",
-        backLink: "/do/hres-navigation/researcher-projects/"+researcher.ref,
+        backLink: "/do/hres-projects/researcher-projects/"+researcher.ref,
         templateObject: templateObj
     }, "std:new_object_editor");
 });

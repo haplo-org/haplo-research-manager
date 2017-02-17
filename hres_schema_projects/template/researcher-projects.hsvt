@@ -1,6 +1,6 @@
 
 if(canCreateProject) { 
-    <form method="GET" action=["/do/hres-navigation/new-project/" researcher.ref]>
+    <form method="GET" action=["/do/hres-projects/new-project/" researcher.ref]>
       <input type="submit" value="Create new Project">
     </form>
 }
