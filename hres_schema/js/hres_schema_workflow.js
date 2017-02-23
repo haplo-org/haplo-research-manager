@@ -109,7 +109,7 @@ P.workflow.registerWorkflowFeature("hres:combined_application_entities", functio
     haveUsedSchemaWorkflowFeature = true;
     workflow.
         use("std:entities", HRES_ENTITIES, SETUP_ENTITY_PROTOTYPE).
-        use("std:entities:tags", "department", "faculty", "academicYear").
+        use("std:entities:tags", "department", "faculty", "academicYear", "project").
         use("std:entities:add_entities", entities).
         use("std:entities:roles");
     if(HRES_SHARED_ROLES.length) {
