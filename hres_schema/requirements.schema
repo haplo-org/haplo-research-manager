@@ -236,6 +236,13 @@ attribute hres:attribute:assessor as Assessor
     linked-type hres:type:person:researcher
     linked-type hres:type:person:staff
 
+attribute hres:attribute:research-group
+    title: Research Group
+    search-name: research-group
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:research-institute:research-group
+
 
 # -------- Aliased attributes ----------------------
 
@@ -272,6 +279,7 @@ type std:type:intranet-page as IntranetPage
 
 type std:type:person
     attribute hres:attribute:research-institute
+    attribute hres:attribute:research-group
 
 type hres:type:person:researcher as Researcher
     title: Researcher
