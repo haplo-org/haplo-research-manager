@@ -47,6 +47,7 @@ type std:type:project as Project
     REMOVE attribute std:attribute:project-team
     REMOVE attribute dc:attribute:subject
     REMOVE attribute std:attribute:text
+    REMOVE attribute dc:attribute:date
     element: std:group:everyone right std:action_panel {"panel":"project"}
 
 attribute std:attribute:relationship-manager as RelationshipManager
