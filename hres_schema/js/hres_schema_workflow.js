@@ -71,6 +71,10 @@ var HRES_ENTITIES = {
         return this._hresFindRoleInResearchInstitute(A.ResearchAdministrator, context);
     },
 
+    'researchDirector': function(context) {
+        return this._hresFindRoleInResearchInstitute(A.ResearchDirector, context);
+    },
+
     'schoolHead': ['faculty', A.Head],
     'facultyHead': ['faculty', A.Head],
     'departmentHead': ['department', A.Head]
