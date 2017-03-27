@@ -16,7 +16,6 @@
     ],
   "use": ["std:reporting"],
   "load": [
-      "js/hres_taught_schema.js",
       "js/hres_taught_reporting.js",
       "js/hres_taught_permissions.js"
     ],
