@@ -1,6 +1,11 @@
 
 # -------- Attributes ------------------------------
 
+attribute hres:attribute:researcher as Researcher
+attribute hres:attribute:supervisor as Supervisor
+attribute hres:attribute:academic-year as AcademicYear
+attribute hres:attribute:research-institute as ResearchInstitute
+
 attribute hres:attribute:taught-student as TaughtStudent
     title: Taught Student
     search-name taught-student
@@ -27,8 +32,6 @@ attribute hres:attribute:code as Code
     search-name: code
     qualifier std:qualifier:null
     data-type text
-
-attribute hres:attribute:academic-year as AcademicYear
 
 # -------- Types -----------------------------------
 
@@ -74,6 +77,8 @@ type hres:type:taught-project as TaughtProject
     attribute hres:attribute:supervisor [sort=12000]
     attribute hres:attribute:course-module [sort=13000]
     attribute haplo:attribute:description [sort=14000]
+    render-icon: E53C,2,f E53D,6,f
+    render-category 4
     element: std:group:everyone right std:action_panel {"panel":"taught_project"} [sort=1800]
     annotation hres:annotation:academic-year:update-on-edit
     default-subtype hres:type:taught-project
