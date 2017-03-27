@@ -13,6 +13,11 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
             [A.CourseModule, A.ResearchInstitute]
         ]
     });
+
+    type(T.StudentProject, {
+        selfLabelling: true,
+        labelsFromLinked: [[A.TaughtStudent, A.ResearchInstitute]]
+    });
 });
 
 var TAUGHT_TYPES = [T.TaughtStudent, T.TaughtProject, T.StudentProject];
