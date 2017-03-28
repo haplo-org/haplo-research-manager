@@ -113,3 +113,5 @@ type hres:type:course-module as CourseModule
 
 group hres:group:taught-students as TaughtStudents
     title: Taught Students
+
+group std:group:everyone as Everyone

@@ -30,15 +30,15 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
 
     setup.roleProjectPermission("Taught Module Leader",        "read-edit",     TAUGHT_TYPES);
 
+    setup.groupPermission(Group.Everyone, "read", T.CourseModule);
+
     // Roles
     setup.groupPersonalRole(Group.TaughtStudents,       "Is: Taught Student");
     setup.attributeRole("Taught Student",               T.TaughtProject,    A.TaughtStudent);
     setup.attributeRole("Taught Student",               T.StudentProject,   A.TaughtStudent);
     
-    // The taught project supervisor is found via the project, but the
-    // relevant label is the student on the given project record.
-    setup.attributeRole("Taught Project Supervisor",    T.TaughtProject,    A.Supervisor,   undefined,  A.TaughtStudent);
-    setup.attributeRole("Student Project Supervisor",   T.StudentProject,   A.Supervisor,   undefined,  A.TaughtStudent);
+    setup.attributeRole("Taught Project Supervisor",    T.TaughtProject,    A.Supervisor,   undefined);
+    setup.attributeRole("Student Project Supervisor",   T.StudentProject,   A.Supervisor,   undefined);
 
     // Module leaders get access to all projects and students in the research institute of the module.
     setup.attributeRole("Taught Module Leader", T.CourseModule, A.ModuleLeader, undefined, A.ResearchInstitute);
