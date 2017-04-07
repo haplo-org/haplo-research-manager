@@ -11,7 +11,7 @@ attribute hres:attribute:taught-student as TaughtStudent
     search-name taught-student
     qualifier std:qualifier:null
     data-type link
-    linked-type hres:type:person:taught-student
+    linked-type hres:type:taught-student
 
 attribute hres:attribute:course-module as CourseModule
     title: Course Module
@@ -35,38 +35,46 @@ attribute hres:attribute:code as Code
 
 # -------- Types -----------------------------------
 
-type hres:type:person:taught-student as TaughtStudent
-    title: Taught Student
-    parent-type std:type:person
+type hres:type:taught-student as TaughtStudent
+    title: Taught student
     search-name: taught student
-    render-icon: E21A,1,f E21B,7,f
-    render-category 3
-    element: std:group:everyone right std:action_panel {"panel":"taught_student", "category":"hres:person"} [sort=14000]
+    attribute std:aliased-attribute:name [sort=1000]
+    attribute std:aliased-attribute:contact-category [sort=1100]
+    attribute std:attribute:job-title [sort=1200]
+    attribute hres:attribute:research-institute [sort=1300]
+    attribute std:attribute:telephone [sort=1400]
+    attribute std:attribute:email [sort=1500]
+    attribute std:attribute:notes [sort=1600]
+    render-icon: E21A,2,f E21B,6,f
+    render-category 0
+    element: std:group:everyone right std:action_panel {"panel":"taught_student"} [sort=1700]
+    default-subtype hres:type:taught-student
+    create-position never
 
-type hres:type:person:taught-student:postgraduate-taught-student as PostgraduateTaughtStudent
+type hres:type:taught-student:postgraduate-taught-student as PostgraduateTaughtStudent
     title: Postgraduate Taught Student
-    parent-type hres:type:person:taught-student
+    parent-type hres:type:taught-student
     search-name: postgraduate taught student
     render-category 1
 
-type hres:type:person:taught-student:undergraduate-student as UndergraduateStudent
+type hres:type:taught-student:undergraduate-student as UndergraduateStudent
     title: Undergraduate Student
-    parent-type hres:type:person:taught-student
+    parent-type hres:type:taught-student
     search-name: undergraduate student
     render-category 2
 
-type hres:type:person:taught-student:postgraduate-taught-student-past as PostgraduateTaughtStudentPast
+type hres:type:taught-student:postgraduate-taught-student-past as PostgraduateTaughtStudentPast
     title: Postgraduate Taught Student (past)
-    parent-type hres:type:person:taught-student
+    parent-type hres:type:taught-student
     search-name: postgraduate taught student
-    render-icon: E21A,1,f E21B,3,f E413,1,f,y
+    render-icon: E21A,2,f E21B,6,f E413,1,f,y
     render-category 3
 
-type hres:type:person:taught-student:undergraduate-student-past as UndergraduateStudentPast
+type hres:type:taught-student:undergraduate-student-past as UndergraduateStudentPast
     title: Undergraduate Student (past)
-    parent-type hres:type:person:taught-student
+    parent-type hres:type:taught-student
     search-name: undergraduate student
-    render-icon: E21A,1,f E21B,3,f E413,1,f,y
+    render-icon: E21A,2,f E21B,6,f E413,1,f,y
     render-category 4
 
 type hres:type:taught-project as TaughtProject
