@@ -1,0 +1,23 @@
+{
+  "pluginName": "hres_taught_schema",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo RM Taught Schema",
+  "displayDescription": "Basic schema and utilities to support taught programmes in Haplo Research Manager",
+  "installSecret": "a6cbefadf27380361e03cc8caa574a021df2785f",
+  "apiVersion": 4,
+  "depend": [
+      "std_action_panel",
+      "std_workflow",
+      "std_reporting",
+      "haplo_descriptive_object_labelling",
+      "haplo_user_roles_permissions",
+      "hres_schema"
+    ],
+  "use": ["std:reporting"],
+  "load": [
+      "js/hres_taught_reporting.js",
+      "js/hres_taught_permissions.js"
+    ],
+  "respond": ["/do/hres-taught-schema"]
+}

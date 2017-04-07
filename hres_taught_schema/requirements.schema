@@ -1,0 +1,125 @@
+
+# -------- Attributes ------------------------------
+
+attribute hres:attribute:researcher as Researcher
+attribute hres:attribute:supervisor as Supervisor
+attribute hres:attribute:academic-year as AcademicYear
+attribute hres:attribute:research-institute as ResearchInstitute
+
+attribute hres:attribute:taught-student as TaughtStudent
+    title: Taught Student
+    search-name taught-student
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:taught-student
+
+attribute hres:attribute:course-module as CourseModule
+    title: Course Module
+    search-name: course-module
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:course-module
+
+attribute hres:attribute:module-leader as ModuleLeader
+    title: Module Leader
+    search-name: module-leader
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:code as Code
+    title: Code
+    search-name: code
+    qualifier std:qualifier:null
+    data-type text
+
+# -------- Types -----------------------------------
+
+type hres:type:taught-student as TaughtStudent
+    title: Taught student
+    search-name: taught student
+    attribute std:aliased-attribute:name [sort=1000]
+    attribute std:aliased-attribute:contact-category [sort=1100]
+    attribute std:attribute:job-title [sort=1200]
+    attribute hres:attribute:research-institute [sort=1300]
+    attribute std:attribute:telephone [sort=1400]
+    attribute std:attribute:email [sort=1500]
+    attribute std:attribute:notes [sort=1600]
+    render-icon: E21A,2,f E21B,6,f
+    render-category 0
+    element: std:group:everyone right std:action_panel {"panel":"taught_student"} [sort=1700]
+    default-subtype hres:type:taught-student
+    create-position never
+
+type hres:type:taught-student:postgraduate-taught-student as PostgraduateTaughtStudent
+    title: Postgraduate Taught Student
+    parent-type hres:type:taught-student
+    search-name: postgraduate taught student
+    render-category 1
+
+type hres:type:taught-student:undergraduate-student as UndergraduateStudent
+    title: Undergraduate Student
+    parent-type hres:type:taught-student
+    search-name: undergraduate student
+    render-category 2
+
+type hres:type:taught-student:postgraduate-taught-student-past as PostgraduateTaughtStudentPast
+    title: Postgraduate Taught Student (past)
+    parent-type hres:type:taught-student
+    search-name: postgraduate taught student
+    render-icon: E21A,2,f E21B,6,f E413,1,f,y
+    render-category 3
+
+type hres:type:taught-student:undergraduate-student-past as UndergraduateStudentPast
+    title: Undergraduate Student (past)
+    parent-type hres:type:taught-student
+    search-name: undergraduate student
+    render-icon: E21A,2,f E21B,6,f E413,1,f,y
+    render-category 4
+
+type hres:type:taught-project as TaughtProject
+    title: Taught Project
+    search-name: taught project
+    attribute dc:attribute:title [sort=10000]
+    attribute hres:attribute:taught-student [sort=11000]
+    attribute hres:attribute:supervisor [sort=12000]
+    attribute hres:attribute:course-module [sort=13000]
+    attribute haplo:attribute:description [sort=14000]
+    render-icon: E53C,2,f E53D,6,f
+    render-category 4
+    element: std:group:everyone right std:action_panel {"panel":"taught_project"} [sort=1800]
+    annotation hres:annotation:academic-year:update-on-edit
+    default-subtype hres:type:taught-project
+    create-position normal
+
+type hres:type:student-project as StudentProject
+    title: Student Project
+    search-name: student project
+    attribute dc:attribute:title [sort=10000]
+    attribute hres:attribute:taught-student [sort=11000]
+    attribute hres:attribute:supervisor [sort=12000]
+    attribute haplo:attribute:description [sort=14000]
+    render-icon: E53C,3,f E53D,4,f
+    render-category 0
+    element: std:group:everyone right std:action_panel {"panel":"student_project"} [sort=1500]
+    annotation hres:annotation:academic-year:update-on-edit
+    default-subtype hres:type:student-project
+    create-position normal
+
+type hres:type:course-module as CourseModule
+    title: Course Module
+    search-name: course-module
+    attribute dc:attribute:title [sort=1000]
+    attribute hres:attribute:code [sort=1100]
+    attribute hres:attribute:module-leader [sort=1200]
+    attribute hres:attribute:research-institute [sort=1300]
+    render-icon: E530,4,f E531,3,f E532,6,f
+    render-category 5
+    create-position normal
+
+# -------- Groups ----------------------------------
+
+group hres:group:taught-students as TaughtStudents
+    title: Taught Students
+
+group std:group:everyone as Everyone
