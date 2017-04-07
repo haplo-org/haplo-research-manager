@@ -26,7 +26,7 @@ P.reporting.registerReportingFeature("hres:schema:calendar_year_navigation", fun
 });
 
 P.reporting.registerReportingFeature("hres:schema:calendar_year_navigation_for_json_columns", function(dashboard, currentYear) {
-    var year = currentYear || new Date.getFullYear();
+    var year = currentYear || new Date().getFullYear();
     dashboard.property("hres:schema:calendar_year_navigation_for_json_columns:year", year);
     dashboard.property("std:reporting:json_column:default_value_property", year.toString());
     dashboard.navigationUI(function(dashboard) {

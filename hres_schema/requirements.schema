@@ -407,6 +407,12 @@ type hres:type:academic-year as AcademicYear
     default-subtype hres:type:academic-year
     create-position normal
 
+type hres:type:organisation:funder as Funder
+    title: Funder
+    parent-type std:type:organisation
+    search-name: funder
+    render-icon: E400,7,f
+    render-category 5
 
 type haplo:type:committee as Committee
 type hres:type:person:external-researcher as ExternalResearcher
