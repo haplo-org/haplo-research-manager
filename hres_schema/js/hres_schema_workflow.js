@@ -296,21 +296,25 @@ P.implementService("haplo:group_notification_queue:task_definition:entity_missin
 P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
     {pathElement:0, as:"object"}
 ], function(E, object) {
-    if(!O.currentUser.isMemberOf(Group.CheckMissingEntities)) {
+    if(!(O.currentUser.isMemberOf(Group.CheckMissingEntities) || O.currentUser.isMemberOf(Group.Administrators))) {
         O.stop("Not permitted");
     }
     var workUnitQuery = O.work.query().ref(object.ref);
     var missingEntities = [];
     if(workUnitQuery.length > 0) {
         var workUnit = workUnitQuery[0];
-        var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
-        if(M) {
-            var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
-            for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
-                var entity = requiredMaybeProps[i];
-                if(!(M.entities[entity])) {
-                    if(!isMissingEntityAllowed(M, entity)) {
-                        missingEntities.push(entity.replace("_refMaybe", ""));
+        // non-workflow workUnits might be attached to an object.
+        // have to check there's a workflow definition for the worktype.
+        if(O.serviceMaybe("std:workflow:definition_for_name", workUnit.workType)) {
+            var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
+            if(M) {
+                var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+                for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+                    var entity = requiredMaybeProps[i];
+                    if(!(M.entities[entity])) {
+                        if(!isMissingEntityAllowed(M, entity)) {
+                            missingEntities.push(entity.replace("_refMaybe", ""));
+                        }
                     }
                 }
             }
