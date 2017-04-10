@@ -74,7 +74,7 @@ var researchInstituteLinksActionPanel = function(name, childType, childTitle, le
                 _.each(childInstitutes, function(inst) {
                     if(exclude.indexOf(inst.ref.toString()) === -1) {
                         numberOfLinks++; 
-                        if(numberOfLinks < MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) {
+                        if(numberOfLinks <= MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION) {
                             builder.panel(300).link("default", inst.url(), inst.title);
                         }
                     }
