@@ -302,19 +302,19 @@ P.respond("GET", "/do/hres-missing-entities/show-missing-entities", [
     var workUnitQuery = O.work.query().ref(object.ref);
     var missingEntities = [];
     if(workUnitQuery.length > 0) {
-        var workUnit = workUnitQuery[0];
-        // non-workflow workUnits might be attached to an object.
-        // have to check there's a workflow definition for the worktype.
-        if(O.serviceMaybe("std:workflow:definition_for_name", workUnit.workType)) {
-            var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
-            if(M) {
-                var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
-                for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
-                    var entity = requiredMaybeProps[i];
-                    if(!(M.entities[entity])) {
-                        if(!isMissingEntityAllowed(M, entity)) {
-                            missingEntities.push(entity.replace("_refMaybe", ""));
-                        }
+        var workUnit = _.find(workUnitQuery, function(wu) {
+            // non-workflow workUnits might be attached to an object.
+            // find the first workUnit that has a workflow definition for the worktype.
+            return O.serviceMaybe("std:workflow:definition_for_name", wu.workType);
+        });
+        var M = O.serviceMaybe("std:workflow:for_ref", workUnit.workType, object.ref);
+        if(M) {
+            var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
+            for(var i = requiredMaybeProps.length - 1; i >= 0; --i) {
+                var entity = requiredMaybeProps[i];
+                if(!(M.entities[entity])) {
+                    if(!isMissingEntityAllowed(M, entity)) {
+                        missingEntities.push(entity.replace("_refMaybe", ""));
                     }
                 }
             }
