@@ -32,7 +32,6 @@ type std:type:person as Person
     REMOVE label-applicable std:label:common
 
 type std:type:organisation as Organisation
-    REMOVE attribute std:attribute:relationship-manager
     REMOVE attribute dc:attribute:subject
     REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
     REMOVE element: std:group:everyone bottom std:contact_notes
@@ -409,9 +408,11 @@ type hres:type:academic-year as AcademicYear
 
 type hres:type:organisation:funder as Funder
     title: Funder
+    attribute std:attribute:relationship-manager [sort=2000]
+    attribute hres:attribute:industry-sector [sort=2100]
     parent-type std:type:organisation
     search-name: funder
-    render-icon: E400,7,f
+    render-icon: E400,3,f
     render-category 5
 
 type haplo:type:committee as Committee
