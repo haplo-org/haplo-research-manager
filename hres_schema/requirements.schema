@@ -290,6 +290,14 @@ type hres:type:person:researcher as Researcher
     REMOVE element: std:group:everyone right std:action_panel {"panel":"researcher"}
     element: std:group:everyone right std:action_panel {"panel":"researcher", "category":"hres:person"} [sort=14000]
 
+type hres:type:person:external-researcher as ExternalResearcher
+    title: External Researcher
+    parent-type std:type:person
+    search-name: external-researcher
+    render-icon: E20A,1,f E223,7,e
+    render-category 5
+    element: std:group:everyone right std:action_panel {"panel":"external_researcher"} [sort=10000]
+
 # Don't use std:type:staff because it's a subtly different meaning than the intent of the default schema
 type hres:type:person:staff as Staff
     title: Staff
