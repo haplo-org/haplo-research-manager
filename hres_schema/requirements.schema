@@ -417,7 +417,6 @@ type hres:type:academic-year as AcademicYear
 type hres:type:organisation:funder as Funder
     title: Funder
     attribute std:attribute:relationship-manager [sort=2000]
-    attribute hres:attribute:industry-sector [sort=2100]
     parent-type std:type:organisation
     search-name: funder
     render-icon: E400,3,f
