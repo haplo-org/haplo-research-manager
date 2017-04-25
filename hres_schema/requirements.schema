@@ -243,6 +243,14 @@ attribute hres:attribute:research-group
     data-type link
     linked-type hres:type:research-institute:research-group
 
+attribute hres:attribute:professional-development as ProfessionalDevelopment
+    title: Professional development
+    search-name: professional-development
+    qualifier std:qualifier:null
+    data-type link
+    ui-options dropdown
+    linked-type hres:type:professional-development
+
 
 # -------- Aliased attributes ----------------------
 
@@ -280,6 +288,7 @@ type std:type:intranet-page as IntranetPage
 type std:type:person
     attribute hres:attribute:research-institute
     attribute hres:attribute:research-group
+    attribute hres:attribute:professional-development
 
 type hres:type:person:researcher as Researcher
     title: Researcher
@@ -424,6 +433,18 @@ type hres:type:organisation:funder as Funder
 
 type haplo:type:committee as Committee
 type hres:type:person:external-researcher as ExternalResearcher
+
+type hres:type:professional-development as ProfessionalDevelopment
+    title: Professional development
+    search-name: professional development
+    behaviour classification
+    attribute dc:attribute:title
+    attribute std:attribute:notes
+    attribute std:attribute:configured-behaviour
+    render-category 0
+    label-base std:label:concept
+    default-subtype hres:type:professional-development
+    create-position normal
 
 
 # -------- Restrictions ----------------------------
