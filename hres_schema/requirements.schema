@@ -32,6 +32,7 @@ type std:type:person as Person
     REMOVE label-applicable std:label:common
 
 type std:type:organisation as Organisation
+    REMOVE attribute std:aliased-attribute:contact-category
     REMOVE attribute dc:attribute:subject
     REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
     REMOVE element: std:group:everyone bottom std:contact_notes
