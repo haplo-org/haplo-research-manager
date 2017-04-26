@@ -7,7 +7,7 @@
   "apiVersion": 4,
   "depend": [
       "hres_thirdparty_libs",
-      "hres_outputs"
+      "hres_repository"
     ],
   "load": [
       "js/hres_oai_pmh.js"

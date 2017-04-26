@@ -121,7 +121,7 @@ COMMANDS.Identify = function(E) {
         items.push(i);
     });
     // Get sample identifier which works
-    var q = O.service("hres:outputs:store_query").limit(1).sortByDateAscending().execute();
+    var q = O.service("hres:repository:store_query").limit(1).sortByDateAscending().execute();
 
     items.push({
         description: [
@@ -159,7 +159,7 @@ COMMANDS.ListMetadataFormats = function(E) {
 
 COMMANDS.ListSets = function(E) {
     var sets = [];
-    O.service("hres:outputs:each_output_type", function(type) {
+    O.service("hres:repository:each_repository_item_type", function(type) {
         var info = SCHEMA.getTypeInfo(type);
         if(info) {
             sets.push({
@@ -206,7 +206,7 @@ COMMANDS.GetRecord = function(E) {
     // Load object, doing our own security on top of the service user's permissions
     return O.impersonating(O.user(SERVICE_USER_EMAIL), function() {
         var object = ref.load();
-        if(!(O.service("hres:outputs:is_output", object))) { O.stop("Not permitted"); }
+        if(!(O.service("hres:repository:is_repository_item", object))) { O.stop("Not permitted"); }
         return [
             {GetRecord: [
                 {record: itemToXML(ref.load(), true)}
@@ -221,7 +221,7 @@ var ensureTypeInfoGathered = function() {
     if(typeToSet) { return; }
     typeToSet = O.refdictHierarchical();
     setToType = {};
-    O.service("hres:outputs:each_output_type", function(type) {
+    O.service("hres:repository:each_repository_item_type", function(type) {
         var info = SCHEMA.getTypeInfo(type);
         if(info) {
             var name = codeToSetName(info.code);
@@ -242,7 +242,7 @@ var queryForCommand = function(E, fullRecord, consume) {
         query.link(setToType[params.set] || O.stop("Bad type"), A.Type);
     } else {
         query.or(function(sq) {
-            O.service("hres:outputs:each_output_type", function(t) { sq.link(t, A.Type); });
+            O.service("hres:repository:each_repository_item_type", function(t) { sq.link(t, A.Type); });
         });
     }
     // Date range?
