@@ -46,9 +46,14 @@ if(!O.user(SERVICE_USER_EMAIL)) {
 var DC_ATTRS = [
     {name:"dc:title", desc:A.Title},
     {name:"dc:creator", desc:A.Author},
-    {name:"dc:date", desc:A.Date},
+    {name:"dc:subject", desc:A.Subject},
+    {name:"dc:description", desc:A.Abstract},
     {name:"dc:publisher", desc:A.Publisher},
-    {name:"dc:subject", desc:A.Subject}
+    {name:"dc:date", desc:A.Date},
+    {name:"dc:contributor", desc:A.Editor},
+    // dc:format -- MIME type of file
+    // dc:source -- "A related resource from which the described resource is derived." -- Project? DOI of that?
+    {name:"dc:rights", desc:A.License}
 ];
 
 var typeToSet;
@@ -146,11 +151,20 @@ COMMANDS.Identify = function(E) {
 COMMANDS.ListMetadataFormats = function(E) {
     return [{
         ListMetadataFormats: [
-            {metadataFormat: [
-                {metadataPrefix: "oai_dc"},
-                {schema: "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"},
-                {metadataNamespace: "http://www.openarchives.org/OAI/2.0/oai_dc/"}
-            ]}
+            {
+                metadataFormat: [
+                    {metadataPrefix: "oai_dc"},
+                    {schema: "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"},
+                    {metadataNamespace: "http://www.openarchives.org/OAI/2.0/oai_dc/"}
+                ]
+            },
+            {
+                metadataFormat: [
+                    {metadataPrefix: "oai_datacite"},
+                    {schema: "http://schema.datacite.org/oai/oai-1.0/oai.xsd"},
+                    {metadataNamespace: "http://schema.datacite.org/oai/oai-1.0/"}
+                ]
+            }
         ]
     }];
 };
@@ -293,54 +307,37 @@ var itemToXML = function(item, fullRecord) {
     var info = [header];
     if(fullRecord) {
         // Metadata
-        var metadataItems = [
-            {"bib-version": 'v2'},
-            {"id": item.ref.toString()},
-            {"entry": (new XDate(item.creationDate)).toString('MMMM d, yyyy')}
-        ];
-        item.every(A.Author, function(v,d,q) {
-            metadataItems.push({author:v.load().firstTitle().toString()});
-        });
-        metadataItems.push({end:""});
-        info.push({
-            metadata: [{
-                rfc1807: [
-                    {_attr: {
-                        "xmlns": "http://info.internet.isi.edu:80/in-notes/rfc/files/rfc1807.txt",
-                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                        "xsi:schemaLocation": "http://info.internet.isi.edu:80/in-notes/rfc/files/rfc1807.txt http://www.openarchives.org/OAI/1.1/rfc1807.xsd"
-                    }}
-                ].concat(metadataItems)
-            }]
-        });
-
-        // About
-        var aboutItems = [];
-        _.each(DC_ATTRS, function(dc) {
-            item.every(dc.desc, function(v,d,q) {
-                var str = (O.isRef(v) ? v.load().firstTitle() : v).toString();
-                var i = {}; i[dc.name] = str;
-                aboutItems.push(i);
-            });
-        });
-        item.everyType(function(v,d,q) {
-            var name = typeToSet.get(v);
-            if(name) { aboutItems.push({"dc:type":name}); }
-        });
-        aboutItems.push({"dc:identifier": item.url(true)});
-        info.push({
-            about: [
-                {"oai_dc:dc": [
-                    {_attr: {
-                        "xmlns:oai_dc": "http://www.openarchives.org/OAI/2.0/oai_dc/",
-                        "xmlns:dc": "http://purl.org/dc/elements/1.1/",
-                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                        "xsi:schemaLocation": "http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
-                    }}
-                ].concat(aboutItems)}
-            ]
-        });
+        var metadata = getDCMetadata(item);
+        info.push(metadata);
     }
 
     return info;
+};
+
+var getDCMetadata = function(item) {
+    var metadataItems = [];
+    _.each(DC_ATTRS, function(dc) {
+        item.every(dc.desc, function(v,d,q) {
+            var str = (O.isRef(v) ? v.load().firstTitle() : v).toString();
+            var i = {}; i[dc.name] = str;
+            metadataItems.push(i);
+        });
+    });
+    item.everyType(function(v,d,q) {
+        var name = typeToSet.get(v);
+        if(name) { metadataItems.push({"dc:type":name}); }
+    });
+    metadataItems.push({"dc:identifier": item.url(true)});
+    return {
+        metadata: [
+            {"oai_dc:dc": [
+                {_attr: {
+                    "xmlns:oai_dc": "http://www.openarchives.org/OAI/2.0/oai_dc/",
+                    "xmlns:dc": "http://purl.org/dc/elements/1.1/",
+                    "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                    "xsi:schemaLocation": "http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
+                }}
+            ].concat(metadataItems)}
+        ]
+    };
 };
