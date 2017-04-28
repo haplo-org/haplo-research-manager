@@ -207,13 +207,6 @@ attribute hres:attribute:student-id as StudentId
     qualifier std:qualifier:null
     data-type text
 
-attribute hres:attribute:chair as Chair
-    title: Chair
-    search-name: chair
-    qualifier std:qualifier:null
-    data-type link
-    linked-type hres:type:person:researcher
-
 attribute hres:attribute:examiner as Examiner
     title: Examiner
     search-name: examiner
