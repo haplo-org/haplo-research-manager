@@ -1,0 +1,13 @@
+std:plugin:resources("calendar-month-filter.js")
+
+<select class="hres_schema_calendar_month_filter_start" data-fact=fact>
+  each(months) {
+    <option> . </option>
+  }
+</select>
+<span>"-  "</span>
+<select class="hres_schema_calendar_month_filter_end">
+  each(months) {
+    <option> . </option>
+  }
+</select>

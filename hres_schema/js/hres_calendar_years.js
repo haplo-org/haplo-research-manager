@@ -37,3 +37,18 @@ P.reporting.registerReportingFeature("hres:schema:calendar_year_navigation_for_j
         });
     });
 });
+
+P.reporting.registerReportingFeature("hres:schema:calendar_month_navigation", function(dashboard, fact) {
+    var attrName = 'data-'+fact.toLowerCase();
+    dashboard.$rowAttributeFns.push(function(row, attrs) {     // TODO - expose from api
+        var value = row[fact];
+        if(value !== null) { attrs[attrName] = value.toString(); }
+    });
+    dashboard.navigationUI(function(dashboard) {
+        return P.template("widget_calendar_month_filter").deferredRender({
+            fact: fact.toLowerCase(),
+            months: ['January', 'February', 'March', 'April', 'May' ,'June' ,
+                'July' ,'August' ,'September', 'October', 'November', 'December']
+        });
+    });
+});
