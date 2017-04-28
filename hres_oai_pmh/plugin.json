@@ -10,7 +10,9 @@
       "hres_repository"
     ],
   "load": [
-      "js/hres_oai_pmh.js"
+      "js/hres_oai_pmh.js",
+      "js/oai_dc.js",
+      "js/oai_datacite.js"
     ],
   "respond": [
       "/do/open-archives-initiative",
