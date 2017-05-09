@@ -1,0 +1,33 @@
+/* Haplo Research Manager                            https://haplo.org
+ * (c) Haplo Services Ltd 2006 - 2017   https://www.haplo-services.com
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
+
+h2 {
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.calendar-url {
+    vertical-align: middle;
+    width: 80%;
+    overflow: hidden;
+}
+
+.copy-url-button {
+    margin-right: 8px;
+    vertical-align: middle;
+    padding: 5px 5px 5px 5px;
+}
+
+.copy-url-success {
+    color: #0a0
+}
+
+.copy-url-failure {
+    color: #a00
+}

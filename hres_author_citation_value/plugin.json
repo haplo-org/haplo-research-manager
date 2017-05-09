@@ -1,0 +1,15 @@
+{
+  "pluginName": "hres_author_citation_value",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Author Citation Value",
+  "displayDescription": "Implementation of author citation value type",
+  "apiVersion": 4,
+  "loadPriority": 5500,
+  "load": [
+      "js/hres_author_citation_value.js"
+    ],
+  "respond": [
+      "/api/hres-author-citation-value"
+    ]
+}

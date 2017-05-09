@@ -1,0 +1,20 @@
+{
+    "specificationVersion": 0,
+    "formId": "fileTemplates",
+    "formTitle": "File template",
+    "elements": [
+        {
+            "type": "repeating-section",
+            "path": "templates",
+            "allowDelete": true,
+            "elements": [
+                {"type":"lookup", "path":"ri", "label":"Research institute", "dataSource":"ris"},
+                {"type":"file", "path":"template", "label":"Template", "required":true},
+                {"type":"number", "path":"margin.marginLeft", "label":"Left margin"},
+                {"type":"number", "path":"margin.marginRight", "label":"Right margin"},
+                {"type":"number", "path":"margin.marginTop", "label":"Top margin"},
+                {"type":"number", "path":"margin.marginBottom", "label":"Bottom margin"}
+            ]
+        }
+    ]
+}

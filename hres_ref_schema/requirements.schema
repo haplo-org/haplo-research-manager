@@ -1,0 +1,197 @@
+
+attribute hres:attribute:ref-unit-of-assessment as RefUnitOfAssessment
+    title: REF Unit of Assessment
+    search-name: ref-unit
+    search-name: ref-unit-of-assessment
+    qualifier std:qualifier:null
+    ui-options dropdown
+    data-type link
+    linked-type hres:type:ref-unit-of-assessment
+
+attribute hres:attribute:ref-panel as RefPanel
+    title: REF Panel
+    search-name: ref-panel
+    qualifier std:qualifier:null
+    ui-options dropdown
+    data-type link
+    linked-type hres:type:ref-panel
+
+# ---------------------------------------------------------------------------
+
+type hres:type:ref-unit-of-assessment as RefUnitOfAssessment
+    title: REF Unit of Assessment
+    search-name: ref-unit
+    search-name: ref-unit-of-assessment
+    attribute hres:attribute:ref-panel
+    apply-schema-template hres:template-type:list
+
+type hres:type:ref-panel as RefPanel
+    title: REF Panel
+    search-name: ref-panel
+    apply-schema-template hres:template-type:list
+
+# ---------------------------------------------------------------------------
+
+# ----------- Panel
+object hres:list:ref-panel-a
+    type: hres:type:ref-panel
+    title: Main panel A
+
+object hres:list:ref-panel-b
+    type: hres:type:ref-panel
+    title: Main panel B
+
+object hres:list:ref-panel-c
+    type: hres:type:ref-panel
+    title: Main panel C
+
+object hres:list:ref-panel-d
+    type: hres:type:ref-panel
+    title: Main panel D
+
+# ----------- Unit of Assessment
+object hres:list:ref-unit-of-assessment:1:clinical-medicine
+    type: hres:type:ref-unit-of-assessment
+    title: 1. Clinical Medicine
+
+object hres:list:ref-unit-of-assessment:2:public-health-health-services-and-primary-care
+    type: hres:type:ref-unit-of-assessment
+    title: 2. Public Health, Health Services and Primary Care
+
+object hres:list:ref-unit-of-assessment:3:allied-health-professions-dentistry-nursing-and-pharmacy
+    type: hres:type:ref-unit-of-assessment
+    title: 3. Allied Health Professions, Dentistry, Nursing and Pharmacy
+
+object hres:list:ref-unit-of-assessment:4:psychology-psychiatry-and-neuroscience
+    type: hres:type:ref-unit-of-assessment
+    title: 4. Psychology, Psychiatry and Neuroscience
+
+object hres:list:ref-unit-of-assessment:5:biological-sciences
+    type: hres:type:ref-unit-of-assessment
+    title: 5. Biological Sciences
+
+object hres:list:ref-unit-of-assessment:6:agriculture-veterinary-and-food-science
+    type: hres:type:ref-unit-of-assessment
+    title: 6. Agriculture, Veterinary and Food Science
+
+object hres:list:ref-unit-of-assessment:7:earth-systems-and-environmental-sciences
+    type: hres:type:ref-unit-of-assessment
+    title: 7. Earth Systems and Environmental Sciences
+
+object hres:list:ref-unit-of-assessment:8:chemistry
+    type: hres:type:ref-unit-of-assessment
+    title: 8. Chemistry
+
+object hres:list:ref-unit-of-assessment:9:physics
+    type: hres:type:ref-unit-of-assessment
+    title: 9. Physics
+
+object hres:list:ref-unit-of-assessment:10:mathematical-sciences
+    type: hres:type:ref-unit-of-assessment
+    title: 10. Mathematical Sciences
+
+object hres:list:ref-unit-of-assessment:11:computer-science-and-informatics
+    type: hres:type:ref-unit-of-assessment
+    title: 11. Computer Science and Informatics
+
+object hres:list:ref-unit-of-assessment:12:aeronautical-mechanical-chemical-and-manufacturing-engineering
+    type: hres:type:ref-unit-of-assessment
+    title: 12. Aeronautical, Mechanical, Chemical and Manufacturing Engineering
+
+object hres:list:ref-unit-of-assessment:13:electrical-and-electronic-engineering-metallurgy-and-materials
+    type: hres:type:ref-unit-of-assessment
+    title: 13. Electrical and Electronic Engineering, Metallurgy and Materials
+
+object hres:list:ref-unit-of-assessment:14:civil-and-construction-engineering
+    type: hres:type:ref-unit-of-assessment
+    title: 14. Civil and Construction Engineering
+
+object hres:list:ref-unit-of-assessment:15:general-engineering
+    type: hres:type:ref-unit-of-assessment
+    title: 15. General Engineering
+
+object hres:list:ref-unit-of-assessment:16:architecture-built-environment-and-planning
+    type: hres:type:ref-unit-of-assessment
+    title: 16. Architecture, Built Environment and Planning
+
+object hres:list:ref-unit-of-assessment:17:geography-environmental-studies-and-archaeology
+    type: hres:type:ref-unit-of-assessment
+    title: 17. Geography, Environmental Studies and Archaeology
+
+object hres:list:ref-unit-of-assessment:18:economics-and-econometrics
+    type: hres:type:ref-unit-of-assessment
+    title: 18. Economics and Econometrics
+
+object hres:list:ref-unit-of-assessment:19:business-and-management-studies
+    type: hres:type:ref-unit-of-assessment
+    title: 19. Business and Management Studies
+
+object hres:list:ref-unit-of-assessment:20:law
+    type: hres:type:ref-unit-of-assessment
+    title: 20. Law
+
+object hres:list:ref-unit-of-assessment:21:politics-and-international-studies
+    type: hres:type:ref-unit-of-assessment
+    title: 21. Politics and International Studies
+
+object hres:list:ref-unit-of-assessment:22:social-work-and-social-policy
+    type: hres:type:ref-unit-of-assessment
+    title: 22. Social Work and Social Policy
+
+object hres:list:ref-unit-of-assessment:23:sociology
+    type: hres:type:ref-unit-of-assessment
+    title: 23. Sociology
+
+object hres:list:ref-unit-of-assessment:24:anthropology-and-development-studies
+    type: hres:type:ref-unit-of-assessment
+    title: 24. Anthropology and Development Studies
+
+object hres:list:ref-unit-of-assessment:25:education
+    type: hres:type:ref-unit-of-assessment
+    title: 25. Education
+
+object hres:list:ref-unit-of-assessment:26:sport-and-exercise-sciences-leisure-and-tourism
+    type: hres:type:ref-unit-of-assessment
+    title: 26. Sport and Exercise Sciences, Leisure and Tourism
+
+object hres:list:ref-unit-of-assessment:27:area-studies
+    type: hres:type:ref-unit-of-assessment
+    title: 27. Area Studies
+
+object hres:list:ref-unit-of-assessment:28:modern-languages-and-linguistics
+    type: hres:type:ref-unit-of-assessment
+    title: 28. Modern Languages and Linguistics
+
+object hres:list:ref-unit-of-assessment:29:english-language-and-literature
+    type: hres:type:ref-unit-of-assessment
+    title: 29. English Language and Literature
+
+object hres:list:ref-unit-of-assessment:30:history
+    type: hres:type:ref-unit-of-assessment
+    title: 30. History
+
+object hres:list:ref-unit-of-assessment:31:classics
+    type: hres:type:ref-unit-of-assessment
+    title: 31. Classics
+
+object hres:list:ref-unit-of-assessment:32:philosophy
+    type: hres:type:ref-unit-of-assessment
+    title: 32. Philosophy
+
+object hres:list:ref-unit-of-assessment:33:theology-and-religious-studies
+    type: hres:type:ref-unit-of-assessment
+    title: 33. Theology and Religious Studies
+
+object hres:list:ref-unit-of-assessment:34:art-and-design:-history-practice-and-theory
+    type: hres:type:ref-unit-of-assessment
+    title: 34. Art and Design: History, Practice and Theory
+
+object hres:list:ref-unit-of-assessment:35:music-drama-dance-and-performing-arts
+    type: hres:type:ref-unit-of-assessment
+    title: 35. Music, Drama, Dance and Performing Arts
+
+object hres:list:ref-unit-of-assessment:36:communication-cultural-and-media-studies-library-and-information-management
+    type: hres:type:ref-unit-of-assessment
+    title: 36. Communication, Cultural and Media Studies, Library and Information Management 
+
+

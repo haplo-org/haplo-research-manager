@@ -1,0 +1,15 @@
+{
+    "specificationVersion": 0,
+    "formId": "edit-scheduled-actual",
+    "formTitle": "Edit date",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "date",
+            "path": "date",
+            "name": "__projectjournal_date_scheduled",
+            "label": "Date",
+            "required": true
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+  "pluginName": "hres_ref_schema",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo RM REF Schema",
+  "displayDescription": "Schema and support functions for REF 2020",
+  "installSecret": "975115a53513eb8abfc9cb32513410f8c1770562",
+  "apiVersion": 4,
+  "depend": [
+      "hres_schema"
+    ],
+  "load": [
+    ],
+  "respond": []
+}

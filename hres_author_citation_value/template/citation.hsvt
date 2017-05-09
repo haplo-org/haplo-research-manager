@@ -1,0 +1,9 @@
+if(object) {
+    if(value.cite) {
+        <a href=std:object:url(object)> value.cite </a>
+    } else {
+        std:object:link(object)
+    }
+} else {
+    value.cite
+}

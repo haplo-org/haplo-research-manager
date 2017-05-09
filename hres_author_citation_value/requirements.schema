@@ -1,0 +1,24 @@
+
+attribute dc:attribute:author as Author
+
+attribute hres:attribute:authors-citation as AuthorsCitation
+    title: Authors
+    search-name: authors
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:author_citation
+
+attribute hres:attribute:editor as Editor
+    title: Editor
+    search-name: editors
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:editors-citation as EditorsCitation
+    title: Editors
+    search-name: editor
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:author_citation
+

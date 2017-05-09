@@ -1,0 +1,73 @@
+
+std:plugin:resources("journal-dates.css")
+
+<table id="project_dates_table">
+    <tr>
+        <th> </th>
+        <th> "Date" </th>
+        <th> "Deadline" </th>
+    </tr>
+    each(display) {
+        <tr>
+            <td> displayName </td>
+            within(date) {
+                <td>
+                    each(previousActuals) { <i> "(previous) " </i> std:date(.) <br> }
+                    if(actual) {
+                        std:date(actual)
+                    } else {
+                        if(scheduled) {
+                            if(previousActuals) { <i> "(next) " </i> }
+                            std:date(scheduled)
+                        } else {  
+                            // If there are previous dates, then note that we're waiting a new actual
+                            if(previousActuals) { <i> "(waiting next)" </i> }
+                        }
+                    }
+                    if(^^{editable}) {
+                        if(isScheduledActualEditableByCurrentUser) {
+                            " "
+                            <a href=["/do/hres-project-journal/edit-date/scheduled-actual/" name "/" ^^{project}]>
+                                if(^{hasScheduledActual}) { "Edit" } else { "Set" }
+                            </a>
+                        }
+                    }
+                </td>
+                do() {
+                    if(requiredMin) {
+                        if(requiredIsInstantaneous) {
+                            <td>
+                                yield:previousActual()
+                                std:date(requiredMin)
+                                yield:isEditable()
+                            </td>
+                        } else {
+                            <td>
+                                yield:previousActual()
+                                std:date(requiredMin)
+                                " &mdash; "
+                                std:date(requiredMax)
+                                yield:isEditable()
+                            </td>
+                        }
+                    } else {
+                        <td> yield:isEditable() </td>
+                    }
+                } previousActual {
+                    if(previousActuals) {
+                        <i> "(next) " </i>
+                    }
+                } isEditable {
+                    if(^^{editable}) {
+                        if(isRequiredEditableByCurrentUser) {
+                            if(requiredMin) { " " }
+                            <a href=["/do/hres-project-journal/edit-date/required/" name "/" ^^{project}]>
+                                if(requiredMin) { "Edit" } else { "Set" }
+                            </a>
+                        }
+                    }
+                }
+            }
+        </tr>
+    }
+</table>

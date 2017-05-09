@@ -1,0 +1,14 @@
+{
+  "pluginName": "hres_orcid_researcher_profile",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "ORCID Researcher Profile",
+  "displayDescription": "Use of ORCID on researcher profile",
+  "apiVersion": 4,
+  "depend": ["hres_orcid"],
+  "use": ["hres:orcid"],
+  "load": [
+      "js/hres_orcid_researcher_profile.js"
+    ],
+  "respond": ["/do/orcid-researcher-profile"]
+}

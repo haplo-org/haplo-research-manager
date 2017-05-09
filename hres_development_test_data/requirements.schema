@@ -1,0 +1,31 @@
+
+feature std:page:home
+    element: std:group:everyone right std:action_panel {"panel":"home_page"}
+
+group std:group:administrators as Administrators
+
+group hres:group:researchers as Researchers
+group hres:group:admin-staff as AdminStaff
+
+attribute std:attribute:email as EmailAddress
+
+attribute hres:attribute:research-institute as ResearchInstitute
+attribute hres:attribute:head as Head
+attribute hres:attribute:research-administrator as ResearchAdministrator
+
+type hres:type:research-institute as ResearchInstitute
+type hres:type:research-institute:university as University
+type hres:type:research-institute:faculty as Faculty
+type hres:type:research-institute:department as Department
+type hres:type:research-institute:school as School
+
+type std:type:organisation as Organisation
+type std:type:person as Person
+type std:type:subject as Subject
+type hres:type:person:researcher as Researcher
+type hres:type:person:staff as Staff
+
+# For committee support
+OPTIONAL attribute haplo:attribute:chair as Chair
+OPTIONAL attribute haplo:attribute:committee-member as CommitteeMember
+OPTIONAL attribute haplo:attribute:committee-representative as CommitteeRepresentative

@@ -1,0 +1,2 @@
+<p> "Your previous user account has been reactivated. Click below to login." </p>
+<p><a href=[appUrl "/do/authentication/login?auth=haplo"]> "Log in" </a></p>

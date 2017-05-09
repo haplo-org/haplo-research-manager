@@ -1,0 +1,25 @@
+pageTitle("Calendar subscriptions")
+backLink("/")
+std:plugin:resources("my-subscriptions.js" "my-subscriptions.css")
+
+<h2>"Manage subscriptions"</h2>
+<h3>"Personal feed"</h3>
+<p>"Your personal calendar feed contains:"</p>
+<ul>
+  each(sources) {
+  <li>title ": " description</li>
+  }
+</ul>
+<p>"Subscribe with the link below by registering it with your chosen Calendar application."</p>
+<p>
+  <button class="copy-url-button" alt="Copy to clipboard" data-clipboard-target-id="calendarUrl">std:icon:description("E208,1,f E246,1,e" "small")</button> "&nbsp;"
+  <input type="text" id="calendarUrl" name="calendarUrl" class="calendar-url" readonly="readonly" value=calendarUrl>
+</p>
+<p class="copy-url-success hidden">"Copied!"</p>
+<p class="copy-url-failure hidden">"Copy failed. Try copying the URL manually with Ctrl+C."</p>
+<p><a href="/do/hres-calendar-subscriptions/generate-new-url"><button>"Reset calendar subscription link"</button></a></p>
+
+// <h2>"Subscribing to your calendar"</h2>
+
+// "TODO"
+

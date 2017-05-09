@@ -1,0 +1,23 @@
+{
+  "pluginName": "hres_workflow_confirmation_steps",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo for Research Workflow Confirmation Steps",
+  "displayDescription": "Wokflow componenets for confirmation ",
+  "installSecret": "c86d51429f69ddecc7569077a6d584fb731a5407",
+  "apiVersion": 4,
+  "loadPriority": 9401,
+  "depend": [
+      "std_workflow",
+      "hres_schema",
+      "phd_schema",
+      "haplo_simple_notification"
+    ],
+  "use": [
+      "std:workflow"
+    ],
+  "load": [
+      "js/hres_workflow_confirm_details.js",
+      "js/hres_workflow_confirm_roles.js"
+    ]
+}

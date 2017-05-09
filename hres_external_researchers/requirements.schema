@@ -1,0 +1,19 @@
+
+attribute std:attribute:email as EmailAddress
+
+
+type hres:type:person:external-researcher as ExternalResearcher
+    element: std:group:everyone right std:action_panel {"panel":"external_researcher"}
+
+
+email-template hres:email-template:external-user-email
+    title: External user email
+    description: External user email
+    purpose: Notify external users
+
+
+group std:group:administrators as Administrators
+
+group hres:group:external-researcher-account as ExternalResearcherAccount
+    title: External Researcher Account
+

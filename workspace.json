@@ -1,0 +1,14 @@
+{
+  "autoUninstallPlugins": true,
+  "search": [
+    {
+      "path": ".",
+      "name": "Haplo Research Manager"
+    },
+    {
+      "path": "../haplo-plugins",
+      "name": "Haplo Plugins",
+      "obtain": "Clone https://github.com/haplo-org/haplo-plugins"
+    }
+  ]
+}

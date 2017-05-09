@@ -1,0 +1,14 @@
+{
+  "pluginName": "hres_orcid",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "ORCID",
+  "displayDescription": "ORCID support for data type and OAuth integrate with the ORCID service.",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase", "pStartOAuth"],
+  "load": [
+      "js/hres_orcid_data_type.js",
+      "js/hres_orcid_integration.js"
+    ],
+  "respond": ["/do/orcid-integration"]
+}

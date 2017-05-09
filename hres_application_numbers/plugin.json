@@ -1,0 +1,15 @@
+{
+  "pluginName": "hres_application_numbers",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "HRES Application Numbers",
+  "displayDescription": "Support for using auto-generated application numbers as identifiers of submitted applications",
+  "installSecret": "ac97eb10eb841a23898a771a5ebcdec21280d43b",
+  "apiVersion": 4,
+  "depend": [
+      "hres_schema"
+    ],
+  "load": [
+      "js/hres_application_numbers.js"
+    ]
+}

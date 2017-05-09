@@ -1,0 +1,22 @@
+{
+  "pluginName": "hresdemo_application",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo Reserach Manager Demo Application",
+  "displayDescription": "Demo version of core Haplo Research Manager functionality",
+  "installSecret": "0cd69d4a40457c13cf8086e562e004bc37913144",
+  "apiVersion": 4,
+  "use": [
+      "haplo:activity_guidance_notes"
+    ],
+  "depend": [
+      "haplo_activity_guidance_notes",
+      "hres_development_test_data",
+      "hres_project_journal",
+      "hres_schema"
+    ],
+  "load": [
+      "js/hresdemo_application.js"
+    ],
+  "respond": []
+}

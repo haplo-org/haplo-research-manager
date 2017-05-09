@@ -1,0 +1,10 @@
+
+attribute hres:attribute:orcid as ORCID
+    title: ORCID
+    search-name: orcid
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:orcid
+
+type std:type:person
+    attribute hres:attribute:orcid

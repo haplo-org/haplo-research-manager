@@ -1,0 +1,17 @@
+{
+  "pluginName": "hres_development_test_data",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Generate Test Data",
+  "displayDescription": "Generate development test data for Haplo Research Manager",
+  "apiVersion": 4,
+  "privilegesRequired": ["pCreateUser", "pSetupSystem", "pBackgroundProcessing"],
+  "depend": [
+      "std_action_panel",
+      "hres_schema"
+    ],
+  "load": [
+      "js/hres_development_test_data.js"
+    ],
+  "respond": ["/do/hres-development-test-data"]
+}

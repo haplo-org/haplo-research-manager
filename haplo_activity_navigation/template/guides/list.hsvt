@@ -1,8 +1,0 @@
-pageTitle("Manage Guides: " activity.title)
-backLink("/do/activity/" activity.name)
-
-each(sections) {
-    <p> <a href=["/do/activity/guides/edit-guide-section/" ^{activity.name} "/" id]> title </a> </p>
-}
-
-<p> <a href=["/do/activity/guides/edit-guide-section/" activity.name]> "Add new section..." </a> </p>

@@ -1,0 +1,9 @@
+
+# -------- Application IDs -------------------------
+
+attribute vre:attribute:application-id
+    title: Application ID
+    search-name: application-id
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:appid

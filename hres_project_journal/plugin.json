@@ -1,0 +1,24 @@
+{
+  "pluginName": "hres_project_journal",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Project Journal",
+  "displayDescription": "Project journal support",
+  "loadPriority": 2100,
+  "apiVersion": 4,
+  "depend": [
+      "std_workflow",
+      "hres_schema"
+    ],
+  "use": ["std:workflow"],
+  "privilegesRequired": ["pDatabase"],
+  "load": [
+      "js/hres_project_journal.js",
+      "js/hres_project_journal_dates.js",
+      "js/hres_project_journal_dates_ui.js",
+      "js/hres_project_journal_workflow.js"
+    ],
+  "respond": [
+    "/do/hres-project-journal"
+  ]
+}

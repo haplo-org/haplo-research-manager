@@ -1,6 +1,0 @@
-pageTitle("Guides")
-
-each(activityGuides) {
-    if(title) { <h1> title </h1> }
-    render(deferred)
-}

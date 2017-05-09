@@ -173,6 +173,78 @@ attribute hres:attribute:research-administrator as ResearchAdministrator
     data-type link
     linked-type std:type:person
 
+attribute hres:attribute:research-director as ResearchDirector
+    title: Director of Research
+    search-name: research-director
+    search-name: director-of-research
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:pro-vice-chancellor-for-research as ProViceChancellorForResearch
+    title: Pro Vice-Chancellor for Research
+    search-name: pro-vice-chancellor
+    search-name: pro-vice-chancellor-for-research
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:person
+
+attribute hres:attribute:academic-year as AcademicYear
+    title: Academic year
+    search-name: academic-year
+    qualifier std:qualifier:null
+    data-type link
+    ui-options dropdown
+    linked-type hres:type:academic-year
+
+attribute haplo:attribute:committee-member as CommitteeMember
+
+attribute haplo:attribute:committee-representative as CommitteeRepresentative
+
+attribute hres:attribute:student-id as StudentId
+    title: Student ID
+    search-name: id
+    qualifier std:qualifier:null
+    data-type text
+
+attribute hres:attribute:examiner as Examiner
+    title: Examiner
+    search-name: examiner
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+    linked-type hres:type:person:external-researcher
+
+attribute hres:attribute:supervisor as Supervisor
+    title: Supervisor
+    search-name supervisor
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+
+attribute hres:attribute:assessor as Assessor
+    title: Assessor
+    search-name: assessor
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:person:researcher
+    linked-type hres:type:person:staff
+
+attribute hres:attribute:research-group
+    title: Research Group
+    search-name: research-group
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:research-institute:research-group
+
+attribute hres:attribute:professional-development as ProfessionalDevelopment
+    title: Professional development
+    search-name: professional-development
+    qualifier std:qualifier:null
+    data-type link
+    ui-options dropdown
+    linked-type hres:type:professional-development
+
 
 # -------- Aliased attributes ----------------------
 
@@ -263,13 +335,9 @@ type hres:type:research-institute as ResearchInstitute
     attribute hres:attribute:head [sort=12000]
     attribute hres:aliased-attribute:dean [sort=12001]
     attribute hres:attribute:research-administrator [sort=13000]
-<<<<<<< HEAD
-    OPTIONAL attribute haplo:attribute:description [sort=20000]
-=======
     attribute hres:attribute:research-director [sort=15000]
     attribute hres:attribute:pro-vice-chancellor-for-research [sort=17000]
     attribute haplo:attribute:description [sort=20000]
->>>>>>> permissions
     render-icon: E521,1,f E522,1,f E524,1,f E523,4,f
     render-category 0
     default-subtype hres:type:research-institute:department
@@ -337,6 +405,7 @@ type hres:type:research-institute:research-group as ResearchGroup
     attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
     element: std:group:everyone right std:action_panel {"panel":"research_group_navigation","style":"links"} [sort=20000]
+
 
 type hres:type:academic-year as AcademicYear
     title: Academic year

@@ -1,0 +1,8 @@
+
+attribute hres:attribute:researcher as Researcher
+
+type hres:type:person:researcher as Researcher
+type hres:type:person:staff as Staff
+type phd:type:person:doctoral-researcher as DoctoralResearcher
+
+qualifier std:qualifier:null as Null

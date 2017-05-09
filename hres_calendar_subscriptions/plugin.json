@@ -1,0 +1,16 @@
+{
+  "pluginName": "hres_calendar_subscriptions",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "HRES Calendar Subscriptions",
+  "displayDescription": "Interface for calendar subscriptions and feed generation",
+  "installSecret": "1bc8ab6633c2054b8d92d65ee1438325fffe1e49",
+  "apiVersion": 4,
+  "depend": [
+      "haplo_calendar_access"
+    ],
+  "load": [
+      "js/hres_calendar_subscriptions.js"
+    ],
+  "respond": ["/do/hres-calendar-subscriptions"]
+}

@@ -1,0 +1,13 @@
+pageTitle("Edit " date.displayName " for " project.title)
+
+std:object(project "linkedheading")
+
+if(error) {
+    std:ui:notice("Please complete all required fields.")
+}
+
+<form method="POST"> std:form:token()
+    std:form(form)
+    if(extras.formInstance) { std:form(extras.formInstance) }
+    <p><input type="submit" value="Set date"></p>
+</form>

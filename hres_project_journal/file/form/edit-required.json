@@ -1,0 +1,19 @@
+{
+    "specificationVersion": 0,
+    "formId": "edit-required",
+    "formTitle": "Edit required",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "date",
+            "path": "min",
+            "label": "Earliest date",
+            "required": true
+        },
+        {
+            "type": "date",
+            "path": "max",
+            "label": "Latest date"
+        }
+    ]
+}

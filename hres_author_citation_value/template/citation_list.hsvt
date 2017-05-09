@@ -1,0 +1,9 @@
+if(first) {
+    each(first) {           template:citation()   ", "      }
+}
+if(penultimate) {
+    within(penultimate) {   template:citation()   " and "   }
+}
+if(last) {
+    within(last) {          template:citation()             }
+}

@@ -1,0 +1,21 @@
+{
+  "pluginName": "hres_external_researchers",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "External Researcher support",
+  "displayDescription": "Grant/revoke access for external researchers",
+  "installSecret": "955a9bca89ccec83311ed15b28c7c9d6d747aca0",
+  "apiVersion": 4,
+  "privilegesRequired": ["pSendEmail", "pCreateUser", "pUserPasswordRecovery", "pUserActivation", "pUserSetDetails"],
+  "depend": [
+      "hres_schema"
+    ],
+  "use": [
+      "hres:schema:names"
+    ],
+  "load": [
+      "js/hres_external_researchers.js",
+      "js/er_dashboard.js"
+    ],
+  "respond": ["/do/hres-external-researchers"]
+}

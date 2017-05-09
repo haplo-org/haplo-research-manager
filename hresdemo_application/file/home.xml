@@ -1,0 +1,20 @@
+<doc>
+  <p>This demonstration system contains:</p>
+  <li>Randomly generated data about people within an institutional structure.</li>
+  <li>The Haplo Research Manger core schema.</li>
+    
+  <h1>Instructions</h1>
+  <li>Follow the instructions below to impersonate other users.</li>
+  <li>As an academic the <i>"My record"</i> button second on the home pages links directly to pages about your use of the system.</li>
+
+  <h1>Impersonation</h1>
+  <p>To see the system from the perspective of different roles, and to try out each step of a workflow, you can impersonate other users.</p>
+
+  <p>To try out the system as another user:</p>
+  <li>Click the name of the current user in the top right of the screen</li>
+  <li>In the menu which appears, click <i>"Impersonate user"</i></li>
+  <li>Choose a user from the list, or type to search.</li>
+  <li>Click the <i>"Finish impersonation"</i> button at the top of the screen to return to the original user, or choose a icon in the top left to quickly switch between users you've previously impersonated.</li>
+
+  <p>Impersonation is only available to IT Support users in a live Haplo Research Manager system.</p>
+</doc>

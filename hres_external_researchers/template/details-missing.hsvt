@@ -1,0 +1,7 @@
+<p> "The information below is missing:" </p>
+<ul>
+  unless(userDetails.nameFirst) { <li><b> "First name" </b></li> }
+  unless(userDetails.nameLast) { <li><b> "Last name" </b></li> }
+  unless(userDetails.email) { <li><b> "Email" </b></li> }
+</ul>
+<p> "Please add the missing information to the " <a href=["/do/edit/" researcher.ref]> NAME("External Researcher") " record." </a></p>

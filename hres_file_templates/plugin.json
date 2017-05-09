@@ -1,0 +1,15 @@
+{
+  "pluginName": "hres_file_templates",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "File Templates",
+  "displayDescription": "Configure template files for document generation",
+  "installSecret": "e3264ddb17fba4ecef7e3b4ac47facc74a36f2d8",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
+  "load": [
+      "js/hres_file_templates.js",
+      "js/hres_file_templates_test_data.js"
+    ],
+  "respond": ["/do/hres-file-templates"]
+}

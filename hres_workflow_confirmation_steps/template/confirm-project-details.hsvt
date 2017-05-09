@@ -1,0 +1,9 @@
+
+within(confirmDetails) {
+    template:std:ui:confirm()
+}
+
+<p> "&nbsp;" </p>
+
+std:object(displayObject)
+render(deferredDates)

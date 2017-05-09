@@ -1,0 +1,19 @@
+{
+  "pluginName": "hres_data_monitoring",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo Research Manager Data Monitoring",
+  "displayDescription": "Monitoring and reporting of data issues in Haplo Research Manager systems",
+  "installSecret": "77b84233fefa6f16467e4696d7a3f9bcf4e893a4",
+  "apiVersion": 4,
+  "depend": [
+      "std_reporting",
+      "haplo_data_monitoring",
+      "hres_schema"
+    ],
+  "use": ["std:reporting"],
+  "load": [
+      "js/hres_data_monitoring.js"
+    ],
+  "respond": ["/do/hres-data-monitoring"]
+}

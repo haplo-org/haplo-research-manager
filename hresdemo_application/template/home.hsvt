@@ -1,0 +1,18 @@
+render(instructions)
+
+if(tryImpersonating) {
+    <h2> "Example Researchers" </h2>
+    <p> "Try impersonating these researchers:" </p>
+    <table>
+        <tr>
+            <th style="width:150px"> "Researcher" </th>
+        </tr>
+        within(tryImpersonating) {
+            each(researchers) {
+                <tr>
+                    <td> std:object:link(.) </td>
+                </tr>
+            }
+        }
+    </table>
+}

@@ -1,0 +1,6 @@
+
+group std:group:administrators as Administrators
+
+type hres:type:research-institute as ResearchInstitute
+
+attribute hres:attribute:research-institute as ResearchInstitute

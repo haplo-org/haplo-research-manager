@@ -3,6 +3,8 @@
 
 Plugins to the [Haplo Platform](http://haplo.org) which implement the [Haplo Research Manager](http://www.research-manager.co.uk) product.
 
+This repository contains the basic schema and records keeping for Haplo Research Manager, along with functionality that's common to all applications. To get something more interesting, you should install one or more modules, such as the Academic Repository. These modules have their own source code repositories.
+
 
 ### Setup
 
@@ -22,28 +24,9 @@ locally on your machine, from this directory.
 
 Push all plugins with:
 
-`haplo-plugin -p ALL`
+`haplo-plugin -p hresdemo_application`
 
-Follow the links on the right of the home page to populate the system with some test data (requires the super user privileges of the SUPPORT user).
-
-To use the example workflow and reporting dashboards, add users to the Research Data Managers group via **System mangement -> Groups -> Research Data Managers -> Members of this group -> Edit**. This will give those users the ability to approve datasets via the example Ingest Approval workflow.
-
-Users added to the Classification Editors group can edit taxonomies.
-
-#### OAI Setup
-
-To activate the OAI-PMH endpoint, manually add a user with no group membership to act as the OAI service user, via 
-**System management -> Users -> New user**. Then add
-
-`"oai:service_user": "SERVICE_USER_EMAIL"`
-
-to **System management -> Configuration -> Configuration data** to active the endpoint, at HOSTNAME/api/oai2
-
-To view the OAI debugging options, also add
-
-`"oai:debug": true`
-
-to the same JSON configuration data. This adds an **OAI Export** button to object pages, allowing you to see the generated xml for that record.
+Follow the links on the right of the home page to populate the system with some test data (requires administrative privileges).
 
 
 ### License

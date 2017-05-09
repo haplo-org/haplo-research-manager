@@ -1,0 +1,4 @@
+pageTitle("Templates")
+backLink("/do/hres-file-templates/admin")
+
+std:document(form)

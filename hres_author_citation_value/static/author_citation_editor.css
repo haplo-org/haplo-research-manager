@@ -1,0 +1,26 @@
+/* Haplo Research Manager                            https://haplo.org
+ * (c) Haplo Services Ltd 2006 - 2017   https://www.haplo-services.com
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
+
+
+.hres_author_citation_container {
+    /* autoclear */ overflow: hidden; width: 100%;
+}
+.hres_author_citation_container_lookup {
+    float:left;
+}
+.hres_author_citation_container_lookup input {
+    width: 270px !important;
+}
+.hres_author_citation_container_lookup div div { /* TODO: Make setting width of ref control less of a complete hack */
+    width: 290px !important;
+}
+.hres_author_citation_container_citation {
+    float:right;
+    text-align: right;
+}
+.hres_author_citation_container_citation input {
+    width: 140px;
+}

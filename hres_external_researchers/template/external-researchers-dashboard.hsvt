@@ -1,0 +1,19 @@
+
+<table>
+    <tr>
+        <th> "Name" </th><th> "External access account" </th><th> "Revoke access" </th><th> "Link sent" </th><th> "Account activated" </th>
+    </tr>
+    each(researchers) {
+        <tr>
+            <td><a href=url> name </a></td>
+            if(externalAccess) {
+                <td> "&#10003;" </td> // tick
+                <td><a href=["/do/vre-external-researchers/revoke-access/" ref]> "Revoke" </a></td>
+            } else {
+                <td></td><td></td>
+            }
+            <td> linkSent </td>
+            <td> firstLogin </td>
+        </tr>
+    }
+</table>

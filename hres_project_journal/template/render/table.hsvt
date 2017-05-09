@@ -1,0 +1,26 @@
+<table>
+    if(withHeaders) {
+        <tr>
+        each(headers) {
+            <th> name </th>
+        }
+        </tr>
+    }
+    each(entries) {
+        <tr>
+            <td style="width:100px">
+                if(link) {
+                    <a href=link> std:date(row.datetime) </a>
+                } else {
+                    std:date(row.datetime)
+                }
+            </td>
+            <td>
+                render(deferred)
+            </td>
+            each(columns) {
+                <td> render(.) </td>
+            }
+        </tr>
+    }
+</table>
