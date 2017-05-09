@@ -2,7 +2,19 @@
 # -------- Features --------------------------------
 
 feature std:page:home
+    element: std:group:everyone right hres_schema:home_nav
     element: std:group:everyone right std:action_panel {"panel":"home_page"}
+
+feature std:navigation
+    entry: plugin hres:institutes
+
+# -------- Labels ------------------------------
+
+label std:label:concept as CONCEPT
+
+label hres:label:identity as ActivityIdentity
+    title: Identity
+    category: Activity
 
 
 # -------- Modifications to Haplo minimal schema ---
@@ -10,7 +22,7 @@ feature std:page:home
 feature std:page:home
     REMOVE element: std:group:everyone right std:quick_links
 
-type std:type:person
+type std:type:person as Person
     REMOVE attribute std:attribute:works-for
     REMOVE attribute std:attribute:member-of
     REMOVE attribute std:attribute:first-contact-via
@@ -18,6 +30,30 @@ type std:type:person
     REMOVE attribute std:attribute:relationship-manager
     REMOVE attribute std:attribute:notes
     REMOVE label-applicable std:label:common
+
+type std:type:organisation as Organisation
+    REMOVE attribute std:aliased-attribute:contact-category
+    REMOVE attribute dc:attribute:subject
+    REMOVE element: std:group:everyone right std:linked_objects {"title":"", "type":"20x0", "attr":"works-for"}
+    REMOVE element: std:group:everyone bottom std:contact_notes
+
+type std:type:project as Project
+    title: Project
+    search-name: project
+    attribute dc:attribute:title [sort=1000]
+    attribute hres:aliased-attribute:researchers [sort=1500]
+    REMOVE attribute std:attribute:client
+    REMOVE attribute std:attribute:project-leader
+    REMOVE attribute std:attribute:project-team
+    REMOVE attribute dc:attribute:subject
+    REMOVE attribute std:attribute:text
+    REMOVE attribute dc:attribute:date
+    element: std:group:everyone right std:action_panel {"panel":"project"}
+
+attribute std:attribute:relationship-manager as RelationshipManager
+    # To avoid sending a list of all the person objects to the client in the object editor
+    REMOVE ui-options dropdown
+    ui-options lookup
 
 
 # -------- Schema templates --------------------
@@ -36,7 +72,23 @@ schema-template hres:template-type:list
     create-position never
 
 
+# -------- Application IDs -------------------------
+
+attribute hres:attribute:application-id
+    title: Application ID
+    search-name: application-id
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:appid
+
+
 # -------- Groups ------------------------------
+
+group std:group:everyone as Everyone
+group std:group:administrators as Administrators
+
+group hres:group:classification-editors as ClassificationEditors
+    title: Classification Editors
 
 group hres:group:researchers as Researchers
     title: Researchers
@@ -44,10 +96,34 @@ group hres:group:researchers as Researchers
 group hres:group:admin-staff as AdminStaff
     title: Admin Staff
 
+group hres:group:it-support as ITSupport
+    title: IT Support
+
+group hres:group:senior-management as SeniorManagement
+    title: Senior Management
+
+group hres:group:check-missing-entities as CheckMissingEntities
+    title: Check missing entities
+    member hres:group:it-support
+
+
 # -------- Qualifiers ------------------------------
 
+qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
+    title: Principal Investigator
+    search-name: principal investigator
+
+qualifier hres:qualifier:co-investigator as CoInvestigator
+    title: Co-Investigator
+    search-name: co-investigator
 
 # -------- Attributes ------------------------------
+
+attribute dc:attribute:date as Date
+attribute std:attribute:project as Project
+attribute std:attribute:job-title as JobTitle
+attribute std:attribute:email as EmailAddress
+attribute std:attribute:telephone as Telephone
 
 attribute hres:attribute:researcher as Researcher
     title: Researcher
@@ -55,6 +131,13 @@ attribute hres:attribute:researcher as Researcher
     qualifier std:qualifier:null
     data-type link
     linked-type hres:type:person:researcher
+
+aliased-attribute hres:aliased-attribute:researchers as Researchers
+    title: Researchers
+    search-name: researchers
+    alias-of hres:attribute:researcher
+    on-qualifier hres:qualifier:principal-investigator
+    on-qualifier hres:qualifier:co-investigator
 
 attribute hres:attribute:project-dates as ProjectDates
     title: Project dates
@@ -70,6 +153,12 @@ attribute hres:attribute:research-institute as ResearchInstitute
     data-type link
     linked-type hres:type:research-institute
 
+attribute hres:attribute:collaborating-institution as CollaboratingInstitution
+    title: Collaborating Institution
+    search-name: collaborating-institution
+    qualifier std:qualifier:null
+    data-type text
+
 attribute hres:attribute:head as Head
     title: Head
     search-name: head-of-department
@@ -84,6 +173,7 @@ attribute hres:attribute:research-administrator as ResearchAdministrator
     data-type link
     linked-type std:type:person
 
+
 # -------- Aliased attributes ----------------------
 
 aliased-attribute hres:aliased-attribute:university as University
@@ -96,19 +186,31 @@ aliased-attribute hres:aliased-attribute:faculty as Faculty
     search-name: faculty
     alias-of std:attribute:parent
 
+aliased-attribute hres:aliased-attribute:department as Department
+    title: Department
+    search-name: department
+    alias-of std:attribute:parent
+
 aliased-attribute hres:aliased-attribute:dean as Dean
     title: Dean
     search-name: dean
     alias-of hres:attribute:head
 
+aliased-attribute hres:aliased-attribute:academic-year-dates as AcademicYearDates
+    title: Academic year dates
+    search-name: academic-year-dates
+    alias-of dc:attribute:date
+    ui-options d,n,y,n,n
+    on-data-type datetime
 
 # -------- Types -----------------------------------
 
-OPTIONAL type haplo:type:committee as Committee
-    attribute hres:attribute:research-institute [sort=10500]
+type std:type:intranet-page as IntranetPage
 
 type std:type:person
     attribute hres:attribute:research-institute
+    attribute hres:attribute:research-group
+    attribute hres:attribute:professional-development
 
 type hres:type:person:researcher as Researcher
     title: Researcher
@@ -116,7 +218,16 @@ type hres:type:person:researcher as Researcher
     search-name: researcher
     render-category 3
     render-icon: E228,2,f
-    element: std:group:everyone right std:action_panel {"panel":"researcher"} [sort=14000]
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"researcher"}
+    element: std:group:everyone right std:action_panel {"panel":"researcher", "category":"hres:person"} [sort=14000]
+
+type hres:type:person:external-researcher as ExternalResearcher
+    title: External Researcher
+    parent-type std:type:person
+    search-name: external-researcher
+    render-icon: E20A,1,f E223,7,e
+    render-category 5
+    element: std:group:everyone right std:action_panel {"panel":"external_researcher"} [sort=10000]
 
 # Don't use std:type:staff because it's a subtly different meaning than the intent of the default schema
 type hres:type:person:staff as Staff
@@ -125,8 +236,18 @@ type hres:type:person:staff as Staff
     search-name: staff
     render-category 4
     render-icon: E21A,1,f E21B,3,f
-    element: std:group:everyone right std:action_panel {"panel":"staff"} [sort=14000]
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
+    element: std:group:everyone right std:action_panel {"panel":"staff", "category":"hres:person"} [sort=14000]
 
+type hres:type:person:staff-past as StaffPast
+    title: Staff (past)
+    parent-type std:type:person
+    search-name: staff past
+    search-name: past staff
+    render-category 4
+    render-icon: E21A,1,f E21B,3,f E413,1,f,y
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
+    element: std:group:everyone right std:action_panel {"panel":"staff", "category":"hres:person"} [sort=14000]
 
 type hres:type:research-institute as ResearchInstitute
     title: Research Institute
@@ -135,13 +256,20 @@ type hres:type:research-institute as ResearchInstitute
     attribute dc:attribute:type [sort=10100]
     attribute hres:aliased-attribute:university [sort=10101]
     attribute hres:aliased-attribute:faculty [sort=10102]
+    attribute hres:aliased-attribute:department [sort=10103]
     attribute hres:attribute:research-institute [sort=10300]
     attribute std:attribute:address [sort=11000]
     attribute std:attribute:telephone [sort=11100]
     attribute hres:attribute:head [sort=12000]
     attribute hres:aliased-attribute:dean [sort=12001]
     attribute hres:attribute:research-administrator [sort=13000]
+<<<<<<< HEAD
     OPTIONAL attribute haplo:attribute:description [sort=20000]
+=======
+    attribute hres:attribute:research-director [sort=15000]
+    attribute hres:attribute:pro-vice-chancellor-for-research [sort=17000]
+    attribute haplo:attribute:description [sort=20000]
+>>>>>>> permissions
     render-icon: E521,1,f E522,1,f E524,1,f E523,4,f
     render-category 0
     default-subtype hres:type:research-institute:department
@@ -156,6 +284,7 @@ type hres:type:research-institute:university as University
     attribute dc:attribute:title
     attribute-hide hres:aliased-attribute:university
     attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
     attribute-hide hres:aliased-attribute:dean
@@ -166,9 +295,13 @@ type hres:type:research-institute:faculty as Faculty
     parent-type hres:type:research-institute
     search-name: faculty
     attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
     attribute-hide hres:attribute:head
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"faculty"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"faculty_navigation","style":"links"} [sort=20000]
+
 
 type hres:type:research-institute:department as Department
     title: Department
@@ -176,8 +309,23 @@ type hres:type:research-institute:department as Department
     search-name: department
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:aliased-attribute:department
     attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"department"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"department_navigation","style":"links"} [sort=20000]
+
+type hres:type:research-institute:school as School
+    title: School
+    parent-type hres:type:research-institute
+    search-name: school
+    attribute-hide hres:aliased-attribute:dean
+    attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:aliased-attribute:faculty
+    attribute-hide hres:attribute:research-institute
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
+    element: std:group:everyone right std:action_panel {"panel":"school"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"school_navigation","style":"links"} [sort=20000]
 
 type hres:type:research-institute:research-group as ResearchGroup
     title: Research Group
@@ -186,5 +334,52 @@ type hres:type:research-institute:research-group as ResearchGroup
     attribute-hide hres:aliased-attribute:faculty
     attribute-hide hres:aliased-attribute:dean
     attribute-hide hres:aliased-attribute:university
+    attribute-hide hres:attribute:pro-vice-chancellor-for-research
     element: std:group:everyone right std:action_panel {"panel":"research_group"} [sort=14000]
+    element: std:group:everyone right std:action_panel {"panel":"research_group_navigation","style":"links"} [sort=20000]
 
+type hres:type:academic-year as AcademicYear
+    title: Academic year
+    search-name: academic-year
+    behaviour classification
+    attribute dc:attribute:title
+    attribute hres:aliased-attribute:academic-year-dates
+    render-category 0
+    default-subtype hres:type:academic-year
+    create-position normal
+
+type hres:type:organisation:funder as Funder
+    title: Funder
+    attribute std:attribute:relationship-manager [sort=2000]
+    parent-type std:type:organisation
+    search-name: funder
+    render-icon: E400,3,f
+    render-category 5
+
+type haplo:type:committee as Committee
+type hres:type:person:external-researcher as ExternalResearcher
+
+type hres:type:professional-development as ProfessionalDevelopment
+    title: Professional development
+    search-name: professional development
+    behaviour classification
+    attribute dc:attribute:title
+    attribute std:attribute:notes
+    attribute std:attribute:configured-behaviour
+    render-category 0
+    label-base std:label:concept
+    default-subtype hres:type:professional-development
+    create-position normal
+
+
+# -------- Restrictions ----------------------------
+
+label hres:label:allow-person-administrative-attributes as AllowPersonAdministrativeAttributes
+    title: Allow Person Administrative Attributes
+    category: Restriction
+
+restriction hres:restriction:person-administrative-attributes
+    title: Person Administrative Attributes
+    restrict-type std:type:person
+    label-unrestricted hres:label:allow-person-administrative-attributes
+    attribute-restricted hres:attribute:student-id

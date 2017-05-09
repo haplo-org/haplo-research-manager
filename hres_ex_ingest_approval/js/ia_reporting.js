@@ -6,8 +6,8 @@
 
 
 // Adds links to the reporting and guides area
-P.implementService("std:action_panel:activity:menu:research_data", function(display, builder) {
-    if(O.currentUser.isMemberOf(Group.ResearchDataManagers)) {
+P.implementService("std:action_panel:activity:menu:outputs", function(display, builder) {
+    if(O.currentUser.isMemberOf(Group.OutputEditors)) {
         builder.panel(100).link(102, "/do/ingest-approval/states-dashboard",
                 "Ingest approval progress");
     }
@@ -19,7 +19,7 @@ P.IngestWorkflow.use("std:dashboard:states", {
     title: "Ingest approval progress",
     path: "/do/ingest-approval/states-dashboard",
     canViewDashboard: function(dashboard, user) {
-        return user.isMemberOf(Group.ResearchDataManagers);
+        return user.isMemberOf(Group.OutputEditors);
     },
     states: [
         "wait_submit",

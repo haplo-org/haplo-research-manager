@@ -7,8 +7,8 @@
 
 // Creates a new workflow definition
 // Workflow: http://docs.haplo.org/dev/standard-plugin/workflow/overview
-var IngestWorkflow = P.IngestWorkflow = P.workflow.implement("ia", "Data ingest approval").
-    objectElementActionPanelName("ingest");
+var IngestWorkflow = P.IngestWorkflow = P.workflow.implement("ia", "Output ingest approval").
+    objectElementActionPanelName("output");
 
 // Creates entities for this workflow, informing each workflow instance of the useful objects that 
 // relate to the workflow process
@@ -26,7 +26,7 @@ IngestWorkflow.use("std:entities:roles");
 // Workflow notes: http://docs.haplo.org/dev/standard-plugin/workflow/definition/std-features/notes
 IngestWorkflow.use("std:notes", {
     canSeePrivateNotes: function(M, user) {
-        return user.isMemberOf(Group.ResearchDataManagers);
+        return user.isMemberOf(Group.OutputEditors);
     }
 });
 
@@ -52,7 +52,7 @@ IngestWorkflow.states({
         flags: ["editForm"]
     },
     "wait_rdm_team": {
-        actionableBy: "hres:group:research-data-managers",
+        actionableBy: "hres:group:output-editors",
         transitions: [
             ["approve", "approved"],
             ["return", "returned"]

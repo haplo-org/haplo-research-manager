@@ -5,6 +5,11 @@
   "displayName": "Example Outputs Dashboard",
   "displayDescription": "Dashboard containing counts of outputs and datasets",
   "apiVersion": 4,
+  "depend": [
+      "std_action_panel",
+      "std_reporting",
+      "hres_outputs"
+    ],
   "use": [
       "std:reporting"
     ],

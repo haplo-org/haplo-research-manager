@@ -11,5 +11,14 @@ P.implementService("std:reporting:discover_collections", function(discover) {
 
 P.implementService("std:reporting:collection:researchers:setup", function(collection) {
     collection.
-        currentObjectsOfType(T.Researcher);
+        currentObjectsOfType(T.Researcher, T.ExternalResearcher).
+        property("hres:row_permissions:additional_labels",  [Label.ActivityIdentity]).
+        fact("isExternal",  "boolean",  "Is an external researcher").
+        filter(collection.FILTER_DEFAULT, function(select) { select.where("isExternal", "=", null); }).
+        filter("includeExternal", function(select) { });
+        // TODO: Permissions for Researchers? Does it need different label lists for different purposes?
+});
+
+P.implementService("std:reporting:collection:researchers:get_facts_for_object", function(object, row, collection) {
+    if(object.isKindOf(T.ExternalResearcher)) { row.isExternal = true; }
 });

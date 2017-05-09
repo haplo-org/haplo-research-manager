@@ -5,6 +5,10 @@
   "displayName": "Haplo RM Test data",
   "displayDescription": "Example plugin to generate test data for Haplo Research Manager",
   "apiVersion": 4,
+  "depend": [
+      "std_action_panel",
+      "hres_schema"
+    ],
   "privilegesRequired": ["pCreateUser"],
   "load": [
       "js/hres_ex_test_data.js"

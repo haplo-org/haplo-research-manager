@@ -35,7 +35,7 @@ P.implementService("std:reporting:collection:researchers:get_facts_for_object", 
 
 // --------------------------------------------------------------------------
 
-P.implementService("std:action_panel:activity:menu:research_data", function(display, builder) {
+P.implementService("std:action_panel:activity:menu:outputs", function(display, builder) {
     if(O.currentUser.isMemberOf(Group.ResearchDataManagers)) {
         builder.panel(100).link(100, "/do/ex-outputs-dashboard/researcher-outputs",
                 "Researcher outputs");

@@ -1,0 +1,11 @@
+if(row) {
+    pageTitle("Edit guide section: " row.title)
+} else {
+    pageTitle("New guide section for " activity.title)
+}
+backLink("/do/activity/guides/edit-guides/" activity.name) { "Cancel" }
+
+<form method="POST"> std:form:token()
+    std:form(form)
+    <p> <input type="submit" value="Save guides"> </p>
+</form>

@@ -29,12 +29,14 @@
         (services below use ACTIVITY_NAME for the name of the activity with s/-/_/g)
     * Implement std:action_panel:activity:my_items:ACTIVITY_NAME to add the important "My items"
         link to the overview page.
-    * To add tiles to the overview page, implement std:action_panel:activity:overview:ACTIVITY_NAME
+    * To add links to the overview page, implement std:action_panel:activity:overview:ACTIVITY_NAME
+    * To add things to to the overview page, implement haplo_activity_navigation:overview:ACTIVITY_NAME
+        or haplo_activity_navigation:overview to add items to all pages.
     * To add things to the sidebar on the overview page, implement
-        haplo_activity_navigation:overview:sidebar:ACTIVITY_NAME (or without ACTIVITY_NAME if you want
-        to insert on everything or implement your own selective logic)
+        haplo_activity_navigation:overview:sidebar:ACTIVITY_NAME or
+        haplo_activity_navigation:overview:sidebar to insert on everything or implement your own selective logic)
     * To add links to the menu, implement std:action_panel:activity:menu:ACTIVITY_NAME
-    * To add statitics to the top of the menu mage, implement std:action_panel:activity:statistics:ACTIVITY_NAME
+    * To add statistics to the top of the menu page, implement std:action_panel:activity:statistics:ACTIVITY_NAME
 
     Things to watch out for:
 
@@ -55,6 +57,11 @@
 
 // --------------------------------------------------------------------------
 
+var DefaultEditAction = O.action("haplo_activity_navigation:default_allow_edit").
+    title("Default edit permission for activity overview");
+
+// --------------------------------------------------------------------------
+
 var activities;
 var activityByName;
 
@@ -63,11 +70,11 @@ P._ensureDiscovered = function() {
     if(O.serviceImplemented("haplo_activity_navigation:discover")) {
         var discovered = [];
         activityByName = {};
-        O.service("haplo_activity_navigation:discover", function(sort, name, title, icon, userCanEdit) {
+        O.service("haplo_activity_navigation:discover", function(sort, name, title, icon, editAction) {
             if(!/^[a-z0-9\-]+$/.test(name)) {
                 throw new Error("Invalid activity name");
             }
-            var activity = new Activity(sort, name, title, icon, userCanEdit);
+            var activity = new Activity(sort, name, title, icon, editAction);
             discovered.push(activity);
             activityByName[name] = activity;
         });
@@ -92,15 +99,16 @@ P.validateActivityName = function(name) {
     return name in activityByName;
 };
 
+P.implementService("haplo_activity_navigation:get_activity", P.getActivity);
+
 // --------------------------------------------------------------------------
 
-var Activity = function(sort, name, title, icon, userCanEdit) {
+var Activity = function(sort, name, title, icon, editAction) {
     this.sort = sort;
     this.name = name;
     this.title = title;
     this.icon = icon;
-    // TODO: More restrictive default permissions for Activity editing
-    this.userCanEdit = userCanEdit || function() { return true; };
+    this.editAction = editAction || DefaultEditAction;
     var nameForService = name.replace(/-/g,'_');
     this._editOverviewAction = "activity:edit_overview:"+nameForService;
     this._myItemsActionPanelName = "activity:my_items:"+nameForService;

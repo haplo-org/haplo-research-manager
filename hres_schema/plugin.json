@@ -5,10 +5,38 @@
   "displayName": "Haplo RM Schema",
   "displayDescription": "Basic institution schema and utilities for Haplo Research Manager",
   "apiVersion": 4,
-  "loadPriority": 6000,
-  "use": ["std:reporting"],
+  "loadPriority": 1401,
+  "depend": [
+      "std_action_panel",
+      "std_workflow",
+      "std_reporting",
+      "haplo_committee_support",
+      "haplo_descriptive_object_labelling",
+      "haplo_user_roles_permissions",
+      "haplo_group_notification_queue"
+    ],
+  "use": ["std:reporting", "std:workflow"],
   "load": [
       "js/hres_schema.js",
-      "js/hres_reporting_researchers.js"
+      "js/hres_institute_structure.js",
+      "js/hres_names.js",
+      "js/hres_permissions.js",
+      "js/hres_schema_search_results_render.js",
+      "js/hres_schema_workflow.js",
+      "js/hres_academic_years.js",
+      "js/hres_reporting.js",
+      "js/hres_reporting_permissions.js",
+      "js/hres_reporting_researchers.js",
+      "js/hres_reporting_funders.js",
+      "js/hres_navigation.js",
+      "js/hres_navigation_home_page.js",
+      "js/hres_schema_institute_choices.js",
+      "js/hres_schema_application_number.js",
+      "js/hres_calendar_years.js"
+    ],
+  "respond": [
+      "/do/hres-navigation",
+      "/do/hres-schema-admin",
+      "/do/hres-missing-entities"
     ]
 }

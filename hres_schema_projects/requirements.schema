@@ -1,0 +1,21 @@
+
+# -------- Groups ----------------------------------
+
+group std:group:everyone as Everyone
+
+# -------- Attributes ------------------------------
+
+attribute hres:attribute:researcher as Researcher
+
+# -------- Qualifiers ------------------------------
+
+qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
+qualifier hres:qualifier:co-investigator as CoInvestigator
+
+# -------- Types -----------------------------------
+
+# std:type:project is modified in hres_schema
+# first for global application, with any further
+# specific functionality provided from within this plugin
+
+type std:type:project as Project

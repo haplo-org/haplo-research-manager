@@ -1,0 +1,28 @@
+each(sections) {
+    <h2> section.title </h2>
+    if(document.intro) {
+        std:text:document(document.intro)
+    }
+    if(guides) {
+        <table>
+            each(guides) {
+                <tr>
+                    <td style="width:200px"> title </td>
+                    <td>if(screen) { <a href=screen> "On screen" </a> } </td>
+                    <td>if(print) { <a href=print> "Printable" </a> } </td>
+                </tr>
+            }
+        </table>
+    }
+    if(files) {
+        each(files) {
+            <p> <a href=file> title </a> </p>
+        }
+    }
+}
+
+if(canEdit) {
+    <p class="activities_overview_text_edit">
+        <a href=["/do/activity/guides/edit-guides/" activity.name]> "Edit guides" </a>
+    </p>
+}

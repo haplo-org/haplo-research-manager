@@ -1,0 +1,5 @@
+pageTitle(i.labelPlural)
+
+each(items) {
+    std:object(. "linkedheading")
+}

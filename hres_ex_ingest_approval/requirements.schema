@@ -6,17 +6,14 @@ label hres:label:accepted-into-repository as AcceptedIntoRepository
 
 # -------- Groups ------------------------------
 
-group hres:group:research-data-managers as ResearchDataManagers
-    title: Research Data Managers
+group hres:group:output-editors as OutputEditors
+    title: Output Editors
 
 # -------- Attributes --------------------------
 
 attribute dc:attribute:author as Author
 
 # -------- Types -------------------------------
-
-type hres:type:dataset as Dataset
-    element: std:group:everyone right std:action_panel {"panel":"ingest"}
 
 type hres:type:person:researcher as Researcher
 

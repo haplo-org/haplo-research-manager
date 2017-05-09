@@ -43,18 +43,7 @@ if(!O.user(SERVICE_USER_EMAIL)) {
 
 // --------------------------------------------------------------------------
 
-var DC_ATTRS = [
-    {name:"dc:title", desc:A.Title},
-    {name:"dc:creator", desc:A.Author},
-    {name:"dc:date", desc:A.Date},
-    {name:"dc:publisher", desc:A.Publisher},
-    {name:"dc:subject", desc:A.Subject}
-];
-
-var typeToSet;
 var setToType;
-
-// --------------------------------------------------------------------------
 
 var codeToSetName = function(code) {
     var s = code.split(':');
@@ -66,18 +55,21 @@ var codeToSetName = function(code) {
 if(DEBUG_MODE) {
     P.hook("hObjectDisplay", function(response, object) {
         ensureTypeInfoGathered();
-        if(typeToSet.get(object.firstType())) {
+        if(P.typeToSet.get(object.firstType())) {
             response.buttons["*EXPORT"] = [["/do/open-archives-initiative/export/"+object.ref, "OAI Export"]];
         }
     });
     P.respond("GET", "/do/open-archives-initiative/export", [
-        {pathElement:0, as:"object"}
-    ], function(E, output) {
+        {pathElement:0, as:"object"},
+        {parameter:"metadataPrefix", as:"string", optional:true}
+    ], function(E, output, metadataPrefix) {
         ensureTypeInfoGathered();
+        if(!metadataPrefix) { metadataPrefix = "oai_dc"; }
         E.render({
             pageTitle: "OAI2: "+output.title,
             backLink: output.url(),
-            xml: O.service("hres_thirdparty_libs:generate_xml", {record:itemToXML(output,true)}, {indent:true}),
+            viewingDC: (metadataPrefix === "oai_dc"),
+            xml: O.service("hres_thirdparty_libs:generate_xml", {record:itemToXML(output,true,metadataPrefix)}, {indent:true}),
             applicationName: O.application.name,
             baseURL: REPO_ATTRS.baseURL
         });
@@ -121,7 +113,7 @@ COMMANDS.Identify = function(E) {
         items.push(i);
     });
     // Get sample identifier which works
-    var q = O.service("hres:outputs:store_query").limit(1).sortByDateAscending().execute();
+    var q = O.service("hres:repository:store_query").limit(1).sortByDateAscending().execute();
 
     items.push({
         description: [
@@ -146,11 +138,20 @@ COMMANDS.Identify = function(E) {
 COMMANDS.ListMetadataFormats = function(E) {
     return [{
         ListMetadataFormats: [
-            {metadataFormat: [
-                {metadataPrefix: "oai_dc"},
-                {schema: "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"},
-                {metadataNamespace: "http://www.openarchives.org/OAI/2.0/oai_dc/"}
-            ]}
+            {
+                metadataFormat: [
+                    {metadataPrefix: "oai_dc"},
+                    {schema: "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"},
+                    {metadataNamespace: "http://www.openarchives.org/OAI/2.0/oai_dc/"}
+                ]
+            },
+            {
+                metadataFormat: [
+                    {metadataPrefix: "oai_datacite"},
+                    {schema: "http://schema.datacite.org/oai/oai-1.0/oai.xsd"},
+                    {metadataNamespace: "http://schema.datacite.org/oai/oai-1.0/"}
+                ]
+            }
         ]
     }];
 };
@@ -159,7 +160,7 @@ COMMANDS.ListMetadataFormats = function(E) {
 
 COMMANDS.ListSets = function(E) {
     var sets = [];
-    O.service("hres:outputs:each_output_type", function(type) {
+    O.service("hres:repository:each_repository_item_type", function(type) {
         var info = SCHEMA.getTypeInfo(type);
         if(info) {
             sets.push({
@@ -206,10 +207,10 @@ COMMANDS.GetRecord = function(E) {
     // Load object, doing our own security on top of the service user's permissions
     return O.impersonating(O.user(SERVICE_USER_EMAIL), function() {
         var object = ref.load();
-        if(!(O.service("hres:outputs:is_output", object))) { O.stop("Not permitted"); }
+        if(!(O.service("hres:repository:is_repository_item", object))) { O.stop("Not permitted"); }
         return [
             {GetRecord: [
-                {record: itemToXML(ref.load(), true)}
+                {record: itemToXML(ref.load(), true, E.request.parameters.metadataPrefix)}
             ]}
         ];
     });
@@ -218,14 +219,14 @@ COMMANDS.GetRecord = function(E) {
 // --------------------------------------------------------------------------
 
 var ensureTypeInfoGathered = function() {
-    if(typeToSet) { return; }
-    typeToSet = O.refdictHierarchical();
+    if(P.typeToSet) { return; }
+    P.typeToSet = O.refdictHierarchical();
     setToType = {};
-    O.service("hres:outputs:each_output_type", function(type) {
+    O.service("hres:repository:each_repository_item_type", function(type) {
         var info = SCHEMA.getTypeInfo(type);
         if(info) {
             var name = codeToSetName(info.code);
-            typeToSet.set(type, name);
+            P.typeToSet.set(type, name);
             setToType[name] = type;
         }
     });
@@ -242,7 +243,7 @@ var queryForCommand = function(E, fullRecord, consume) {
         query.link(setToType[params.set] || O.stop("Bad type"), A.Type);
     } else {
         query.or(function(sq) {
-            O.service("hres:outputs:each_output_type", function(t) { sq.link(t, A.Type); });
+            O.service("hres:repository:each_repository_item_type", function(t) { sq.link(t, A.Type); });
         });
     }
     // Date range?
@@ -261,7 +262,7 @@ var queryForCommand = function(E, fullRecord, consume) {
         for(var i = startIndex; i < endIndex; ++i) {
             if(i >= items.length) { break; }
             var item = items[i];
-            consume(itemToXML(item, fullRecord));
+            consume(itemToXML(item, fullRecord, params.metadataPrefix));
         }
         // Resumption token needed?
         if(i < items.length) {
@@ -277,14 +278,14 @@ var queryForCommand = function(E, fullRecord, consume) {
     });
 };
 
-var itemToXML = function(item, fullRecord) {
+var itemToXML = function(item, fullRecord, metadataPrefix) {
     // Header
     var headerItems = [
         {identifier: IDENTIFIER_BASE+item.ref},
         {datestamp: (new XDate(item.lastModificationDate)).toString('yyyy-MM-dd')}
     ];
     item.everyType(function(v,d,q) {
-        var name = typeToSet.get(v);
+        var name = P.typeToSet.get(v);
         if(name) { headerItems.push({setSpec:name}); }
     });
     var header = {header:headerItems};
@@ -293,53 +294,15 @@ var itemToXML = function(item, fullRecord) {
     var info = [header];
     if(fullRecord) {
         // Metadata
-        var metadataItems = [
-            {"bib-version": 'v2'},
-            {"id": item.ref.toString()},
-            {"entry": (new XDate(item.creationDate)).toString('MMMM d, yyyy')}
-        ];
-        item.every(A.Author, function(v,d,q) {
-            metadataItems.push({author:v.load().firstTitle().toString()});
-        });
-        metadataItems.push({end:""});
-        info.push({
-            metadata: [{
-                rfc1807: [
-                    {_attr: {
-                        "xmlns": "http://info.internet.isi.edu:80/in-notes/rfc/files/rfc1807.txt",
-                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                        "xsi:schemaLocation": "http://info.internet.isi.edu:80/in-notes/rfc/files/rfc1807.txt http://www.openarchives.org/OAI/1.1/rfc1807.xsd"
-                    }}
-                ].concat(metadataItems)
-            }]
-        });
-
-        // About
-        var aboutItems = [];
-        _.each(DC_ATTRS, function(dc) {
-            item.every(dc.desc, function(v,d,q) {
-                var str = (O.isRef(v) ? v.load().firstTitle() : v).toString();
-                var i = {}; i[dc.name] = str;
-                aboutItems.push(i);
-            });
-        });
-        item.everyType(function(v,d,q) {
-            var name = typeToSet.get(v);
-            if(name) { aboutItems.push({"dc:type":name}); }
-        });
-        aboutItems.push({"dc:identifier": item.url(true)});
-        info.push({
-            about: [
-                {"oai_dc:dc": [
-                    {_attr: {
-                        "xmlns:oai_dc": "http://www.openarchives.org/OAI/2.0/oai_dc/",
-                        "xmlns:dc": "http://purl.org/dc/elements/1.1/",
-                        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-                        "xsi:schemaLocation": "http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
-                    }}
-                ].concat(aboutItems)}
-            ]
-        });
+        var metadata;
+        if(metadataPrefix === "oai_dc") {
+            metadata = P.getDublinCoreMetadata(item);
+        } else if(metadataPrefix === "oai_datacite") {
+            metadata = P.getDataCiteMetadata(item);
+        } else {
+            throw new Error("Bad metadataPrefix requested.");
+        }
+        info.push(metadata);
     }
 
     return info;

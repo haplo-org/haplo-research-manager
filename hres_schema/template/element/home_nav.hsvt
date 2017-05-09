@@ -1,0 +1,9 @@
+
+// My Record link
+within(myRecord) { template:std:ui:panel() }
+
+// Links to useful links relevant to this user below it
+// TODO: Better styling, don't show background if there are no entries in the panel
+<div style="position:relative;top:-24px;padding:8px 0 4px 16px;background:#eee;border-radius:0 0 4px 4px">
+    within(myLinks) { template:std:element() }
+</div>
