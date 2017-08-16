@@ -21,12 +21,8 @@ P.implementService("std:action_panel:researcher", function(display, builder) {
     }
 });
 
-P.implementService("std:action_panel:home_page_my_links", function(display, builder) {
-    var roles = O.service("haplo:permissions:user_roles", O.currentUser);
-    if(roles.hasAnyRole("Principal Investigator")) {
-        builder.link(400, "/do/hres-projects/researcher-projects/"+O.currentUser.ref,
-            "My Projects");
-    }
+P.implementService("hres:schema:roles_for_my_links", function(myLink) {
+    myLink(100, "Principal Investigator", "My Project", "My Projects");
 });
 
 // --------------------------------------------------------------------------

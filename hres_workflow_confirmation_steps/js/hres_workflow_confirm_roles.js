@@ -10,6 +10,7 @@
 *
 *   Specification:
 *    path: consuming plugin's respond path
+*    pageTitle: specify custom page title
 *    states: array of objects containing keys:
 *      state: state in which roles are confirmed
 *      redirect: optional function to redirect after confirmation
@@ -46,7 +47,7 @@ P.workflow.registerWorkflowFeature("hres:confirm_roles",
             forms[state] = P.form({
                 specificationVersion: 0,
                 formId: "confirmRole"+state,
-                formTitle: "Confirm roles",
+                pageTitle: spec.pageTitle || "Confirm roles",
                 elements: _.map(stateInfo.roles, function(roleInfo) {
                     return {
                         type: "lookup",
@@ -62,7 +63,7 @@ P.workflow.registerWorkflowFeature("hres:confirm_roles",
                 if(M.workUnit.isActionableBy(O.currentUser)) {
                     var confirmed = rolesConfirmed(stateInfo.roles, M.entities.object);
                     builder.link("default", spec.path+"/confirm-roles/"+M.workUnit.id,
-                        "Confirm roles", confirmed ? "standard" : "primary");
+                        (spec.pageTitle || "Confirm roles"), confirmed ? "standard" : "primary");
                 }
             });
 
@@ -122,7 +123,7 @@ P.workflow.registerWorkflowFeature("hres:confirm_roles",
                 return E.response.redirect(object.url());
             }
             E.render({
-                pageTitle: "Confirm roles",
+                pageTitle: (spec.pageTitle || "Confirm roles"),
                 backLink: object.url(),
                 form: form
             });

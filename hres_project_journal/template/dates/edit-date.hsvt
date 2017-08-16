@@ -2,6 +2,10 @@ pageTitle("Edit " date.displayName " for " project.title)
 
 std:object(project "linkedheading")
 
+if(date.actual) {
+    std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
+}
+
 if(error) {
     std:ui:notice("Please complete all required fields.")
 }

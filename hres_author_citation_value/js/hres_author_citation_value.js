@@ -253,9 +253,10 @@ P.hook('hPostObjectEdit', function(response, object, previous) {
     }
 });
 
-// Don't display the shadowed fields
+// Don't display the shadowed fields (for internal UI and published views of object)
 // Combine all the author values into a single list value
-P.hook('hPreObjectDisplay', function(response, object) {
+// hPreObjectDisplay & hPreObjectDisplayPublisher
+var preObjectDisplay = function(response, object) {
     var type = object.firstType();
     if(haveShadowedAttributes && type && shadowInTypes.get(type)) {
         var r = response.replacementObject || object.mutableCopy();
@@ -282,7 +283,9 @@ P.hook('hPreObjectDisplay', function(response, object) {
         });
         response.replacementObject = r;
     }
-});
+};
+P.hook('hPreObjectDisplay', preObjectDisplay);
+P.hook('hPreObjectDisplayPublisher', preObjectDisplay);
 
 // --------------------------------------------------------------------------
 

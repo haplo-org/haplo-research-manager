@@ -49,6 +49,14 @@ P.DOI = {
         } else {
             throw new Error("Not a DOI");
         }
+    },
+    isDOI: function(maybeDOI) {
+        return O.isPluginTextValue(maybeDOI, "hres:doi");
+    },
+    asString: function(doi) {
+        var f = doi.toFields();
+        if(f.type !== "hres:doi") { throw new Error("Not a DOI"); }
+        return f.value[0];
     }
 };
 

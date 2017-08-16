@@ -215,7 +215,7 @@ P.implementService("hres:academic_year:navigation_bar", function(currentYear) {
     var year = currentYear ?
         O.service("hres:academic_year:year_info", currentYear) :
         O.service("hres:academic_year:for_date", new Date());
-    return P.template("academic-year-navigation").deferredRender(year);
+    return {year:year, deferred:P.template("academic-year-navigation").deferredRender(year)};
 });
 
 // ----------------------------------------------------------------------------------------------------------------

@@ -13,10 +13,18 @@ P.canRequestAccess = O.action("hres_external_researchers:can_request_external_ac
     title("Can request external access").
     allow("group", Group.Administrators);
 
+var userHasAccess = function(user) {
+    return (
+        user &&
+        user.isActive && 
+        !O.serviceMaybe("hres_external_researchers:prevent_user_access", user)
+    );
+};
+
 P.implementService("std:action_panel:external_researcher", function(display, builder) {
     if(O.currentUser.allowed(P.canRequestAccess)) {
         var user = O.user(display.object.ref);
-        if(user && user.isActive) {
+        if(userHasAccess(user)) {
             if(user.isMemberOf(Group.ExternalResearcherAccount)) {
                 builder.link("default", "/do/hres-external-researchers/revoke-access/"+
                     display.object.ref.toString(), "Revoke access");
@@ -43,8 +51,7 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
 ], function(E, researcher) {
     P.canRequestAccess.enforce();
     var user = O.user(researcher.ref);
-    if(user && user.isActive) { O.stop(NAME("External Researcher")+" already has access"); }
-    else if(user) {
+    if(user) {
         E.response.redirect("/do/hres-external-researchers/reactivate-user/"+
             researcher.ref.toString());
     }
@@ -55,12 +62,22 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
     if(names.last) { userDetails.nameLast = names.last; } else { detailsMissing = true; }
     var email = researcher.first(A.EmailAddress);
     if(email) { userDetails.email = email.s(); } else { detailsMissing = true; }
+    
+    // Add optional details form
+    var form;
+    var document = {};
+    var formMaybe = O.serviceMaybe("hres_external_researchers:details_form");
+    if(formMaybe) {
+        form = formMaybe.handle(document, E.request);
+    }
+    
     if(E.request.method === "POST") {
         if(O.user(userDetails.email)) { O.stop("An account with this email address already exists"); }
         userDetails.ref = researcher.ref;
         userDetails.groups = [Group.ExternalResearcherAccount];
         user = O.setup.createUser(userDetails);
         if(user) {
+            O.serviceMaybe("hres_external_researchers:handle_details", user, document);
             user.data["hres_external_researchers:activation_link_sent"] = new XDate();
             O.audit.write({
                 auditEntryType: "hres_external_researchers:new_external_user",
@@ -72,6 +89,7 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
         }
         E.response.redirect(researcher.url());
     }
+
     if(detailsMissing) {
         E.render({
             pageTitle: "Missing data",
@@ -86,7 +104,7 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
             researcher: researcher,
             userDetails: userDetails,
             text: "Confirm external access for the "+NAME("External Researcher"),
-            options: [{label: "Confirm"}]
+            form: form
         });
     }
 });
@@ -97,10 +115,19 @@ P.respond("GET,POST", "/do/hres-external-researchers/reactivate-user", [
     P.canRequestAccess.enforce();
     var user = O.user(researcher.ref);
     if(!user) { O.stop(NAME("External Researcher")+" does not have existing account"); }
-    if(user.isActive) { O.stop("User is already active"); }
     if(!user.isMemberOf(Group.ExternalResearcherAccount)) { O.stop("Not an "+NAME("External Researcher")); }
+    
+    // Add optional details form
+    var form;
+    var document = {};
+    var formMaybe = O.serviceMaybe("hres_external_researchers:details_form");
+    if(formMaybe) {
+        form = formMaybe.handle(document, E.request);
+    }
+    
     if(E.request.method === "POST") {
         user.setIsActive(true);
+        O.serviceMaybe("hres_external_researchers:handle_details", user, document);
         var linkSent = user.data["hres_external_researchers:activation_link_sent"];
         if(!linkSent) {
             user.data["hres_external_researchers:activation_link_sent"] = new XDate();
@@ -114,8 +141,8 @@ P.respond("GET,POST", "/do/hres-external-researchers/reactivate-user", [
         pageTitle: "Reactivate user",
         backLink: researcher.url(),
         text: "The "+NAME("External Researcher")+" has a previously existing user account. Confirm to reactivate it.",
-        options:[{label:"Confirm"}]
-    }, "std:ui:confirm");
+        form: form
+    }, "request-external-access");
 });
 
 P.respond("GET,POST", "/do/hres-external-researchers/revoke-access", [
@@ -135,7 +162,7 @@ P.respond("GET,POST", "/do/hres-external-researchers/revoke-access", [
         backLink: researcher.url(),
         text: "Confirm revocation of "+researcher.title+"'s external access",
         options: [{label: "Confirm"}]
-    }, "std:ui:confirm");
+    }, "request-external-access");
 });
 
 P.hook("hPostObjectEdit", function(response, object, previous) {

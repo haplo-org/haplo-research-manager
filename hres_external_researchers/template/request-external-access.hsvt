@@ -1,9 +1,19 @@
-<p> "The following details will be used to create the user account:" </p>
-<ul>
-  <li><b> "First name: " </b> userDetails.nameFirst </li>
-  <li><b> "Last name: " </b> userDetails.nameLast </li>
-  <li><b> "Email: " </b> userDetails.email </li>
-</ul>
-<p><a href=["/do/edit/" researcher.ref]> "Edit record" </a></p>
 
-template:std:ui:confirm()
+<p> text </p>
+
+if(userDetails) {
+    <p> "The following details will be used to create the user account:" </p>
+    <ul>
+        <li><b> "First name: " </b> userDetails.nameFirst </li>
+        <li><b> "Last name: " </b> userDetails.nameLast </li>
+        <li><b> "Email: " </b> userDetails.email </li>
+    </ul>
+    <p><a href=["/do/edit/" researcher.ref]> "Edit record" </a></p>
+}
+
+<form method="POST">std:form:token()
+    if(form) {
+        std:form(form)
+    }
+    <p><input type="submit" value="Confirm"></p>
+</form>   

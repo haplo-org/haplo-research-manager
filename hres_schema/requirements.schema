@@ -72,16 +72,6 @@ schema-template hres:template-type:list
     create-position never
 
 
-# -------- Application IDs -------------------------
-
-attribute hres:attribute:application-id
-    title: Application ID
-    search-name: application-id
-    qualifier std:qualifier:null
-    data-type plugin
-    data-type-options hres:appid
-
-
 # -------- Groups ------------------------------
 
 group std:group:everyone as Everyone
@@ -124,6 +114,7 @@ attribute std:attribute:project as Project
 attribute std:attribute:job-title as JobTitle
 attribute std:attribute:email as EmailAddress
 attribute std:attribute:telephone as Telephone
+attribute std:attribute:parent as Parent
 
 attribute hres:attribute:researcher as Researcher
     title: Researcher
@@ -293,6 +284,16 @@ type hres:type:person:researcher as Researcher
     REMOVE element: std:group:everyone right std:action_panel {"panel":"researcher"}
     element: std:group:everyone right std:action_panel {"panel":"researcher", "category":"hres:person"} [sort=14000]
 
+type hres:type:person:researcher-past as ResearcherPast
+    REMOVE title: Researcher Past
+    title: Researcher (past)
+    parent-type std:type:person
+    search-name: researcher-past
+    attribute-hide hres:attribute:student-id
+    render-category 3
+    render-icon E228,2,f,y E413,1,f,y
+    REMOVE element: std:group:everyone right std:action_panel {"panel":"doctoral_researcher"} [sort=10000]
+    
 type hres:type:person:external-researcher as ExternalResearcher
     title: External Researcher
     parent-type std:type:person

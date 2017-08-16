@@ -5,9 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
+// TODO: Remove this knowledge of phd namespaced code
 P.implementService("std:action_panel:activity:menu:graduate_school", function(display, builder) {
     if(O.currentUser.allowed(P.canRequestAccess)) {
-        builder.panel("phd:graduate_school_menu:supervision").link("default",
+        builder.panel("phd:graduate_school_menu:directories").link(1000,
             "/do/hres-external-researchers/external-researchers-dashboard",
             NAME('+External Researcher'));
     }

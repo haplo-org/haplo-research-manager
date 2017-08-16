@@ -1,5 +1,5 @@
 
-attribute hres:attribute:ref-unit-of-assessment as RefUnitOfAssessment
+attribute hres:attribute:ref-unit-of-assessment as REFUnitOfAssessment
     title: REF Unit of Assessment
     search-name: ref-unit
     search-name: ref-unit-of-assessment
@@ -8,7 +8,7 @@ attribute hres:attribute:ref-unit-of-assessment as RefUnitOfAssessment
     data-type link
     linked-type hres:type:ref-unit-of-assessment
 
-attribute hres:attribute:ref-panel as RefPanel
+attribute hres:attribute:ref-panel as REFPanel
     title: REF Panel
     search-name: ref-panel
     qualifier std:qualifier:null
@@ -18,7 +18,7 @@ attribute hres:attribute:ref-panel as RefPanel
 
 # ---------------------------------------------------------------------------
 
-type hres:type:ref-unit-of-assessment as RefUnitOfAssessment
+type hres:type:ref-unit-of-assessment as REFUnitOfAssessment
     title: REF Unit of Assessment
     search-name: ref-unit
     search-name: ref-unit-of-assessment
@@ -182,7 +182,7 @@ object hres:list:ref-unit-of-assessment:33:theology-and-religious-studies
     type: hres:type:ref-unit-of-assessment
     title: 33. Theology and Religious Studies
 
-object hres:list:ref-unit-of-assessment:34:art-and-design:-history-practice-and-theory
+object hres:list:ref-unit-of-assessment:34:art-and-design-history-practice-and-theory
     type: hres:type:ref-unit-of-assessment
     title: 34. Art and Design: History, Practice and Theory
 

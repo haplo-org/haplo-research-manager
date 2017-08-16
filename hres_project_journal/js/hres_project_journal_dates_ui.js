@@ -127,8 +127,13 @@ var editVariations = {
             var enteredDate = new XDate(document.date).clearTime();
             var today = new XDate().clearTime();
             // Dates entered as in the future are scheduled dates, otherwise they're actuals
-            var setFn = (enteredDate.diffDays(today) <=  0) ? "setScheduled" : "setActual";
-            date[setFn](new Date(document.date));
+            if(enteredDate.diffDays(today) <= 0) { 
+                // When date is in the future, it implicitly means the 'actual' didn't actually happen
+                date.clearActual();
+                date.setScheduled(new Date(document.date));
+            } else {
+                date.setActual(new Date(document.date));
+            }
         }
     }
 };
@@ -153,10 +158,11 @@ P.respond("GET,POST", "/do/hres-project-journal/edit-date", [
         var options = prevent.url ? [{action:prevent.url, label:prevent.label || "More information..."}] : [];
         E.render({
             pageTitle: date.displayName,
+            additionalUI: prevent.additionalUI,
             text: prevent.message,
             backLink: backLink,
             options: options
-        }, "std:ui:confirm");
+        }, "dates/dates-prevent-edit");
     } else {
 
         var extras = variation.extras(project, date, E);

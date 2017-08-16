@@ -1,7 +1,11 @@
 
+# we have REMOVE on vre:doi as a pragmatic way of handling doi
+# that were converted from ported systems that would break otherwise
+
 attribute hres:attribute:digital-object-identifier-doi as DigitalObjectIdentifierDOI
     title: Digital Object Identifier (DOI)
     search-name: doi
     qualifier std:qualifier:null
     data-type plugin
+    REMOVE data-type-options vre:doi
     data-type-options hres:doi

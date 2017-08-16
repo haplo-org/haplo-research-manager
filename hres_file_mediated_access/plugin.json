@@ -1,0 +1,14 @@
+{
+  "pluginName": "hres_file_mediated_access",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo RM File Mediated Access",
+  "displayDescription": "Support for mediated access to files stored in Haplo RM applications",
+  "installSecret": "3407d01cb7cb640bc1cec2b119ace8df8f6f5435",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_file_mediated_access.js"
+    ],
+  "respond": ["/do/hres-file-mediated-access"],
+  "allowAnonymousRequests": true
+}

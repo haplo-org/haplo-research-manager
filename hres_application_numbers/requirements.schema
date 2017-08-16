@@ -1,9 +1,12 @@
 
 # -------- Application IDs -------------------------
+# we have REMOVE on vre:appid as a pragmatic way of handling application-ids
+# that were converted from ported systems that would break otherwise
 
-attribute vre:attribute:application-id
+attribute hres:attribute:application-id
     title: Application ID
     search-name: application-id
     qualifier std:qualifier:null
     data-type plugin
+    REMOVE data-type-options vre:appid
     data-type-options hres:appid

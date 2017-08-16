@@ -1,6 +1,10 @@
 if(object) {
     if(value.cite) {
-        <a href=std:object:url(object)> value.cite </a>
+        ifRenderingForWebPublisher() {
+            std:web-publisher:object:link(object value.cite)
+        } else {
+            <a href=std:object:url(object)> value.cite </a>
+        }
     } else {
         std:object:link(object)
     }

@@ -1,0 +1,3 @@
+if(additionalUI.top) { render(additionalUI.top) }
+template:std:ui:confirm()
+if(additionalUI.bottom) { render(additionalUI.bottom) }

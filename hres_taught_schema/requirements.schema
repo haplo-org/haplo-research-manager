@@ -1,4 +1,8 @@
 
+# -------- Labels ------------------------------
+
+label hres:label:identity as ActivityIdentity
+
 # -------- Attributes ------------------------------
 
 attribute hres:attribute:researcher as Researcher
@@ -84,6 +88,7 @@ type hres:type:taught-project as TaughtProject
     attribute hres:attribute:taught-student [sort=11000]
     attribute hres:attribute:supervisor [sort=12000]
     attribute hres:attribute:course-module [sort=13000]
+    attribute hres:attribute:academic-year [sort=13500]
     attribute haplo:attribute:description [sort=14000]
     render-icon: E53C,2,f E53D,6,f
     render-category 4
@@ -98,6 +103,7 @@ type hres:type:student-project as StudentProject
     attribute dc:attribute:title [sort=10000]
     attribute hres:attribute:taught-student [sort=11000]
     attribute hres:attribute:supervisor [sort=12000]
+    attribute hres:attribute:academic-year [sort=13000]
     attribute haplo:attribute:description [sort=14000]
     render-icon: E53C,3,f E53D,4,f
     render-category 0

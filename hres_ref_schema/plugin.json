@@ -10,6 +10,7 @@
       "hres_schema"
     ],
   "load": [
+      "js/hres_ref_schema.js"
     ],
   "respond": []
 }

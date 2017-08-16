@@ -23,16 +23,18 @@ P.element("home_nav", "Home page key links navigation",
     function(L) {
         var myRecordRef = O.currentUser.ref;
         if(!myRecordRef) { return; }
+        var myRecord = myRecordRef.load();
         L.render({
             myRecord: {
                 highlight: "primary",
                 elements: [
-                    {label:"My record", href:myRecordRef.load().url()}
+                    {label:"My record", href:myRecord.url()}
                 ]
             },
             myLinks: {
                 name: "std:action_panel",
-                options: '{"panel":"home_page_my_links","style":"links"}'
+                options: '{"panel":"home_page_my_links","style":"links"}',
+                object: myRecord
             }
         }, "element/home_nav");
     }
@@ -70,7 +72,7 @@ P.implementService("std:action_panel:home_page_my_links", function(display, buil
 P.respond("GET", "/do/hres-navigation", [
     {pathElement:0, as:"string"}
 ], function(E, roleUrlName) {
-    var i = _.find(rolesForMyLinks(), function(l) { console.log(roleUrlName, l); return l.urlName === roleUrlName; });
+    var i = _.find(rolesForMyLinks(), function(l) { return l.urlName === roleUrlName; });
     if(!i) { O.stop("Unknown role"); }
     var roles = O.service("haplo:permissions:user_roles", O.currentUser);
     var items = roles.labelsForRole(i.role);

@@ -5,10 +5,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
+// Navigation for home page
+P.implementService("hres:schema:roles_for_my_links", function(myLink) {
+    myLink(100, "Taught Student", "My project", "My projects");
+});
+
+var CanSeeRoles = O.action("haplo_user_roles_permissions:can_see_roles");
+
+// Add button to object page to roles list
+P.hook("hObjectDisplay", function(response, object) {
+    if(O.currentUser.allowed(CanSeeRoles)) {
+        // TODO: Configurable set of types to show Permissions button
+        if(object.isKindOf(T.TaughtStudent)) {
+            response.buttons["*USERROLES"] = [["/do/haplo-user-roles-permissions/roles/"+object.ref, "Permissions: User roles"]];
+        }
+    }
+});
+
 P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
     type(T.CourseModule, {
         selfLabelling: true,
         labelWith: [A.ModuleLeader, A.ResearchInstitute]
+    });
+
+    type(T.TaughtStudent, {
+        labels: [Label.ActivityIdentity],
+        labelWith: [A.ResearchInstitute]
     });
 
     type(T.TaughtProject, {
@@ -37,6 +59,7 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.roleProjectPermission("Taught Module Leader",        "read-edit",     TAUGHT_TYPES);
 
     setup.groupPermission(Group.Everyone, "read", T.CourseModule);
+    setup.groupPermission(Group.Everyone, "read", T.TaughtStudent);
 
     // Roles
     setup.groupPersonalRole(Group.TaughtStudents,       "Is: Taught Student");

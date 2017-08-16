@@ -231,6 +231,7 @@ var generateTestData = function(instituteStructureDepth) {
     generator.setPeopleTypes(ADMIN_STAFF_SPEC); // put a few staff on institutes, just to make things more interesting
 
     generator.addInstituteRole(A.Head, T.Researcher);
+    generator.addInstituteRole(A.ResearchDirector, T.Researcher);
     generator.addInstituteRole(A.ResearchAdministrator, T.Staff, 2);
 
     O.impersonating(O.SYSTEM, function() {
@@ -340,6 +341,17 @@ var generateTestData = function(instituteStructureDepth) {
             });
         });
 
+        // Funders
+        var funders = [];
+        _.each(TEST_FUNDERS, function(name) {
+            var funder = O.object();
+            funder.appendType(T.Funder);
+            funder.appendTitle(name);
+            funder.save();
+            funders.push(funder);
+        });
+        generator.funders = funders;
+
         // Taxonomy and other plugins?
         generateTestTaxonomy();
         var ends = [];
@@ -384,6 +396,32 @@ var INSTITUTE_STRUCTURE = "University of Example\n"+
 "* * Art and Design\n"+
 "* * Journalism\n"+
 "* * Music";
+
+// --------------------------------------------------------------------------
+// Taken from http://www.rin.ac.uk/system/files/attachments/List-of-major-UK-research-funders.pdf
+var TEST_FUNDERS = [
+    "Arts and Humanities Research Council",
+    "Biotechnology and Biological Sciences Research Council",
+    "Council for the Central Laboratory of the Research Councils",
+    "Engineering and Physical Sciences Research Council",
+    "Economic and Social Research Council",
+    "Medical Research Council",
+    "Natural Environment Research Council",
+    "Particle Physics and Astronomy Research Council",
+    "Science and Technology Facilities Council",
+    "Academies",
+    "British Academy",
+    "Royal Academy of Engineering",
+    "Royal Society",
+    "Major Medical Research Charities",
+    "Arthritis Research Campaign",
+    "British Heart Foundation",
+    "Cancer Research UK",
+    "Wellcome Trust",
+    "Leverhulme Trust",
+    "Nuffield Foundation",
+    "Joint Information Systems Committee"
+];
 
 // --------------------------------------------------------------------------
 

@@ -12,6 +12,7 @@ attribute std:attribute:email as EmailAddress
 attribute hres:attribute:research-institute as ResearchInstitute
 attribute hres:attribute:head as Head
 attribute hres:attribute:research-administrator as ResearchAdministrator
+attribute hres:attribute:research-director as ResearchDirector
 
 type hres:type:research-institute as ResearchInstitute
 type hres:type:research-institute:university as University
@@ -20,6 +21,7 @@ type hres:type:research-institute:department as Department
 type hres:type:research-institute:school as School
 
 type std:type:organisation as Organisation
+type hres:type:organisation:funder as Funder
 type std:type:person as Person
 type std:type:subject as Subject
 type hres:type:person:researcher as Researcher

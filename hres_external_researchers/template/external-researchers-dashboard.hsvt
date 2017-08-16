@@ -8,7 +8,7 @@
             <td><a href=url> name </a></td>
             if(externalAccess) {
                 <td> "&#10003;" </td> // tick
-                <td><a href=["/do/vre-external-researchers/revoke-access/" ref]> "Revoke" </a></td>
+                <td><a href=["/do/hres-external-researchers/revoke-access/" ref]> "Revoke" </a></td>
             } else {
                 <td></td><td></td>
             }
