@@ -1,0 +1,21 @@
+
+pageTitle("Researcher Profile: " researcher.title)
+backLink("/do/researcher-profile/view/" researcher.ref)
+std:plugin:resources("edit.js" "edit.css")
+
+each(sections) {
+    if(editLink) {
+        <div class="profile-section">
+            <h2> section.title </h2>
+            <form method="GET" action=editLink  class="profile-edit-button">
+                <input type="submit" value="Edit">
+            </form>
+            if(display) {
+                <a class="profile-show-hide" href="#"> "Show/Hide" </a>
+            }
+            <div class="profile-section-display">
+                render(display)
+            </div>
+        </div>
+    }
+}

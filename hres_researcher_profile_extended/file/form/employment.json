@@ -1,0 +1,16 @@
+{
+    "specificationVersion": 0,
+    "formId": "employment",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "employment",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            { "type": "text", "name": "position", "path": "position", "label": "Position", "required":true },
+            { "type": "text", "name": "institution", "path": "institution", "label": "Institution", "required":true },
+            { "type": "text", "name": "from", "path": "from", "label": "From", "required":true },
+            { "type": "text", "name": "to", "path": "to", "label": "To", "inDocument": {"path":"to", "operation":"defined"} }
+        ]
+    }]
+}

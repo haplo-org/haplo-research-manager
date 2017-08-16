@@ -1,0 +1,10 @@
+{
+    "specificationVersion": 0,
+    "formId": "biography",
+    "renderDocumentOmitEmpty": true,
+    "elements": [
+        { "type":"document-text", "label":"Biography", "name":"biography", "path":"biography", "inDocument": {"path":"biography", "operation":"defined"} },
+        { "type":"document-text", "label":"Teaching",  "name":"teaching",  "path":"teaching",  "inDocument": {"path":"teaching",  "operation":"defined"} },
+        { "type":"document-text", "label":"Research",  "name":"research",  "path":"research",  "inDocument": {"path":"research",  "operation":"defined"} }
+    ]
+}

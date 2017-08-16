@@ -1,0 +1,23 @@
+{
+  "pluginName": "hres_researcher_profile_photo",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Researcher Profile: Photo",
+  "displayDescription": "Photo section for researcher profile",
+  "installSecret": "c1e7a1c700465e3f37e37735227b06acc9164b58",
+  "apiVersion": 4,
+  "depend": [
+      "hres_researcher_profile",
+      "std_reporting"
+    ],
+  "use": [
+      "hres:researcher-profile",
+      "std:reporting"
+    ],
+  "load": [
+      "js/hres_researcher_profile_photo.js",
+      "js/photo_web_publisher.js",
+      "js/photo_reporting.js"
+    ],
+  "respond": ["/do/hres-researcher-profile-photo"]
+}

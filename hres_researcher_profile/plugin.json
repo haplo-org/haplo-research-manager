@@ -1,0 +1,18 @@
+{
+  "pluginName": "hres_researcher_profile",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Researcher Profile",
+  "displayDescription": "Framework for managing Researcher profiles",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
+  "depend": ["std_document_store"],
+  "use": ["std:document_store"],
+  "loadPriority": 2200,
+  "load": [
+      "js/hres_researcher_profile.js",
+      "js/hres_researcher_profile_ui.js",
+      "js/hres_researcher_profile_web_publisher.js"
+    ],
+  "respond": ["/do/researcher-profile"]
+}

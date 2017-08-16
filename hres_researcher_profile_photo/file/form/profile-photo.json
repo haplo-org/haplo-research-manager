@@ -1,0 +1,15 @@
+{
+    "specificationVersion": 0,
+    "formId": "photo",
+    "elements": [
+        {
+            "type": "static",
+            "display": "form",
+            "text": "Upload the original file.\nUpload a good quality, hi-res large image, ideally 800 x 450 pixels.\nPlease use a real camera rather than a camera phone to ensure a good quality photo."
+        },
+        {
+            "type": "file",
+            "path": "photo"
+        }
+    ]
+}

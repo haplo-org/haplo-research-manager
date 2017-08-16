@@ -1,0 +1,7 @@
+
+group hres:group:researcher-profile:editors as ResearcherProfileEditors
+    title: Researcher Profile Editors
+
+# TODO: Some way of specifying Elements on types & their child types
+type hres:type:person:researcher as Researcher
+    element: std:group:everyone bottom hres_researcher_profile:profile [sort=20000]

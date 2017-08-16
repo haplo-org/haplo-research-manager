@@ -1,0 +1,12 @@
+{
+  "pluginName": "hres_researcher_profile_biography",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Researcher Profile: Biography",
+  "displayDescription": "Biography section for researcher profile",
+  "apiVersion": 4,
+  "depend": ["hres_researcher_profile"],
+  "use": ["hres:researcher-profile"],
+  "loadPriority": 2222,
+  "load": ["js/hres_researcher_profile_biography.js"]
+}

@@ -1,0 +1,33 @@
+{
+    "specificationVersion": 0,
+    "formId": "qualifications",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "qualifications",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            {
+                "type": "text",
+                "name": "title",
+                "path": "title",
+                "placeholder": "Qualification name",
+                "required": true
+            },
+            {
+                "type": "paragraph",
+                "name": "notes",
+                "path": "notes",
+                "inDocument": {"path":"notes", "operation":"defined"},
+                "label": "Notes"
+            },
+            {
+                "type": "text",
+                "name": "date",
+                "path": "date",
+                "inDocument": {"path":"date", "operation":"defined"},
+                "label": "Date"
+            }
+        ]
+    }]
+}

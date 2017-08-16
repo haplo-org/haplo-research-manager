@@ -1,0 +1,10 @@
+
+pageTitle("Researcher Profile: " researcher.title)
+backLink(std:object:url(researcher))
+
+each(sections) {
+    if(show) {
+        <h2> section.title </h2>
+        render(display)
+    }
+}

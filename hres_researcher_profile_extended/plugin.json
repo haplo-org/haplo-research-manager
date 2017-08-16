@@ -1,0 +1,18 @@
+{
+  "pluginName": "hres_researcher_profile_extended",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Researcher Profile: Extended",
+  "displayDescription": "Extended additional sections from researcher profile",
+  "installSecret": "0e313c545bd6364c9d085db8c8bcd0d21ea7e7df",
+  "apiVersion": 4,
+  "depend": [
+      "hres_researcher_profile",
+      "hres_schema"
+    ],
+  "use": ["hres:researcher-profile"],
+  "load": [
+      "js/hres_researcher_profile_extended.js"
+    ],
+  "respond": ["/do/hres-researcher-profile-extended"]
+}

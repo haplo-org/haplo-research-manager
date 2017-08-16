@@ -1,0 +1,8 @@
+
+pageTitle("Edit " section.title)
+backLink("/do/researcher-profile/edit-section/" profile.ref)
+
+<form method="POST"> std:form:token()
+    std:form(form)
+    <p> <input type="submit" value="Save profile"> </p>
+</form>

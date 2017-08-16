@@ -1,0 +1,6 @@
+
+type std:type:project as Project
+
+attribute hres:attribute:researcher as Researcher
+
+
