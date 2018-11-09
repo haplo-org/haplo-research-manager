@@ -4,7 +4,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-
 // TODO: Remove this knowledge of phd namespaced code
 P.implementService("std:action_panel:activity:menu:graduate_school", function(display, builder) {
     if(O.currentUser.allowed(P.canRequestAccess)) {
@@ -12,6 +11,11 @@ P.implementService("std:action_panel:activity:menu:graduate_school", function(di
             "/do/hres-external-researchers/external-researchers-dashboard",
             NAME('+External Researcher'));
     }
+});
+
+P.implementService("hres_external_researchers:dashboard", function() {
+    return O.currentUser.allowed(P.canRequestAccess) ?
+        "/do/hres-external-researchers/external-researchers-dashboard" : undefined;
 });
 
 P.respond("GET", "/do/hres-external-researchers/external-researchers-dashboard", [
@@ -52,13 +56,15 @@ P.respond("GET", "/do/hres-external-researchers/external-researchers-dashboard",
                 ref: researcher.ref.toString(),
                 externalAccess: (user && user.isActive),
                 sort: title.last+title.first,
-                linkSent: linkSent ? new XDate(linkSent).toString("dd MMM yyyy") : "",
-                firstLogin: firstLogin ? new XDate(firstLogin).toString("dd MMM yyyy") : ""
+                linkSent: linkSent ? new Date(linkSent) : undefined,
+                firstLogin: firstLogin ? new Date(firstLogin) : undefined,
+                surname: researcher.firstTitle().toFields().last || researcher.firstTitle().toFields().first
             });
         }
     );
+
     E.render({
         pageTitle: NAME('+External Researcher'),
-        researchers: researchers
+        researchers: _.sortBy(researchers, 'surname')
     });
 });

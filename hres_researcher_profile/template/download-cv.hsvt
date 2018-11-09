@@ -1,0 +1,5 @@
+pageTitle("Download CV as PDF: " researcher.title)
+
+std:object(researcher "linkedheading")
+<p> "&nbsp;" </p>
+template:std:ui:confirm()

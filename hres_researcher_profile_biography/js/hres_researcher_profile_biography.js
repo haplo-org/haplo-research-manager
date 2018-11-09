@@ -12,5 +12,9 @@ P.researcherProfile.formSection({
     title: "Biography",
     sort: 100,
     showOnObject: true,
-    form: BiographyForm
+    form: BiographyForm,
+    includeInExport: true,
+    deferredRenderForExport: (profile, document) => {
+        return P.template("export/biography").deferredRender(document);
+    }
 });

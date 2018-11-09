@@ -1,0 +1,18 @@
+
+std:plugin:resources("view.js")
+
+<div id="deadline-notice" style=unless(hasDeadline) { "display:none;" }>
+    within(notice) {
+        template:std:ui:notice()
+    }
+</div>
+
+if(deferred) {
+    render(deferred)
+}
+
+each(files) {
+    <div class="released-file">
+        std:file:with-link-url(file url "authenticationSignature")            
+    </div>
+}

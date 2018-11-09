@@ -9,7 +9,11 @@
             "path": "date",
             "name": "__projectjournal_date_scheduled",
             "label": "Date",
-            "required": true
+            "required": {
+                "path": "required",
+                "operation": "===",
+                "value": true
+            }
         }
     ]
 }

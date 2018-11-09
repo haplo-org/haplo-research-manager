@@ -1,0 +1,171 @@
+Location
+*Africa
+*America
+*Asia
+**Afghanistan
+**Armenia
+**Azerbaijan
+**Bahrain
+**Bangladesh
+**Bhutan
+**Brunei
+**Cambodia
+**China
+**Cyprus
+**Georgia
+**India
+**Indonesia
+**Iran
+**Iraq
+**Israel
+**Japan
+**Jordan
+**Kazakhstan
+**Kuwait
+**Kyrgyzstan
+**Laos
+**Lebanon
+**Malaysia
+**Maldives
+**Mongolia
+**Myanmar (Burma)
+**Nepal
+**North Korea
+**Oman
+**Pakistan
+**Palestine
+**Philippines
+**Qatar
+**Russia
+**Saudi Arabia
+**Singapore
+**South Korea
+**Sri Lanka
+**Syria
+**Taiwan
+**Tajikistan
+**Thailand
+**Timor-Leste
+**Turkey
+**Turkmenistan
+**United Arab Emirates
+**Uzbekistan
+**Vietnam
+**Yemen
+*Australasia
+*Europe
+**Albania
+**Andorra
+**Armenia
+**Austria
+**Azerbaijan
+**Belarus
+**Belgium
+**Bosnia and Herzegovina
+**Bulgaria
+**Croatia
+**Cyprus
+**Czech Republic
+**Denmark
+**Estonia
+**Finland
+**France
+**Georgia
+**Germany
+**Greece*
+**Hungary
+**Iceland
+**Ireland
+**Italy
+**Kazakhstan
+**Kosovo
+**Latvia
+**Liechtenstein
+**Lithuania
+**Luxembourg
+**Macedonia
+**Malta
+**Moldova
+**Monaco
+**Montenegro
+**Netherlands
+**Norway
+**Poland
+**Portugal
+**Romania
+**Russia
+**San Marino
+**Serbia
+**Slovakia
+**Slovenia
+**Spain
+**Sweden
+**Switzerland
+**Turkey
+**Ukraine
+**United Kingdom
+***England
+****Avon
+****Bedfordshire
+****Berkshire
+****City of Bristol
+****Buckinghamshire
+****Cambridgeshire
+****Cheshire
+****Cleveland
+****Cornwall
+****Cumberland
+****Cumbria
+****Derbyshire
+****Devon
+****Dorset
+****Durham
+****East Suffolk
+****East Sussex
+****Essex
+****Gloucestershire
+****Greater London
+****Greater Manchester
+****Hampshire
+****Hereford and Worcester
+****Herefordshire
+****Humberside
+****Huntingdonshire
+****Isle of Ely
+****Isle of Wight
+****Kent
+****Lancashire
+****Leicestershire
+****Lincolnshire
+****Greater London
+****Merseyside
+****Middlesex
+****Norfolk
+****Northamptonshire
+****Northumberland
+****North Humberside
+****North Yorkshire
+****Nottinghamshire
+****Oxfordshire
+****Rutland
+****Shropshire
+****Somerset
+****South Humberside
+****South Yorkshire
+****Staffordshire
+****Suffolk
+****Surrey
+****Sussex
+****Tyne and Wear
+****Warwickshire
+****West Midlands
+****Westmorland
+****West Suffolk
+****West Yorkshire
+****Wiltshire
+****Worcestershire
+****Yorkshire
+***Wales
+***Northern Ireland
+***Scotland
+**Vatican City

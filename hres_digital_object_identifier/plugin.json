@@ -6,7 +6,14 @@
   "displayDescription": "Support for Digital Object Identifiers",
   "apiVersion": 4,
   "loadPriority": 5500,
+  "use": [
+    "std:reporting"
+  ],
+  "depend": [
+      "std_reporting"
+  ],
   "load": [
-      "js/hres_digital_object_identifier.js"
+      "js/hres_digital_object_identifier.js",
+      "js/doi_reporting.js"
     ]
 }

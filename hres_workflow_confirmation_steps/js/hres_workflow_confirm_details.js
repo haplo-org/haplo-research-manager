@@ -78,8 +78,9 @@ P.workflow.registerWorkflowFeature("hres:confirm_details",
                 pageTitle: "Confirm project details",
                 backLink: M.entities.object.url(),
                 displayObject: displayObject,
-                deferredDates: O.serviceMaybe("hres:project_journal:dates:ui:render_overview", "confirm_details",
-                    M.entities.project_refMaybe, {}),
+                deferredDates: !spec.disableDatesRender ? 
+                    O.serviceMaybe("hres:project_journal:dates:ui:render_overview", 
+                        "confirm_details", M.entities.project_refMaybe, {}) : undefined,
                 confirmDetails: {
                     text: "Please confirm the details, as shown below, are correct.",
                     backLink: spec.path+"/request-project-detail-change/"+M.workUnit.id,

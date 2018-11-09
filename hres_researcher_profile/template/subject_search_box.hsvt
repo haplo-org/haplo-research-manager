@@ -1,0 +1,15 @@
+std:plugin:resources("home_search_box.css")
+<div id="search_box">
+  <div>
+    <span> "Find a researcher" </span>
+    <form action="/do/researcher-profile/search/researcher">
+      <input name="searchTerm">
+    </form>
+  </div>
+  <div>
+    <span> "Find research" </span>
+    <form action="/do/researcher-profile/search/research">
+      <input name="searchTerm">
+    </form>
+  </div>
+</div>

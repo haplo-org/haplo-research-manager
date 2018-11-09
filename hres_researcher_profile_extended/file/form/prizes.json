@@ -1,0 +1,48 @@
+{
+    "specificationVersion": 0,
+    "formId": "prizes",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "prizes",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            {
+                "type": "text",
+                "name": "name",
+                "path": "name",
+                "label": "Name",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "awardingBody",
+                "path": "awardingBody",
+                "label": "Awarding body",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "date",
+                "path": "date",
+                "inDocument": {"path":"date", "operation":"defined"},
+                "label": "Date"
+            },
+            {
+                "type": "lookup",
+                "name": "research",
+                "path": "research",
+                "label": "Underpinning research",
+                "inDocument": {"path":"research", "operation":"defined"},
+                "dataSource": "underpinningResearch"
+            },
+            {
+                "type": "text",
+                "name": "url",
+                "path": "url",
+                "label": "URL",
+                "inDocument": {"path":"url", "operation":"defined"}
+            }
+        ]
+    }]
+}

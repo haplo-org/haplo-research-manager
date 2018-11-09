@@ -4,17 +4,51 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-
-var datesTableDeferredRender = function(projectRef, options) {
-    var projectDates = O.service("hres:project_journal:dates", projectRef);
+var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef, options, context) {
+    var projectDates = ("datesList" in options) ?
+        options.datesList :
+        O.service("hres:project_journal:dates", projectRef);
+    var project = projectRef.load();
+    var isPastProject = O.serviceMaybe("hres:project_journal:is_project_past", project);
+    var deployment = O.serviceMaybe("hres:simple_alerts:get_deployment_date");
     var display = [];
     var lastPrefix;
+    var displayAlerts = false;
+    let displayAdminOptions = !!(O.currentUser.allowed(P.CanForceDatesUpdate) && options.displayAdminOptions);
     projectDates.datesForDisplay().forEach(function(date, i, dates) {
-        if(("dates" in options) && options.dates.indexOf(date.name) === -1) { return; }
+        if(date.alerts && date.requiredMax) {
+            displayAlerts = true;
+            var now = new XDate();
+            var red;
+            var amber;
+            var beforeDeployment = 0;
+            _.each(date.alerts, function(alert) {
+                var alertStart = new XDate(alert.requiredMin);
+                var deadline = new XDate(date.requiredMax);
+                if(!deployment || deployment.diffDays(alertStart) < 0) {
+                    ++beforeDeployment;
+                }
+                if(now.diffDays(alertStart) <= 0) {
+                    amber = "amber";
+                }
+                if(now.diffDays(deadline) <= 0) {
+                    red = "red";
+                }
+            });
+            date.warning = red || amber;
+            if(isPastProject || date.actual) {
+                date.warning = "";
+            }
+            if(beforeDeployment === date.alerts.length) {
+                date.warning = "beforeDeployment";
+            }
+        }
+        if((!date.warning||date.warning === "beforeDeployment") && ("dates" in options) && options.dates.indexOf(date.name) === -1) { return; }
         var d = {
             date: date,
             displayName: date.displayName,
-            hasScheduledActual: !!(date.scheduled || date.actual)
+            hasScheduledActual: !!(date.scheduled || date.actual),
+            displayRequiredIsFixed: !!(date.requiredIsFixed && displayAdminOptions)
         };
         var split = date.displayName.split(',');
         if(split.length > 1) {
@@ -30,12 +64,17 @@ var datesTableDeferredRender = function(projectRef, options) {
     return P.template("dates/dates-display").deferredRender({
         project: projectRef,
         display: display,
-        editable: !!options.isEditable
+        hideDeadlines: options.hideDeadlines,
+        editable: !!options.isEditable,
+        displayAdminOptions: displayAdminOptions,
+        canForceUpdate: O.currentUser.isMemberOf(Group.Administrators),
+        displayAlerts: displayAlerts,
+        context: context
     });
 };
 
 P.implementService("hres:project_journal:dates:ui:render_full_list", function(projectRef, options) {
-    return datesTableDeferredRender(projectRef, options);
+    return datesTableDeferredRender(projectRef, options, 'full');
 });
 
 P.implementService("hres:project_journal:dates:ui:render_overview", function(usage, projectRef, options) {
@@ -58,7 +97,7 @@ P.implementService("hres:project_journal:dates:ui:render_overview", function(usa
     services.forEach(function(s) { O.serviceMaybe(s, configure, projectRef); });
     dates = _.uniq(dates); remove = _.uniq(remove);
     dates = _.filter(dates, function(d) { return (remove.indexOf(d) === -1); });
-    return datesTableDeferredRender(projectRef, _.extend({}, options, {dates:dates}));
+    return datesTableDeferredRender(projectRef, _.extend({}, options, {dates:dates}), "overview");
 });
 
 
@@ -97,9 +136,14 @@ var editVariations = {
                 max: date.requiredIsInstantaneous ? undefined : dateForForm(date.requiredMax)
             };
         },
+        // console.log(new Date(null)) prints null but on the same time 
+        // new Date(null) === null is false and that breaks everything
         updateDate: function(document, date) {
-            date.setRequiredFixed(new Date(document.min), new Date(document.max));
-        }
+            var min = !!document.min ? new Date(document.min) : null;
+            var max = !!document.max ? new Date(document.max) : null;
+            date.setRequiredFixed(min, max);
+        },
+        clearDate: function(date) { date.clearRequired(); }
     },
     "scheduled-actual": {
         actionName: "editScheduledActual",
@@ -120,20 +164,27 @@ var editVariations = {
         makeDocument: function(date) {
             var mostRelevantDate = date.actual || date.scheduled;
             return {
+                required: !!mostRelevantDate,
                 date: dateForForm(mostRelevantDate)
             };
         },
         updateDate: function(document, date) {
-            var enteredDate = new XDate(document.date).clearTime();
-            var today = new XDate().clearTime();
-            // Dates entered as in the future are scheduled dates, otherwise they're actuals
-            if(enteredDate.diffDays(today) <= 0) { 
-                // When date is in the future, it implicitly means the 'actual' didn't actually happen
-                date.clearActual();
-                date.setScheduled(new Date(document.date));
-            } else {
-                date.setActual(new Date(document.date));
+            if(document.date) {
+                var enteredDate = new XDate(document.date).clearTime();
+                var today = new XDate().clearTime();
+                // Dates entered as in the future are scheduled dates, otherwise they're actuals
+                if(enteredDate.diffDays(today) <= 0) { 
+                    // When date is in the future, it implicitly means the 'actual' didn't actually happen
+                    date.clearActual();
+                    date.setScheduled(new Date(document.date));
+                } else {
+                    date.setActual(new Date(document.date));
+                }
             }
+        },
+        clearDate: function(date) {
+            date.clearActual();
+            date.clearScheduled();
         }
     }
 };
@@ -169,14 +220,24 @@ P.respond("GET,POST", "/do/hres-project-journal/edit-date", [
         var document = variation.makeDocument(date);
         var form = variation.form.handle(document, E.request);
         if(form.complete && (!extras || extras.formInstance.complete)) {
-            variation.updateDate(form.document, date);
-            if(extras) { extras.commit(); }
-            list.requestUpdatesThenCommitIfChanged({
-                action: "user-edit",
-                name: name,
-                kind: variationName
-            });
-            return E.response.redirect(backLink);
+            if(E.request.parameters.clear) {
+                variation.clearDate(date);
+                list.requestUpdatesThenCommitIfChanged({
+                    action: "ADMIN-FORCE-CLEAR-DATE",
+                    name: name,
+                    kind: variationName
+                });
+                return E.response.redirect(backLink);
+            } else {
+                variation.updateDate(form.document, date);
+                if(extras) { extras.commit(); }
+                list.requestUpdatesThenCommitIfChanged({
+                    action: "user-edit",
+                    name: name,
+                    kind: variationName
+                });
+                return E.response.redirect(backLink);
+            }
         }
 
         E.render({
@@ -185,7 +246,9 @@ P.respond("GET,POST", "/do/hres-project-journal/edit-date", [
             error: (E.request.method === "POST"),
             date: date,
             form: form,
-            extras: extras
+            extras: extras,
+            action: variation.actionName,
+            canClear: O.currentUser.allowed(P.CanForceDatesUpdate)
         }, "dates/edit-date");
     }
 });

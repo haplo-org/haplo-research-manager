@@ -1,0 +1,17 @@
+<table width="100%">
+    each(qualifications) {
+        <tr>
+            <td width="75%">
+                <p>
+                    <b>title</b>
+                    if(notes) {
+                        <br>
+                        std:text:paragraph(notes)
+                    }
+                    <br>
+                </p>
+            </td>
+            <td width="25%" style="text-align: right;">date</td>
+        </tr>
+    }
+</table>

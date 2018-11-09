@@ -1,0 +1,13 @@
+{
+    "information": {
+        "moduleOversightGroups": {
+            "std:group:administrators": true,
+            "hres:group:it-support": true
+        },
+        "typesIsStructureOrProject": {
+            "std:type:project": true,
+            "hres:type:research-institute": true,
+            "hres:type:committee:ethics-committee": true
+        }
+    }
+}

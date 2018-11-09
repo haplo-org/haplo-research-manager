@@ -7,6 +7,7 @@
 
 P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
     type(T.Person, {
+        selfLabelling: true,
         labels: [Label.ActivityIdentity],
         labelWith: [A.ResearchInstitute]
     });
@@ -16,11 +17,22 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
         labels: [Label.ActivityIdentity],
         labelWith: [A.ResearchInstitute]
     });
+
+    type(T.Organisation, {
+        labels: [Label.ActivityIdentity]
+    });
     
     type(T.Project, {
         selfLabelling: true,
+        labels: [Label.ActivityResearch],
         labelsFromLinked: [[A.Researcher, A.ResearchInstitute]]
     });
+
+    if("Meeting" in T) {
+        type(T.Meeting, {
+            labels: [Label.ActivityResearch]
+        });
+    }
 });
 
 P.implementService("haplo:user_roles_permissions:setup", function(setup) {
@@ -45,15 +57,10 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.attributeRole("Research Director",        T.ResearchInstitute,    A.ResearchDirector);
     setup.attributeRole("Committee Member",         T.Committee,            A.CommitteeMember);
     setup.attributeRole("Committee Representative", T.Committee,            A.CommitteeRepresentative);
-
-    setup.attributeRole("Principal Investigator",   T.Project,      A.Researcher,   Q.PrincipalInvestigator);
-    setup.attributeRole("Co-Investigator",          T.Project,      A.Researcher,   Q.CoInvestigator);
+    setup.attributeRole("Researcher",               T.Project,              A.Researcher);
 
     // Role permissions
     setup.roleOversightPermission("Research Administrator", "read-edit", [T.ResearchInstitute]);
-
-    setup.roleProjectPermission("Principal Investigator",       "read-write",       [T.Project]);
-    setup.roleProjectPermission("Co-Investigator",              "read-edit",        [T.Project]);
 });
 
 // --------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+
+<table width="100%">
+    each(prizes) {
+        <tr>
+            <td width="75%">
+                <p>
+                    <b>name</b> " - " awardingBody
+                </p>
+            </td>
+            <td width="25%" style="text-align: right;">date</td>
+        </tr>
+    }
+</table>

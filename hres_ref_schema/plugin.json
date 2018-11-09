@@ -6,11 +6,17 @@
   "displayDescription": "Schema and support functions for REF 2020",
   "installSecret": "975115a53513eb8abfc9cb32513410f8c1770562",
   "apiVersion": 4,
+  "privilegesRequired": ["pBackgroundProcessing"],
+  "use": ["std:reporting"],
   "depend": [
+      "std_reporting",
       "hres_schema"
     ],
   "load": [
-      "js/hres_ref_schema.js"
+      "js/hres_ref_schema.js",
+      "js/hres_ref_schema_reporting.js",
+      "js/hres_ref_permissions.js",
+      "js/hres_ref_test_data.js"
     ],
-  "respond": []
+  "respond": ["/do/hres-ref"]
 }

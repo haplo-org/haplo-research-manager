@@ -72,14 +72,37 @@ P.respond("GET,POST", "/do/hres-file-templates/edit", [
     E.render({form:form, templateName:templateName});
 });
 
-P.implementService("hres_file_templates:get_template", function(userRef, templateSearchPath) {
+/*HaploDoc
+node: /hres_file_templates/hres_file_templates
+title: Get template service
+sort: 10
+--
+
+h3(service). "hres_file_templates:get_template"
+
+Takes a function with two parameters, @userRef@ (optional) and @templateSearchPath@.
+
+@templateSearchPath@ is an array of template names to look for. Pass @["DEFAULT"]@ to get the default template.
+
+This service will search up the heirarchy of the first RI attributed to the @userRef@ until it finds a template.
+
+If an RI isn't found, the first object of type @University@ is used.
+
+This service will exception if a template isn't found. Use @"hres_file_templates:get_template:maybe"@ to return undefined.
+
+*/
+
+var getTemplate = function(userRef, templateSearchPath) {
     var search = _.compact(_.map(templateSearchPath, function(templateName) {
         var t = P.db.fileTemplates.select().where("name", "=", templateName);
         return t.length ? t[0].document.templates : undefined;
     }));
     var template;
     _.find(search, function(templateList) {
-        var ri = userRef.load().first(A.ResearchInstitute);
+        var ri = userRef ? userRef.load().first(A.ResearchInstitute) : undefined;
+        if(!ri) {
+            ri = O.query().link(T.University, A.Type).limit(1).execute()[0].ref;
+        }
         var safety = 256;
         var riStr, testFn = function(t) { return t.ri === riStr; };
         while(ri && --safety) {
@@ -98,5 +121,14 @@ P.implementService("hres_file_templates:get_template", function(userRef, templat
         });
         return {file:O.file(template.template), margin:margin};
     }
+};
+
+P.implementService("hres_file_templates:get_template:maybe", function(userRef, templateSearchPath) {
+    return getTemplate(userRef, templateSearchPath);
+});
+
+P.implementService("hres_file_templates:get_template", function(userRef, templateSearchPath) {
+    let template = getTemplate(userRef, templateSearchPath);
+    if(template) { return template; }
     O.stop("Cannot find the template necessary to generate this document. Please contact your administrator for assistance.");
 });

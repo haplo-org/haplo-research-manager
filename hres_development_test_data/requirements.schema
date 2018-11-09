@@ -31,3 +31,17 @@ type hres:type:person:staff as Staff
 OPTIONAL attribute haplo:attribute:chair as Chair
 OPTIONAL attribute haplo:attribute:committee-member as CommitteeMember
 OPTIONAL attribute haplo:attribute:committee-representative as CommitteeRepresentative
+
+
+#TODO is this in the correct namespace/location?
+type hres:type:location as Location
+    title Location
+    search-name: location
+    behaviour classification
+    behaviour hierarchical
+    attribute dc:attribute:title
+    attribute std:attribute:notes
+    attribute std:attribute:related-term
+    render-type classification
+    label-base std:label:concept
+    create-position never

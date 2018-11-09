@@ -19,7 +19,43 @@ std:plugin:resources("my-subscriptions.js" "my-subscriptions.css")
 <p class="copy-url-failure hidden">"Copy failed. Try copying the URL manually with Ctrl+C."</p>
 <p><a href="/do/hres-calendar-subscriptions/generate-new-url"><button>"Reset calendar subscription link"</button></a></p>
 
-// <h2>"Subscribing to your calendar"</h2>
+<h2>"Subscribing to your calendar"</h2>
 
-// "TODO"
+<p>"You can use the link above to automatically feed your personal Calendar with events. See below for instructions on how to achieve this in various Calendar applications."</p>
 
+<h3>"Outlook 2007"</h3>
+<ol>
+  <li>"Copy the iCalendar subscription link from the box near the top of this page."</li>
+  <li>"In Outlook 2007, click on the Tools -&gt; Account Settings... menu"</li>
+  <li>"Go to the Internet Calendars tab and click on New..."</li>
+  <li>"Paste the iCalendar link into the box for location of the Internet Calendar and click on the Add button"</li>
+  <li>"Confirm or edit the Folder Name and other options and select the OK button."</li>
+  <li>"Click on the Close button. Go to the Mail view and click Send/Receive which will connect and download the calendar entries to your computer. Go to Calendars -&gt; Other Calendars and check on the box next to the internet calendar you just created. Your calendar events will then appear in your calendar view."</li>
+</ol>
+
+<h3>"Outlook 2010"</h3>
+<ol>
+  <li>"Copy the iCalendar subscription link from the box near the top of this page."</li>
+  <li>"In the Outlook 2010 Calendar click the Home tab on the Ribbon -&gt; Under Manage Calendars click on Open Calendar -&gt; From Internet…"</li>
+  <li>"Paste the link into the New Internet Calendar field then click OK."</li>
+  <li>"Click [Yes] to the dialog box that comes up verifying you want to subscribe to it."</li>
+</ol>
+
+<h3>"Outlook 2016"</h3>
+<ol>
+  <li>"Copy the iCalendar subscription link from the box near the top of this page."</li>
+  <li>"In the Outlook 2016 Calendar click the "Open Calendar" dropdown. Select "From Internet""</li> 
+  <li>"Paste the link into the field. Click OK."</li>
+  <li>"Click "Yes" that you want to add this calendar to outlook and subscribe to updates."</li> 
+</ol>
+
+<h3>"macOS Calendar"</h3>
+<ol>
+  <li>"Copy the iCalendar subscription link from the box near the top of this page."</li>
+  <li>"In Calendar, choose File &gt; New Calendar Subscription."</li> 
+  <li>"Paste calendar’s link, then click Subscribe."</li>
+  <li>"Enter a name for the calendar and choose a color to help you identify it on your calendar."</li>
+  <li>"Selet how frequent you want the calendar to update and click OK."</li>
+</ol>
+
+<p>"If your calendar application isn't listed above, please visit the help section for your calendar provider."</p>

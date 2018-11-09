@@ -1,0 +1,25 @@
+
+<link href=url(staticDirectoryUrl "/publisher-view.css") rel="stylesheet">
+scriptTag(staticDirectoryUrl "/publisher-view.js")
+
+
+<h2> pageTitle </h2>
+
+<div id="deadline-notice" style=unless(hasDeadline) { "display:none;" }>
+    <div id="deadline-notice-inner">
+        within(notice) {
+            <p> message </p>
+        }
+    </div>
+</div>
+
+if(deferred) {
+    render(deferred)
+}
+
+each(files) {
+    <div class="released-file">
+        std:file:with-link-url(file url "authenticationSignatureValidForSeconds")
+    </div>
+    <br>
+}

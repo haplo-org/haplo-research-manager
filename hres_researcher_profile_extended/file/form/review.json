@@ -1,0 +1,48 @@
+{
+    "specificationVersion": 0,
+    "formId": "review",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "review",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            {
+                "type": "text",
+                "name": "item",
+                "path": "item",
+                "label": "Item reviewed",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "institution",
+                "path": "institution",
+                "label": "At institution",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "date",
+                "path": "date",
+                "inDocument": {"path":"date", "operation":"defined"},
+                "label": "Date"
+            },
+            {
+                "type": "lookup",
+                "name": "research",
+                "path": "research",
+                "label": "Underpinning research",
+                "inDocument": {"path":"research", "operation":"defined"},
+                "dataSource": "underpinningResearch"
+            },
+            {
+                "type": "text",
+                "name": "url",
+                "path": "url",
+                "inDocument": {"path":"url", "operation":"defined"},
+                "label": "URL"
+            }
+        ]
+    }]
+}

@@ -1,8 +1,15 @@
 
-attribute hres:attribute:researcher as Researcher
-
-type hres:type:person:researcher as Researcher
-type hres:type:person:staff as Staff
-type phd:type:person:doctoral-researcher as DoctoralResearcher
+# -------- Qualifiers ------------------------------
 
 qualifier std:qualifier:null as Null
+
+# -------- Types -----------------------------------
+
+type hres:type:person:researcher as Researcher
+    annotation hres:annotation:confirm-roles:eligible-person
+
+type hres:type:person:external-researcher as ExternalResearcher
+    annotation hres:annotation:confirm-roles:eligible-person
+
+type hres:type:person:staff as Staff
+    annotation hres:annotation:confirm-roles:eligible-person

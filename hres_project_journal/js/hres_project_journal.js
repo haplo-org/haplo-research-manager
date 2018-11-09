@@ -31,6 +31,9 @@ var selectJournalEntries = function(specification) {
     var select = P.db.journal.select().
         order("datetime",true).
         where("project","=",specification.project);
+    if("academicYear" in specification && specification.academicYear) {
+        select.where("academicYear","=",specification.academicYear);
+    }
     if("kind" in specification) {
         if(specification.kind === "PDATE") {
             // Special case because project dates are encoded using the kind,
@@ -40,8 +43,11 @@ var selectJournalEntries = function(specification) {
             select.where("kind","=",specification.kind);
         }
     }
-    if("academicYear" in specification && specification.academicYear) {
-        select.where("academicYear","=",specification.academicYear);
+    if("implementation" in specification) {
+        select.where("implementation", "=", specification.implementation);
+    }
+    if("identifier" in specification) {
+        select.where("identifier", "=", specification.identifier);
     }
     if("modify" in specification && typeof specification.modify === 'function') {
         specification.modify(select);
@@ -57,9 +63,10 @@ var getImplementation = function(implementation) {
     var impl = implementations[implementation];
     if(!impl) {
         var serviceName = 'hres:project_journal:get_implementation:'+implementation;
-        if(O.serviceImplemented(serviceName)) {
-            impl = implementations[implementation] = O.service(serviceName);
-        }
+        impl = O.serviceMaybe(serviceName) ||
+            // Fallback generic service; something may still provide the implementation.
+            O.serviceMaybe("hres:project_journal:get_implementation", implementation);
+        if(impl) { implementations[implementation] = impl; }
     }
     return impl;
 };
@@ -90,6 +97,53 @@ P.implementService("hres:project_journal:save", function(entry) {
         }
     }
     if(entry.id) { row = P.db.journal.load(entry.id); }
+
+    saveEntry(entry, row);
+});
+
+P.implementService("hres:project_journal:save_all_of_kind", function(specification) {
+
+    var existingEntries = P.db.journal.select().
+        where("project", "=", specification.project).
+        where("kind", "=", specification.kind).
+        where("implementation", "=", specification.implementation);
+    var entriesMap = {};
+    _.each(existingEntries, function(row) {
+        entriesMap[row.id] = row;
+    });
+    var deleteMap = _.clone(entriesMap);
+
+    _.each(specification.entries, function(entry) {
+        entry.project = specification.project;
+        entry.kind = specification.kind;
+        entry.implementation = specification.implementation;
+        var row;
+        var existingRow = _.find(entriesMap, function(mappedEntry) {
+            var isMatch = true;
+            var mustMatchIfPresent = ["identifier", "ref", "id"];
+            _.each(mustMatchIfPresent, function(key) {
+                if(entry[key] && entry[key] !== mappedEntry[key]) {
+                    isMatch = false;
+                }
+            });
+            return isMatch;
+        });
+
+        if(existingRow) {
+            delete deleteMap[existingRow.id];
+        }
+
+        saveEntry(entry, existingRow);
+    });
+
+    _.each(deleteMap, function(mappedEntry, id) {
+            P.db.journal.select().
+            where("id", "=", Number.parseInt(id)).
+            deleteAll();
+    });
+});
+
+var saveEntry = function(entry, row) {
     if(row) {
         UPDATE_FIELDS.forEach(function(k) {
             row[k] = (k in entry) ? entry[k] : null;
@@ -111,7 +165,8 @@ P.implementService("hres:project_journal:save", function(entry) {
         // TODO: Should permissions be elevated for this service call for consistency?
         O.serviceMaybe(name, row);
     });
-});
+};
+
 
 // Finds the last action by the researcher, given a specification.
 // Uses user argument for fallback determination of whether a journal entry is by the user in question
@@ -173,7 +228,11 @@ P.implementService("hres:project_journal:render", function(specification) {
         var impl = getImplementation(row.implementation);
         if(!impl) { return; }
         var object, link, deferred;
-        if(row.ref) { object = row.ref.load(); }
+        if(row.ref) {
+            // if currentUser cannot read the row object, do not render it
+            if(!O.currentUser.can("read", row.ref)) { return; }
+            object = row.ref.load();
+        }
         if("link" in impl) {
             link = impl.link(row);
         } else if(object) {

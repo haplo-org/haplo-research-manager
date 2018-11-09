@@ -2,9 +2,12 @@ pageTitle("Edit " date.displayName " for " project.title)
 
 std:object(project "linkedheading")
 
-if(date.actual) {
-    std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
-}
+switch(action) {}
+    editScheduledActual {
+        if(date.actual) {
+            std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
+        }
+    }
 
 if(error) {
     std:ui:notice("Please complete all required fields.")
@@ -13,5 +16,10 @@ if(error) {
 <form method="POST"> std:form:token()
     std:form(form)
     if(extras.formInstance) { std:form(extras.formInstance) }
-    <p><input type="submit" value="Set date"></p>
+    <p>
+        <input type="submit" value="Set date">
+        if(canClear) {
+            <span style="float: right"><input type="submit" value="Delete" name="clear"></span>
+        }
+    </p>
 </form>

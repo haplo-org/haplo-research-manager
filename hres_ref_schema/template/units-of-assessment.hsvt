@@ -1,0 +1,3 @@
+pageTitle("REF Units of Assessment")
+
+each(uoas) { std:object(. "searchresult") }

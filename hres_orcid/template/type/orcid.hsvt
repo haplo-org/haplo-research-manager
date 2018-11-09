@@ -1,1 +1,5 @@
-<a href=[SERVICE_PREFIX orcid]> orcid </a>
+std:plugin:resources("orcid_icon.css")
+
+<a href=[SERVICE_PREFIX orcid] class="orcid-id"> 
+    SERVICE_PREFIX orcid
+</a>

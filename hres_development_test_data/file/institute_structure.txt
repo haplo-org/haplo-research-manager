@@ -1,0 +1,21 @@
+University of Example
+* Science and Technology
+* * Computer Science
+* * Engineering
+* * * Civil Engineering
+* * * Architecture
+* * Life Sciences
+* * * Medical
+* Humanities
+* * English
+* * * Literature
+* * Law
+* * Politics
+* * * Government
+* * * European Politics
+* * * American Politics
+* * History
+* Media
+* * Art and Design
+* * Journalism
+* * Music

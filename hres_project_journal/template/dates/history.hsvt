@@ -1,0 +1,28 @@
+
+std:layout:wide()
+pageTitle("Dates history")
+
+<p>
+    <i> "Version: " </i> version unless(next) { " (current)" } <br>
+    <i> "Action: " </i> entry.reason.action <br>
+    <i> "Created: " </i> std:date(entry.updated)
+</p>
+
+<div style="float:right;">
+    <p>
+    // Previous can be 0, which is falsey in HSVT
+    if(version) {
+        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=previous]>
+            "Previous"
+        </a>
+    }
+    " "
+    if(next) {
+        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=next]>
+            "Next"
+        </a>
+    }
+    </p>
+</div>
+
+render(table)

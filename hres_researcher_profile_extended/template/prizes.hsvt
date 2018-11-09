@@ -1,0 +1,11 @@
+
+std:plugin:resources("prizes.css")
+
+each(prizes) {
+    <div class="prize">
+        <h2> name </h2>
+        <p class="prize-date"> date </p>
+        <p class="prize-body"> <i> awardingBody </i> </p>
+        if(^{href}) { <a href=[^{href}]> "See more..." </a> }
+    </div>
+}

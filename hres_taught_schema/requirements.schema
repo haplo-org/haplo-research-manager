@@ -42,6 +42,7 @@ attribute hres:attribute:code as Code
 type hres:type:taught-student as TaughtStudent
     title: Taught student
     search-name: taught student
+    annotation hres:annotation:repository:publically-accessible-person
     attribute std:aliased-attribute:name [sort=1000]
     attribute std:aliased-attribute:contact-category [sort=1100]
     attribute std:attribute:job-title [sort=1200]
@@ -93,7 +94,8 @@ type hres:type:taught-project as TaughtProject
     render-icon: E53C,2,f E53D,6,f
     render-category 4
     element: std:group:everyone right std:action_panel {"panel":"taught_project"} [sort=1800]
-    annotation hres:annotation:academic-year:update-on-edit
+    annotation hres:annotation:academic-year:apply
+    annotation hres:annotation:project
     default-subtype hres:type:taught-project
     create-position normal
 
@@ -108,7 +110,8 @@ type hres:type:student-project as StudentProject
     render-icon: E53C,3,f E53D,4,f
     render-category 0
     element: std:group:everyone right std:action_panel {"panel":"student_project"} [sort=1500]
-    annotation hres:annotation:academic-year:update-on-edit
+    annotation hres:annotation:academic-year:apply
+    annotation hres:annotation:project
     default-subtype hres:type:student-project
     create-position normal
 

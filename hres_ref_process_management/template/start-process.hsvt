@@ -1,0 +1,10 @@
+
+<p> "This will start a new REF process in the system. This triggers the following:" </p>
+
+each(sections) {
+    render(.)
+}
+
+within(confirm) {
+    template:std:ui:confirm()
+}

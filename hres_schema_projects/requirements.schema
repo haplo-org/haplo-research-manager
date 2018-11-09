@@ -3,19 +3,34 @@
 
 group std:group:everyone as Everyone
 
+group hres:group:researchers as Researchers
+group hres:group:admin-staff as AdminStaff
+
 # -------- Attributes ------------------------------
 
 attribute hres:attribute:researcher as Researcher
+
+attribute hres:attribute:grant-id as GrantID
+    title: Grant ID
+    search-name grant-id
+    qualifier std:qualifier:null
+    data-type text
 
 # -------- Qualifiers ------------------------------
 
 qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
 qualifier hres:qualifier:co-investigator as CoInvestigator
 
+qualifier std:qualifier:null as Null
+
 # -------- Types -----------------------------------
 
-# std:type:project is modified in hres_schema
-# first for global application, with any further
-# specific functionality provided from within this plugin
+# std:type:project is modified in hres_schema first
+# for global application, with any further specific
+# functionality provided from within this plugin
 
 type std:type:project as Project
+    attribute hres:attribute:grant-id
+
+type hres:type:person:researcher as Researcher
+type hres:type:person:staff as Staff

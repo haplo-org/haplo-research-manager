@@ -1,0 +1,6 @@
+{
+    "suppress": {
+        "use-of-hPreObjectDisplay/hres_author_citation_value":
+            "For clarity of display, author citations must be merged into a single list. Shadowed attributes are removed to avoid duplication."
+    }
+}

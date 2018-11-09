@@ -1,19 +1,21 @@
+thirdparty:client_side_ui:resources("tablesort" "0")
+std:layout:wide()
 
-<table>
+<table class="tablesort">
     <tr>
         <th> "Name" </th><th> "External access account" </th><th> "Revoke access" </th><th> "Link sent" </th><th> "Account activated" </th>
     </tr>
     each(researchers) {
         <tr>
-            <td><a href=url> name </a></td>
+            <td data-sort=surname><a href=url> name </a></td>
             if(externalAccess) {
                 <td> "&#10003;" </td> // tick
                 <td><a href=["/do/hres-external-researchers/revoke-access/" ref]> "Revoke" </a></td>
             } else {
                 <td></td><td></td>
             }
-            <td> linkSent </td>
-            <td> firstLogin </td>
+            <td data-sort=std:utc:date:sort(linkSent)> std:date(linkSent) </td>
+            <td data-sort=std:utc:date:sort(firstLogin)> std:date(firstLogin) </td>
         </tr>
     }
 </table>

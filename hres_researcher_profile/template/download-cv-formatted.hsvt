@@ -1,0 +1,15 @@
+
+<p class="hres-researcher-profile-details">
+    <span class="hres-researcher-profile-name"> researcher.title </span><br>
+    if(role) { <b>role</b> <br> }
+    if(department) { std:object:title(department) if(university) { ", " std:object:title(university) } <br> }
+    if(email) { email }
+</p>
+
+each(sections) {
+    <hr>
+    <div class="hres-researcher-profile-section">
+        <h3 class="hres-researcher-profile-section-title"> title </h3>
+        if(deferredRender) { render(deferredRender) }
+    </div>
+}

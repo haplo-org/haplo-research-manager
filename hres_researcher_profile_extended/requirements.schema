@@ -1,5 +1,6 @@
 
 type std:type:project as Project
+OPTIONAL type hres:type:impact as Impact
 
 attribute hres:attribute:researcher as Researcher
 

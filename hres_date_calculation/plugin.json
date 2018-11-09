@@ -12,6 +12,7 @@
       "hres_project_journal"
     ],
   "load": [
-      "js/hres_date_calculation.js"
+      "js/hres_date_calculation.js",
+      "js/hres_date_calculation_modifications.js"
     ]
 }

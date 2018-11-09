@@ -80,7 +80,7 @@ P.respond("GET,POST", "/do/researcher-profile/edit", [
     var profile = new P.Profile(researcher);
     if(!profile.userCanEdit(O.currentUser)) { O.stop("Not permitted"); }
     var section = profile.getSection(sectionName);
-    if(!(section instanceof P.SectionForm)) { O.stop("Not a form"); }
+    if(!(section instanceof P.SectionForm || section instanceof P.SectionFormRendered)) { O.stop("Not a form"); }
     var document = profile.document[section.name] || {};
     var form = section.form.handle(document, E.request);
     if(form.complete) {

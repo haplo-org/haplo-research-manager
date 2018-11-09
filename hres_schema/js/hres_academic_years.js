@@ -4,39 +4,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-/*
 
-    Using Academic Years
-    ====================
+/*HaploDoc
+node: /hres_schema/academic_years
+title: Academic years
+--
 
-    Your objects should include a calendar year in the A.Date attributes.
+Using Academic Years
+====================
 
-    When you create or modify an object in your code, update the academic year with:
+Your objects should include a calendar year in the A.Date attributes.
 
-        O.service("hres:academic_year:update_object", object);
+Add an annotation to your type definition so that the academic year will
+be set and updated when the object changes. In your requirements.schema file:
 
-    If users can edit the object themselves, add an annotation to your type definition 
-    so that the academic year will be updated. In your requirements.schema file:
-
-        annotation hres:annotation:academic-year:update-on-edit
-
-
-    Workflows
-    =========
-
-    use("hres:schema") to set up entities and tags.
-
-    use("std:dashboard:states", {
-        configurationService: "hres:schema:workflow:dashboard:states:configure",
-        // rest ofstd:dashboard:states specification
-    });
+    annotation hres:annotation:academic-year:apply
 
 
-    Permissions
-    ===========
+Workflows
+=========
 
-    Everyone has permission to read academic year objects, and they're created
-    automatically when they're required.
+use("hres:schema") to set up entities and tags.
+
+use("std:dashboard:states", {
+    configurationService: "hres:schema:workflow:dashboard:states:configure",
+    // rest ofstd:dashboard:states specification
+});
+
+
+Permissions
+===========
+
+Everyone has permission to read academic year objects, and they're created
+automatically when they're required.
 
 */
 
@@ -60,7 +60,7 @@ var academicYearsLookup;
 var loadAcademicYears = function() {
     academicYears = [];
     academicYearsLookup = O.refdict();
-    O.withoutPermissionEnforcement(function() {
+    O.impersonating(O.SYSTEM, function() {
         _.each(O.query().link(T.AcademicYear,A.Type).sortByDateAscending().execute(), function(obj) {
             var datetime = obj.first(A.Date);
             if(datetime) {
@@ -151,43 +151,16 @@ var expectedAcademicYearRef = function(object) {
     }
 };
 
-// Apply or update correct acacdemic year on a mutable object
-var updateAcademicYearOn = function(obj) {
-    var academicYearRef = expectedAcademicYearRef(obj);
-    if(academicYearRef) {
-        if(!obj.has(academicYearRef, A.AcademicYear)) {
-            obj.remove(A.AcademicYear);
-            obj.append(academicYearRef, A.AcademicYear);
-            return true;
-        }
-    }
-    return false;
-};
-
-
 // --------------------------------------------------------------------------
-// Update academic year when edited
+// When objects are created or updated, set the academic year
 
-var typesToUpdateAcademicYearOnEdit;
-var ensureTypesToUpdateAcademicYearOnEdit = function() {
-    if(typesToUpdateAcademicYearOnEdit) { return; }
-    typesToUpdateAcademicYearOnEdit = O.refdictHierarchical();
-    SCHEMA.getTypesWithAnnotation("hres:annotation:academic-year:update-on-edit").forEach(function(type) {
-        typesToUpdateAcademicYearOnEdit.set(type, true);
-    });
-};
-
-// When objects are edited manually, update the academic year automatically
-P.hook('hPostObjectEdit', function(response, object, previous) {
-    ensureTypesToUpdateAcademicYearOnEdit();
-    var type = object.firstType();
-    if(type && typesToUpdateAcademicYearOnEdit.get(type)) {
+P.hook('hComputeAttributes', function(response, object) {
+    if(object.isKindOfTypeAnnotated('hres:annotation:academic-year:apply')) {
         var academicYearRef = expectedAcademicYearRef(object);
         if(academicYearRef) {
             if(!(object.has(academicYearRef, A.AcademicYear))) {
-                var m = response.replacementObject || (response.replacementObject = object.mutableCopy());
-                m.remove(A.AcademicYear);
-                m.append(academicYearRef, A.AcademicYear);
+                object.remove(A.AcademicYear);
+                object.append(academicYearRef, A.AcademicYear);
             }
         }
     }
@@ -197,9 +170,6 @@ P.hook('hPostObjectEdit', function(response, object, previous) {
 // Interface for other plugins to use
 
 P.implementService("hres:academic_year:for_date", forDate);
-
-// Returns true if object has been changed
-P.implementService("hres:academic_year:update_object", updateAcademicYearOn);
 
 P.implementService("hres:academic_year:year_info", function(ref) {
     ensureAcademicYears();

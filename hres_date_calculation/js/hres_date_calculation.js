@@ -13,35 +13,48 @@
 *       can be left unused if not required
 */
 
-// TODO: Add more extension units when required
-var DATE_FUNCTION = {
-    "months": "addMonths",
-    "years": "addYears"
-};
-
-var applyModifications = function(dates, modifications) {
-    _.each(modifications, function(modification) {
-        // TODO: allow more modification types when required
-        if(!("extendBy" in modification)) { throw new Error("Date modification must be an extension"); }
-        _.each(_.keys(dates), function(name) {
-            var d = dates[name];
-            // Only extend if the whole date period is before the effectiveFrom date
-            dates[name] = _.map(d, function(dd) {
-                dd = new XDate(dd);   // Safety, in case inputs are native Dates
-                // Lookup for adding time.
-                var fn = DATE_FUNCTION[modification.extendBy[1]];
-                if(!fn) { throw new Error("Invalid extension unit"); }
-                if(d[1] < modification.effectiveFrom) {
-                    dd = dd[fn](modification.extendBy[0]);
-                }
-                return dd;
-            });
-        });
+var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculateOnly) {
+    var flags = impl.flags(ref.load());
+    var inputDates = {};
+    _.each(impl.calculationDates, function(name) {
+        var calculationDate = dates.date(name).getDatesForCalculations();
+        if(calculationDate.min) {
+            inputDates[name] = [calculationDate.min, calculationDate.max];
+        }
+        if(calculationDate.previousActual) {
+            inputDates[name+":previous"] = [calculationDate.previousActual, calculationDate.previousActual];
+            flags.push("has:"+name+":previous");
+        }
     });
-    return dates;
+
+    var suspensions = P.getSuspensionsForProject(ref);
+
+    // Allow plugins to add dates and flags not stored in workflows or project journal
+    O.serviceMaybe("hres_date_calculation:add_input_information", ref, inputDates, flags);
+
+    var operation = calculateOnly ? "compute" : "update";
+    var service = ignorePreviousState ?  
+        "haplo:date_rule_engine:"+operation+"_dates_ignoring_previous_state" :
+        "haplo:date_rule_engine:"+operation+"_dates";
+
+    var outputXDates = O.service(service,
+                inputDates,
+                impl.ruleSet,
+                flags,
+                suspensions,
+                ref);
+
+    O.serviceMaybe("hres_date_calculation:modify_output_dates", outputXDates);
+    var outputDates = {};
+    _.each(outputXDates, function(result, name) {
+        if(result && result[0]) {
+            outputDates[name] = [result[0].toDate(), result[1].toDate()];
+        }
+    });
+    return outputDates;
 };
 
-P.implementService("hres:project_journal:dates:request_update", function(ref, dates, reason) {
+var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState) {
     var impls = [];
     var project = ref.load();
     if(O.serviceImplemented("hres_date_calculation:get_implementations_for_project")) {
@@ -49,45 +62,46 @@ P.implementService("hres:project_journal:dates:request_update", function(ref, da
     }
 
     _.each(impls, function(impl) {
-        var flags = impl.flags(project);
-        var inputDates = {};
-        _.each(impl.calculationDates, function(name) {
-            var calculationDate = dates.date(name).getDatesForCalculations();
-            if(calculationDate.min) {
-                inputDates[name] = [calculationDate.min, calculationDate.max];
-            }
-            if(calculationDate.previousActual) {
-                inputDates[name+":previous"] = [calculationDate.previousActual, calculationDate.previousActual];
-                flags.push("has:"+name+":previous");
-            }
-        });
-
-        // Allow plugins to add dates and flags not stored in workflows or project journal
-        O.serviceMaybe("hres_date_calculation:add_input_information", ref, inputDates, flags);
-
-        // For modifying input data. Separate service to ensure all inputs are collected before this gets called
-        var modifications = [];
-        O.serviceMaybe("hres_date_calculation:collect_input_modifications", ref, modifications);
-        inputDates = applyModifications(inputDates, modifications);
-
-        var outputDates = O.service("haplo:date_rule_engine:compute_dates",
-                    inputDates,
-                    impl.ruleSet,
-                    flags,
-                    ref);
+        var recalculated = recalculateDates(impl, ref, dates, ignorePreviousState);
 
         // result = [start, end <,problem string>]
         _.each(impl.calculationDates, function(name) {
             var date = dates.date(name);
             if(date.requiredIsFixed || date.actual) { return; }
-            var result = outputDates[name];
-            if(result) {
-                date.setRequiredCalculated(new Date(result[0]), new Date(result[1]));
+            var result = recalculated[name];
+            if(result && result[0]) {
+                date.setRequiredCalculated(result[0], result[1]);
                 // Problem calculating
                 if(result.length === 3) {
                     // TODO: Report on the error
                 }
             }
         });
+    });
+};
+
+P.implementService("hres:project_journal:dates:request_update", function(ref, dates) {
+    saveRecalculatedDatesToJournal(ref, dates);
+});
+
+// --------------------------------------------------------------------------
+// Admin functionality
+
+P.implementService("hres:project_journal:dates:request_update_ignoring_state", function(ref, dates) {
+    saveRecalculatedDatesToJournal(ref, dates, true);
+});
+
+P.implementService("hres:project_journal:dates:recalculated_for_project", function(ref, dates, ignorePreviousState) {
+    var impls = [];
+    var project = ref.load();
+    if(O.serviceImplemented("hres_date_calculation:get_implementations_for_project")) {
+        O.service("hres_date_calculation:get_implementations_for_project", project, impls);
+    }
+    
+    return _.map(impls, function(impl) {
+        return {
+            impl: impl,
+            dates: recalculateDates(impl, ref, dates, ignorePreviousState, true /*only calculate dates, don't save state*/)
+        };
     });
 });

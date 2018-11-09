@@ -1,5 +1,23 @@
 
+restriction hres:restriction:citation-attribute:calculated
+    title Calculated citation attribute
+    label-unrestricted hres:label:citation-attribute:calculated
+    attribute-read-only dc:attribute:author
+    attribute-read-only hres:attribute:editor
+
+label hres:label:citation-attribute:calculated
+    title Calculated citation attribute
+    category Restriction
+
+# ---------------------------------------------------------------
+
 attribute dc:attribute:author as Author
+
+attribute hres:attribute:preferred-citation as PreferredCitation
+    title: Preferred citation
+    search-name: preferred-citation
+    qualifier: std:qualifier:null
+    data-type: text
 
 attribute hres:attribute:authors-citation as AuthorsCitation
     title: Authors
@@ -21,4 +39,3 @@ attribute hres:attribute:editors-citation as EditorsCitation
     qualifier std:qualifier:null
     data-type plugin
     data-type-options hres:author_citation
-

@@ -17,6 +17,12 @@
 .hres_author_citation_container_lookup div div { /* TODO: Make setting width of ref control less of a complete hack */
     width: 290px !important;
 }
+.hres_author_citation_container_qualifiers .hres_author_citation_container_lookup input {
+    width: 132px !important;
+}
+.hres_author_citation_container_qualifiers .hres_author_citation_container_lookup div div { /* TODO: Make setting width of ref control less of a complete hack */
+    width: 152px !important;
+}
 .hres_author_citation_container_citation {
     float:right;
     text-align: right;

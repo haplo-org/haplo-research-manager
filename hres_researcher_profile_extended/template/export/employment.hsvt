@@ -1,0 +1,10 @@
+
+<table width="100%">
+    each(employment) {
+        <tr>
+            <td width="40%">position</td>
+            <td width="20%">institution</td>
+            <td width="40%" style="text-align: right;">from if(to) {  " - " to }</td>
+        </tr>
+    }
+</table>

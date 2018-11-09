@@ -1,0 +1,1 @@
+url(prefix "/v2.1/" orcid "/" kind if(putCode) { "/" putCode })

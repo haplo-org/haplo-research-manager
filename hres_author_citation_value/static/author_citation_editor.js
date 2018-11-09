@@ -10,11 +10,12 @@
     var DC_ATTRIBUTE_AUTHOR = 212;  // standard schema dc:attribute:author, always present
 
     var objectTitles = {};    // maybe filled in by object editor 'plugin'
-    var IGNORE_NAME_TITLES = ['mr','ms','mrs','dr','prof'];
     var shadowedAttributes = {};
+    var descChoosesQualifiers = {};
 
-    var AuthorCitationEditorValue = function(value, lookupDesc) {
+    var AuthorCitationEditorValue = function(value, desc, lookupDesc) {
         this.initialValue = value || {};
+        this.desc = desc;
         this.lookupDesc = lookupDesc;
     };
     _.extend(AuthorCitationEditorValue.prototype, {
@@ -25,7 +26,9 @@
             };
             this.lookupControl = Haplo.editor.createRefLookupControl(this, this.lookupDesc, listener, this.initialValue.ref, objectTitles[this.initialValue.ref]);
             var html = [
-                '<div class="hres_author_citation_container"><div class="hres_author_citation_container_lookup">',
+                '<div class="hres_author_citation_container',
+                descChoosesQualifiers[this.desc] ? ' hres_author_citation_container_qualifiers' : '',
+                '"><div class="hres_author_citation_container_lookup">',
                 this.lookupControl.generateHTML(),
                 '</div><div class="hres_author_citation_container_citation"><input type="text" tabindex="1" value="',
                 _.escape(this.initialValue.cite || ''),
@@ -51,38 +54,33 @@
         },
         onLookupControlChange: function(container, title) {
             var input = $('.hres_author_citation_container_citation input', container);
-            if(window.hresAuthorCitationValueFetch) {
-                // Server implementation
-                input[0].placeholder = 'fetching ...';
-                window.hresAuthorCitationValueFetch(this.lookupControl.getValue(), function(cite) {
+            input[0].placeholder = 'fetching ...';
+            jQuery.ajax({
+                url: "/api/hres-author-citation-value/fetch",
+                data: {ref: this.lookupControl.getValue()},
+                success: function(body) {
+                    var cite = (body || '').toString();
                     if(cite) { input.val(cite); }
-                });
-            } else {
-                // Client side implementation
-                var cite = this.getCitationValue(container);
-                if(!cite) {
-                    var elements = title.split(/\s+/);
-                    var last = elements.pop();
-                    if(-1 !== _.indexOf(IGNORE_NAME_TITLES, (elements[0]||'').toLowerCase())) {
-                        elements.shift();
-                    }
-                    input.val(last+', '+
-                        _.map(elements, function(e) { return e[0]+'.'; }).join('')
-                    );
                 }
-            }
+            });
         }
     });
 
     Haplo.editor.registerTextType("hres:author_citation", function(value, desc) {
-        return new AuthorCitationEditorValue(value, shadowedAttributes[desc] || DC_ATTRIBUTE_AUTHOR);
+        return new AuthorCitationEditorValue(value, desc, shadowedAttributes[desc] || DC_ATTRIBUTE_AUTHOR);
     });
 
     // Pick up titles of existing values using an editor plugin
     Haplo.editor.registerDelegate("hres_author_citation_value", function(editor, data) {
         objectTitles = data.titles || {};
         shadowedAttributes = data.shadowedAttributes || {};
-        return {};
+        return {
+            setupAttribute: function(container) {
+                if(container.getContainerChoosesQualifier()) {
+                    descChoosesQualifiers[container.getDescriptor()] = true;
+                }
+            }
+        };
     });
 
 })(jQuery);

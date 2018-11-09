@@ -2,8 +2,3 @@ std:plugin:resources(
   "author_citation_editor.js"
   "author_citation_editor.css"
 )
-if(needsServerCitationLookup) {
-  std:plugin:resources(
-    "author_citation_server.js"
-  )
-}

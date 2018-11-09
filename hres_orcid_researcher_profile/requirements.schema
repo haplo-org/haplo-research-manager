@@ -1,4 +1,13 @@
 
+restriction hres:restriction:orcid
+    title: ORCID
+    restrict-type: std:type:person
+    attribute-read-only hres:attribute:orcid
+
+label hres:label:restrict-orcid-edit
+    title ORCID Attribute Restriction
+    category: Restriction
+
 attribute hres:attribute:orcid as ORCID
     title: ORCID
     search-name: orcid

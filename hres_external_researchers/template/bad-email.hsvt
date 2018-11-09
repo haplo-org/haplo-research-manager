@@ -1,0 +1,7 @@
+<p>
+    "Please click"
+    <a href=["/do/edit/" researcher.ref]>
+        " here "
+    </a>
+    "to change to a valid email address and try again."
+</p>

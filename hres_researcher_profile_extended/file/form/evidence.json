@@ -1,0 +1,55 @@
+{
+    "specificationVersion": 0,
+    "formId": "evidence",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "evidence",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            {
+                "type": "text",
+                "name": "title",
+                "path": "title",
+                "label": "Title",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "publicBody",
+                "path": "publicBody",
+                "label": "Public body",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "date",
+                "path": "date",
+                "inDocument": {"path":"date", "operation":"defined"},
+                "label": "Date"
+            },
+            {
+                "type": "paragraph",
+                "name": "evidencePresented",
+                "path": "evidencePresented",
+                "inDocument": {"path":"evidencePresented", "operation":"defined"},
+                "label": "Evidence presented"
+            },
+            {
+                "type": "lookup",
+                "name": "research",
+                "path": "research",
+                "label": "Underpinning research",
+                "inDocument": {"path":"research", "operation":"defined"},
+                "dataSource": "underpinningResearch"
+            },
+            {
+                "type": "text",
+                "name": "url",
+                "path": "url",
+                "inDocument": {"path":"url", "operation":"defined"},
+                "label": "URL"
+            }
+        ]
+    }]
+}

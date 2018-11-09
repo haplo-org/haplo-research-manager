@@ -4,84 +4,147 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+// -------------------------------------------------------------
 
-
-P.implementService("std:reporting:discover_collections", function(discover) {
-    discover("ref_unit_of_assessment", "Research Institutes", ["hierarchical"]);
+P.hook("hNavigationPosition", function(response, name) {
+    if(name === "hres:ref-units-of-assessment" && !O.application.config["hres_ref_schema:hide_uoa_navigation"]) {
+        let navigation = response.navigation;
+        navigation.separator();
+        navigation.link("/do/hres-ref/units-of-assessment", "REF Units of Assessment");
+    }
 });
 
-P.implementService("std:reporting:collection:ref_unit_of_assessment:setup", function(collection) {
-    collection.currentObjectsOfType(T.REFUnitOfAssessment);
+P.respond("GET,POST", "/do/hres-ref/units-of-assessment", [
+], function(E) {
+    E.render({
+        uoas: O.query().link(T.REFUnitOfAssessment, A.Type).sortByTitle().execute()
+    });
+});
+
+// -------------------------------------------------------------
+// TODO: Should this be on all list types?
+// TODO: Replace with restriction
+
+P.hook('hObjectRender', function(response, object) {
+    if(object.first(A.ConfiguredBehaviour)) {
+        response.hideAttributes.push(A.ConfiguredBehaviour);
+    }
+});
+
+// -------------------------------------------------------------
+
+P.hook('hComputeAttributes', function(response, object) {
+    if(object.isKindOfTypeAnnotated('hres:annotation:ref-unit-of-assessment:copy-from-researcher')) {
+        let toAdd = {};
+        object.every(A.Researcher, (v,d,q) => {
+            let researcher = v.load();
+            researcher.every(A.REFUnitOfAssessment, (vv,dd,qq) => {
+                toAdd[vv.toString()] = true;
+            });
+        });
+        // To avoid reordering attributes unnecessarily
+        let existing = {};
+        object.every(A.REFUnitOfAssessment, (v,d,q) => {
+            existing[v.toString()] = true;
+        });
+        if(!_.isEqual(toAdd, existing)) {
+            O.withoutPermissionEnforcement(() => {
+                object.remove(A.REFUnitOfAssessment);
+                _.each(_.keys(toAdd), function(str) {
+                    object.append(O.ref(str), A.REFUnitOfAssessment);
+                });
+            });
+        }
+    }
+});
+
+P.hook('hPostObjectChange', function(response, object, operation, previous) {
+    if(object.isKindOf(T.Person)) {
+        if(!(previous && object.valuesEqual(previous, A.REFUnitOfAssessment))) {
+            O.background.run("hres_ref_schema:copy_uoa_to_linked_records", {
+                ref: object.ref.toString()
+            });
+        }
+    }
+});
+
+P.backgroundCallback("copy_uoa_to_linked_records", function(data) {
+    O.withoutPermissionEnforcement(() => {    
+        O.query().
+            link(SCHEMA.getTypesWithAnnotation('hres:annotation:ref-unit-of-assessment:copy-from-researcher'), A.Type).
+            link(O.ref(data.ref), A.Researcher).
+            execute().each((obj) => {
+                let mObj = obj.mutableCopy();
+                mObj.computeAttributesForced();
+                if(!obj.valuesEqual(mObj)) {
+                    mObj.save();
+                }
+            });
+    });
 });
 
 // -------------------------------------------------------------
 // Installation schema setup
 
+var assignPanel = function(behaviour, panel) {
+    var uoa = O.behaviourRef(behaviour).load();
+    if(!uoa.first(A.REFPanel)) {
+        var m = uoa.mutableCopy();
+        m.append(O.behaviourRef(panel), A.REFPanel);
+        m.save();
+    }
+};
+
 P.onInstall = function() {
-    // Add panel objects to     
-    var uoa;
-    ["hres:list:ref-unit-of-assessment:1:clinical-medicine",
-    "hres:list:ref-unit-of-assessment:2:public-health-health-services-and-primary-care",
-    "hres:list:ref-unit-of-assessment:3:allied-health-professions-dentistry-nursing-and-pharmacy",
-    "hres:list:ref-unit-of-assessment:4:psychology-psychiatry-and-neuroscience",
-    "hres:list:ref-unit-of-assessment:5:biological-sciences",
-    "hres:list:ref-unit-of-assessment:6:agriculture-veterinary-and-food-science"].forEach(function(behaviour) {
-        uoa = O.behaviourRef(behaviour).load();
-        if(!uoa.first(A.REFPanel)) {
-            var m = uoa.mutableCopy();
-            m.append(O.behaviourRef("hres:list:ref-panel-a"), A.REFPanel);
-            m.save();
-        }
-    });
-    ["hres:list:ref-unit-of-assessment:7:earth-systems-and-environmental-sciences",
-    "hres:list:ref-unit-of-assessment:8:chemistry",
-    "hres:list:ref-unit-of-assessment:9:physics",
-    "hres:list:ref-unit-of-assessment:10:mathematical-sciences",
-    "hres:list:ref-unit-of-assessment:11:computer-science-and-informatics",
-    "hres:list:ref-unit-of-assessment:12:aeronautical-mechanical-chemical-and-manufacturing-engineering",
-    "hres:list:ref-unit-of-assessment:13:electrical-and-electronic-engineering-metallurgy-and-materials",
-    "hres:list:ref-unit-of-assessment:14:civil-and-construction-engineering",
-    "hres:list:ref-unit-of-assessment:15:general-engineering"].forEach(function(behaviour) {
-        uoa = O.behaviourRef(behaviour).load();
-        if(!uoa.first(A.REFPanel)) {
-            var m = uoa.mutableCopy();
-            m.append(O.behaviourRef("hres:list:ref-panel-b"), A.REFPanel);
-            m.save();
-        }
-    });
-    ["hres:list:ref-unit-of-assessment:16:architecture-built-environment-and-planning",
-    "hres:list:ref-unit-of-assessment:17:geography-environmental-studies-and-archaeology",
-    "hres:list:ref-unit-of-assessment:18:economics-and-econometrics",
-    "hres:list:ref-unit-of-assessment:19:business-and-management-studies",
-    "hres:list:ref-unit-of-assessment:20:law",
-    "hres:list:ref-unit-of-assessment:21:politics-and-international-studies",
-    "hres:list:ref-unit-of-assessment:22:social-work-and-social-policy",
-    "hres:list:ref-unit-of-assessment:23:sociology",
-    "hres:list:ref-unit-of-assessment:24:anthropology-and-development-studies",
-    "hres:list:ref-unit-of-assessment:25:education",
-    "hres:list:ref-unit-of-assessment:26:sport-and-exercise-sciences-leisure-and-tourism"].forEach(function(behaviour) {
-        uoa = O.behaviourRef(behaviour).load();
-        if(!uoa.first(A.REFPanel)) {
-            var m = uoa.mutableCopy();
-            m.append(O.behaviourRef("hres:list:ref-panel-c"), A.REFPanel);
-            m.save();
-        }
-    });
-    ["hres:list:ref-unit-of-assessment:27:area-studies",
-    "hres:list:ref-unit-of-assessment:28:modern-languages-and-linguistics",
-    "hres:list:ref-unit-of-assessment:29:english-language-and-literature",
-    "hres:list:ref-unit-of-assessment:30:history",
-    "hres:list:ref-unit-of-assessment:31:classics",
-    "hres:list:ref-unit-of-assessment:32:philosophy",
-    "hres:list:ref-unit-of-assessment:33:theology-and-religious-studies",
-    "hres:list:ref-unit-of-assessment:34:art-and-design-history-practice-and-theory",
-    "hres:list:ref-unit-of-assessment:35:music-drama-dance-and-performing-arts",
-    "hres:list:ref-unit-of-assessment:36:communication-cultural-and-media-studies-library-and-information-management"].forEach(function(behaviour) {
-        uoa = O.behaviourRef(behaviour).load();
-        if(!uoa.first(A.REFPanel)) {
-            var m = uoa.mutableCopy();
-            m.append(O.behaviourRef("hres:list:ref-panel-d"), A.REFPanel);
-            m.save();
-        }
+    var panelA = ["hres:list:ref-unit-of-assessment-2021:1:clinical-medicine",
+    "hres:list:ref-unit-of-assessment-2021:2:public-health-health-services-and-primary-care",
+    "hres:list:ref-unit-of-assessment-2021:3:allied-health-professions-dentistry-nursing-and-pharmacy",
+    "hres:list:ref-unit-of-assessment-2021:4:psychology-psychiatry-and-neuroscience",
+    "hres:list:ref-unit-of-assessment-2021:5:biological-sciences",
+    "hres:list:ref-unit-of-assessment-2021:6:agriculture-veterinary-and-food-science"];
+    panelA.forEach(function(behaviour) { assignPanel(behaviour, "hres:list:ref-panel-a"); });
+
+    var panelB = ["hres:list:ref-unit-of-assessment-2021:7:earth-systems-and-environmental-sciences",
+    "hres:list:ref-unit-of-assessment-2021:8:chemistry",
+    "hres:list:ref-unit-of-assessment-2021:9:physics",
+    "hres:list:ref-unit-of-assessment-2021:10:mathematical-sciences",
+    "hres:list:ref-unit-of-assessment-2021:11:computer-science-and-informatics",
+    "hres:list:ref-unit-of-assessment-2021:12:engineering"];
+    panelB.forEach(function(behaviour) { assignPanel(behaviour, "hres:list:ref-panel-b"); });
+
+    var panelC = ["hres:list:ref-unit-of-assessment-2021:13:architecture-built-environment-and-planning",
+    "hres:list:ref-unit-of-assessment-2021:14:geography-and-environmental-studies",
+    "hres:list:ref-unit-of-assessment-2021:15:archaeology",
+    "hres:list:ref-unit-of-assessment-2021:16:economics-and-econometrics",
+    "hres:list:ref-unit-of-assessment-2021:17:business-and-management-studies",
+    "hres:list:ref-unit-of-assessment-2021:18:law",
+    "hres:list:ref-unit-of-assessment-2021:19:politics-and-international-studies",
+    "hres:list:ref-unit-of-assessment-2021:20:social-work-and-social-policy",
+    "hres:list:ref-unit-of-assessment-2021:21:sociology",
+    "hres:list:ref-unit-of-assessment-2021:22:anthropology-and-development-studies",
+    "hres:list:ref-unit-of-assessment-2021:23:education",
+    "hres:list:ref-unit-of-assessment-2021:24:sport-and-exercise-sciences-leisure-and-tourism"];
+    panelC.forEach(function(behaviour) { assignPanel(behaviour, "hres:list:ref-panel-c"); });
+    
+    var panelD = ["hres:list:ref-unit-of-assessment-2021:25:area-studies",
+    "hres:list:ref-unit-of-assessment-2021:26:modern-languages-and-linguistics",
+    "hres:list:ref-unit-of-assessment-2021:27:english-language-and-literature",
+    "hres:list:ref-unit-of-assessment-2021:28:history",
+    "hres:list:ref-unit-of-assessment-2021:29:classics",
+    "hres:list:ref-unit-of-assessment-2021:30:philosophy",
+    "hres:list:ref-unit-of-assessment-2021:31:theology-and-religious-studies",
+    "hres:list:ref-unit-of-assessment-2021:32:art-and-design-history-practice-and-theory",
+    "hres:list:ref-unit-of-assessment-2021:33:music-drama-dance-and-performing-arts",
+    "hres:list:ref-unit-of-assessment-2021:34:communication-cultural-and-media-studies-library-and-information-management"];
+    panelD.forEach(function(behaviour) { assignPanel(behaviour, "hres:list:ref-panel-d"); });
+    
+
+    var allCurrentUoAs = panelA.concat(panelB).concat(panelC).concat(panelD);
+    var allUoAs = O.query().link(T.REFUnitOfAssessment, A.Type).execute();
+    _.chain(allUoAs).filter((uoa) => {
+        var isCurrent = _.contains(allCurrentUoAs, uoa.ref.behaviour);
+        return !isCurrent;
+    }).each((uoa) => {
+        uoa.relabel(O.labelChanges([Label.ARCHIVED]));
     });
 };

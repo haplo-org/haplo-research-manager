@@ -19,6 +19,36 @@
 }
 
 #project_dates_table tr td:nth-child(2) {
-    border-right: 1px solid #ccc !important;
     border-left: 1px solid #ccc !important;
+}
+
+#project_dates_table tr td:nth-child(3) {
+    border-left: 1px solid #ccc !important;
+} 
+
+.alert {
+    border-left: 1px solid #ccc !important;
+}
+
+.amber-alert {
+    border-left:10px solid orange !important;
+    font-weight:bold;
+}
+
+.red-alert {
+    border-left:10px solid red !important;
+    font-weight:bold;
+}
+
+.past-alert {
+    border-left: 1px solid #ccc !important;
+    color: #ccc;
+}
+
+.earliest-deadline-date {
+    display: none;
+}
+
+#project_dates_table td.admin-required-fixed {
+    background-color: #fcc;
 }

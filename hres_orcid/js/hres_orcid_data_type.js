@@ -9,6 +9,13 @@ var SERVICE_PREFIX = 'https://orcid.org/';
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var deferredRenderORCID = function(orcid) {
+    return P.template("type/orcid").deferredRender({
+        orcid: orcid,
+        SERVICE_PREFIX: SERVICE_PREFIX
+    });
+};
+
 var createORCIDValue = P.implementTextType("hres:orcid", "ORCID", {
     string: function(value) {
         return value[0];
@@ -20,10 +27,7 @@ var createORCIDValue = P.implementTextType("hres:orcid", "ORCID", {
         return value[0];
     },
     render: function(value) {
-        return P.template("type/orcid").render({
-            orcid: value[0],
-            SERVICE_PREFIX: SERVICE_PREFIX
-        });
+        return P.template("std:render").render(deferredRenderORCID(value[0]));
     },
     $setupEditorPlugin: function(value) {
         P.template("type/include_editor_plugin").render();   // hack to include client side support
@@ -56,6 +60,9 @@ P.ORCID = {
         if(orcidFields.type === "hres:orcid") {
             return orcidFields.value[0];
         }
+    },
+    deferredRender: function(orcid) {
+        return deferredRenderORCID(orcid);
     }
 };
 

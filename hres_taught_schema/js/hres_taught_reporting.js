@@ -26,7 +26,9 @@ P.implementService("std:reporting:collection:taught_students:setup", function(co
 P.implementService("std:reporting:collection:taught_students:get_facts_for_object", 
     function(object, row) {
         var res = O.query().link([T.TaughtProject, T.StudentProject], A.Type).
-            link(object.ref, A.Researcher).
+            or(function(sq) {
+                sq.link(object.ref, A.TaughtStudent).link(object.ref, A.Researcher);
+            }).
             sortBy("date").
             execute();
         if(!res.length) { return; }
@@ -48,4 +50,10 @@ P.implementService("std:reporting:collection:taught_students:get_facts_for_objec
 P.implementService("std:reporting:gather_collection_update_rules", function(rule) {
     rule("taught_students",     T.TaughtProject,     A.TaughtStudent);
     rule("taught_students",     T.StudentProject,    A.TaughtStudent);
+});
+
+P.hook('hPostObjectChange', function(response, object, operation) {
+    if(object.isKindOf(T.TaughtStudent)) {
+        O.serviceMaybe("hres_repo_schema_outputs:update_outputs");
+    }
 });

@@ -12,10 +12,15 @@ feature std:navigation
 
 label std:label:concept as CONCEPT
 
+# Label for things around the identity of people and organisation structure
 label hres:label:identity as ActivityIdentity
     title: Identity
     category: Activity
 
+# Label for things, like projects, which are research activities across the entire information system
+label hres:label:research as ActivityResearch
+    title: Research
+    category: Activity
 
 # -------- Modifications to Haplo minimal schema ---
 
@@ -49,6 +54,7 @@ type std:type:project as Project
     REMOVE attribute std:attribute:text
     REMOVE attribute dc:attribute:date
     element: std:group:everyone right std:action_panel {"panel":"project"}
+    annotation hres:annotation:project
 
 attribute std:attribute:relationship-manager as RelationshipManager
     # To avoid sending a list of all the person objects to the client in the object editor
@@ -145,7 +151,8 @@ attribute hres:attribute:research-institute as ResearchInstitute
     linked-type hres:type:research-institute
 
 attribute hres:attribute:collaborating-institution as CollaboratingInstitution
-    title: Collaborating Institution
+    REMOVE title: Collaborating Institution
+    title: Collaborating institution
     search-name: collaborating-institution
     qualifier std:qualifier:null
     data-type text
@@ -212,6 +219,7 @@ attribute hres:attribute:supervisor as Supervisor
     qualifier std:qualifier:null
     data-type link
     linked-type hres:type:person:researcher
+    linked-type hres:type:person:external-researcher
 
 attribute hres:attribute:assessor as Assessor
     title: Assessor
@@ -235,6 +243,23 @@ attribute hres:attribute:professional-development as ProfessionalDevelopment
     data-type link
     ui-options dropdown
     linked-type hres:type:professional-development
+
+# TODO renamed to subjects so fits on one line in the public profile
+attribute hres:attribute:research-interests
+    REMOVE title: Research interests
+    title: Subjects
+    REMOVE search-name: research-interests
+    search-name: subjects
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:subject
+
+attribute hres:attribute:supervision-interests
+    title: Supervision interests
+    search-name: supervision-interests
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:subject
 
 
 # -------- Aliased attributes ----------------------
@@ -274,6 +299,13 @@ type std:type:person
     attribute hres:attribute:research-institute
     attribute hres:attribute:research-group
     attribute hres:attribute:professional-development
+    attribute hres:attribute:research-interests
+    attribute hres:attribute:supervision-interests
+
+type haplo:type:committee as Committee
+    attribute hres:attribute:research-institute [sort=10200]
+
+OPTIONAL type haplo:type:meeting as Meeting
 
 type hres:type:person:researcher as Researcher
     title: Researcher
@@ -307,6 +339,8 @@ type hres:type:person:staff as Staff
     title: Staff
     parent-type std:type:person
     search-name: staff
+    attribute-hide hres:attribute:research-interests
+    attribute-hide hres:attribute:supervision-interests
     render-category 4
     render-icon: E21A,1,f E21B,3,f
     REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
@@ -317,6 +351,8 @@ type hres:type:person:staff-past as StaffPast
     parent-type std:type:person
     search-name: staff past
     search-name: past staff
+    attribute-hide hres:attribute:research-interests
+    attribute-hide hres:attribute:supervision-interests
     render-category 4
     render-icon: E21A,1,f E21B,3,f E413,1,f,y
     REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
@@ -426,7 +462,6 @@ type hres:type:organisation:funder as Funder
     render-icon: E400,3,f
     render-category 5
 
-type haplo:type:committee as Committee
 type hres:type:person:external-researcher as ExternalResearcher
 
 type hres:type:professional-development as ProfessionalDevelopment

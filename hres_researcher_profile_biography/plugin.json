@@ -8,5 +8,8 @@
   "depend": ["hres_researcher_profile"],
   "use": ["hres:researcher-profile"],
   "loadPriority": 2222,
-  "load": ["js/hres_researcher_profile_biography.js"]
+  "load": [
+      "js/hres_researcher_profile_biography.js",
+      "js/biography_web_publisher.js"
+    ]
 }

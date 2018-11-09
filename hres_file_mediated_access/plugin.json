@@ -6,8 +6,10 @@
   "displayDescription": "Support for mediated access to files stored in Haplo RM applications",
   "installSecret": "3407d01cb7cb640bc1cec2b119ace8df8f6f5435",
   "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
   "load": [
-      "js/hres_file_mediated_access.js"
+      "js/hres_file_mediated_access.js",
+      "js/fma_web_publisher.js"
     ],
   "respond": ["/do/hres-file-mediated-access"],
   "allowAnonymousRequests": true

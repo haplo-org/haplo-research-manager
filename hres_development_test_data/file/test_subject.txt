@@ -1,0 +1,206 @@
+Subject
+*Medicine and Dentistry
+**Pre-clinical medicine
+**Pre-clinical dentistry
+**Clinical medicine
+**Clinical dentistry
+**Others in medicine & dentistry
+**Medicine & dentistry not elsewhere classified
+*Subjects Allied to Medicine
+**Anatomy, physiology & pathology
+**Anatomy
+**Physiology
+**Clinical physiology
+**Pathology
+**Cellular pathology
+**Pathobiology
+**Neuroscience
+**Physiotherapy
+*Biological Sciences
+**Biology
+**Applied biology
+**Parasitology
+**Behavioural biology
+**Cell biology
+**Applied cell biology
+**Developmental/Reproductive biology
+**Developmental biology
+**Reproductive biology
+**Environmental biology
+**Marine/Freshwater biology
+**Marine biology
+**Freshwater biology
+**Population biology
+**Ecology
+*Veterinary sciences, agriculture & related subjects
+**Pre-clinical veterinary medicine
+**Pre-clinical veterinary medicine not elsewhere classified
+**Clinical veterinary medicine & dentistry
+**Clinical veterinary medicine
+**Clinical veterinary dentistry
+**Clinical veterinary medicine & dentistry not elsewhere classified
+**Animal science
+**Veterinary nursing
+**Animal health
+**Animal anatomy
+**Animal physiology
+**Animal pathology
+**Animal pharmacology
+*Physical sciences
+**Chemistry
+**Applied chemistry
+**Industrial chemistry
+**Colour chemistry
+**Inorganic chemistry
+**Structural chemistry
+**Crystallography
+**Environmental chemistry
+**Marine chemistry
+**Medicinal chemistry
+**Pharmaceutical chemistry
+**Organic chemistry
+**Organometallic chemistry
+**Polymer chemistry
+**Bio-organic chemistry
+**Petrochemical chemistry
+**Biomolecular chemistry
+**Physical chemistry
+**Analytical chemistry
+*Mathematical sciences
+**Mathematics
+**Pure mathematics
+**Applied mathematics
+**Mechanics (mathematical)
+**Mathematical methods
+**Numerical analysis
+**Mathematical modelling
+**Engineering/industrial mathematics
+**Computational mathematics
+**Mathematics not elsewhere classified
+*Engineering
+**General engineering
+**Integrated engineering
+**Safety engineering
+**Fire safety engineering
+**Water quality control
+**Public health engineering
+**Computer-aided engineering
+**Automated engineering design
+**Mechanics
+**Fluid mechanics
+**Solid mechanics
+**Structural mechanics
+**Engineering design
+**Bioengineering, biomedical engineering & clinical engineering
+*Computer science
+**Computer science
+**Computer architectures & operating systems
+**Computer architectures
+*Technologies
+**Minerals technology
+**Mining
+**Quarrying
+**Rock mechanics
+**Minerals processing
+**Minerals surveying
+**Petrochemical technology
+**Minerals technology not elsewhere classified
+**Metallurgy
+**Applied metallurgy
+*Architecture, building & planning
+**Architecture
+**Architectural design theory
+**Interior architecture
+**Architectural technology
+**Architecture not elsewhere classified
+*Social studies
+**Economics
+**Applied economics
+**Financial economics
+**Agricultural economics
+**Economic policy
+**Microeconomics
+*Law
+**Law by area
+**UK legal systems
+**English law
+**Welsh law
+**Northern Irish law
+**Scottish law
+**European Union law
+**Public international law
+*Business & administrative studies
+**Business studies
+**European business studies
+**International business studies
+**Business studies not elsewhere classified
+**Management studies
+**Management techniques
+**Strategic management
+**Creative management
+**Project management
+**Change management
+**Organisational development
+**Institutional management
+*Mass communications & documentation
+**Information services
+**Information management
+**Librarianship
+**Library studies
+**Curatorial studies
+**Museum studies
+**Archive studies
+**Information services not elsewhere classified
+**Publicity studies
+**Public relations
+*Linguistics, classics & related subjects
+**Linguistics
+**Applied linguistics
+**Historical linguistics
+**Phonetics & phonology
+**Phonetics
+**Phonology
+**Sociolinguistics
+**Psycholinguistics
+**British Sign Language
+**Linguistics not elsewhere classified
+**Comparative literary studies
+*European languages, literature & related subjects
+**French studies
+**French language
+*Eastern, Asiatic, African, American & Australasian languages, literature & related subjects
+**Chinese studies
+**Chinese language studies
+**Chinese literature studies
+**Chinese society & culture studies
+**Chinese studies not elsewhere classified
+**Japanese studies
+**Japanese language studies
+**Japanese literature studies
+**Japanese society & culture studies
+**Japanese studies not elsewhere classified
+**South Asian studies
+**South Asian language studies
+**Indian language studies
+*Historical & philosophical studies
+**History by period
+**Modern history
+*Creative arts & design
+**Fine art
+**Drawing
+**Painting
+**Sculpture
+**Printmaking
+**Calligraphy
+**Fine art conservation
+**Fine art not elsewhere classified
+**Design studies
+**Graphic design
+**Typography
+**Multimedia design
+**Visual communication
+**Illustration
+**Clothing/fashion design
+*Education
+**Training teachers
+*Combined/general subject unspecified\n

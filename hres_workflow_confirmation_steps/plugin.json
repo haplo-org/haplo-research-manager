@@ -10,7 +10,6 @@
   "depend": [
       "std_workflow",
       "hres_schema",
-      "phd_schema",
       "haplo_simple_notification"
     ],
   "use": [
@@ -19,5 +18,6 @@
   "load": [
       "js/hres_workflow_confirm_details.js",
       "js/hres_workflow_confirm_roles.js"
-    ]
+    ],
+  "respond": ["/do/hres-workflow-confirmation-steps"]
 }

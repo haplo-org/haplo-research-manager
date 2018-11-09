@@ -13,6 +13,16 @@ P.canRequestAccess = O.action("hres_external_researchers:can_request_external_ac
     title("Can request external access").
     allow("group", Group.Administrators);
 
+// ------ Helper functions -------
+
+var validateUserExistsIsActiveAndIsExternal = function(user) {
+    if(!user) { O.stop("Researcher does not have access"); }
+    if(!user.isActive) { O.stop("User is already blocked"); }
+    if(!user.isMemberOf(Group.ExternalResearcherAccount)) {
+        O.stop("Not an "+NAME("External Researcher"));
+    }
+};
+
 var userHasAccess = function(user) {
     return (
         user &&
@@ -26,8 +36,11 @@ P.implementService("std:action_panel:external_researcher", function(display, bui
         var user = O.user(display.object.ref);
         if(userHasAccess(user)) {
             if(user.isMemberOf(Group.ExternalResearcherAccount)) {
-                builder.link("default", "/do/hres-external-researchers/revoke-access/"+
-                    display.object.ref.toString(), "Revoke access");
+                builder.
+                    link("default", "/do/hres-external-researchers/revoke-access/"+
+                        display.object.ref.toString(), "Revoke access").
+                    link("default", "/do/hres-external-researchers/resend-access/"+user.ref,
+                        "Resend password setting link");
             }
         } else {
             builder.link("default", "/do/hres-external-researchers/request-external-access/"+
@@ -75,7 +88,14 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
         if(O.user(userDetails.email)) { O.stop("An account with this email address already exists"); }
         userDetails.ref = researcher.ref;
         userDetails.groups = [Group.ExternalResearcherAccount];
-        user = O.setup.createUser(userDetails);
+        try {
+            user = O.setup.createUser(userDetails);
+        } catch (exception) {
+            //TODO: Change regex in haplo/lib/common/kextend_rails_and_ruby.rb to a better one
+            E.response.redirect("/do/hres-external-researchers/bad-email/" + userDetails.ref.toString());
+            return;
+        }
+
         if(user) {
             O.serviceMaybe("hres_external_researchers:handle_details", user, document);
             user.data["hres_external_researchers:activation_link_sent"] = new XDate();
@@ -107,6 +127,16 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
             form: form
         });
     }
+});
+
+P.respond("GET", "/do/hres-external-researchers/bad-email", [
+    {pathElement:0, as: "object"}
+], function(E, researcher) {
+    E.render({
+        pageTitle: "Invalid Email Address",
+        backLink: researcher.url(),
+        researcher: researcher
+    }, "bad-email");
 });
 
 P.respond("GET,POST", "/do/hres-external-researchers/reactivate-user", [
@@ -150,9 +180,7 @@ P.respond("GET,POST", "/do/hres-external-researchers/revoke-access", [
 ], function(E, researcher) {
     P.canRequestAccess.enforce();
     var user = O.user(researcher.ref);
-    if(!user) { O.stop("Researcher does not have access"); }
-    if(!user.isActive) { O.stop("User is already blocked"); }
-    if(!user.isMemberOf(Group.ExternalResearcherAccount)) { O.stop("Not an "+NAME("External Researcher")); }
+    validateUserExistsIsActiveAndIsExternal(user);
     if(E.request.method === "POST") {
         user.setIsActive(false);
         return E.response.redirect(researcher.url());
@@ -163,6 +191,26 @@ P.respond("GET,POST", "/do/hres-external-researchers/revoke-access", [
         text: "Confirm revocation of "+researcher.title+"'s external access",
         options: [{label: "Confirm"}]
     }, "request-external-access");
+});
+
+P.respond("GET,POST", "/do/hres-external-researchers/resend-access", [
+    {pathElement:0, as:"object"}
+], function(E, researcher) {
+    P.canRequestAccess.enforce();
+    var user = O.user(researcher.ref);
+    validateUserExistsIsActiveAndIsExternal(user);
+    if(E.request.method === "POST") {
+        var emailView = { welcomeUrl: user.generateWelcomeURL() };
+        P.sendEmail(user, "new_user", emailView);
+        return E.response.redirect(researcher.url());
+    }
+    var view = {
+        pageTitle: "Resend password setting email",
+        backLink: researcher.url(),
+        text: "Email "+researcher.title+" instructions for getting started on "+O.application.name,
+        options: [{ label: "Confirm" }]
+    };
+    E.render(view, "std:ui:confirm");
 });
 
 P.hook("hPostObjectEdit", function(response, object, previous) {

@@ -1,0 +1,14 @@
+
+if(biography) {
+    std:text:document(biography)
+}
+
+if(teaching) {
+    <span><i>"Teaching"</i></span>
+    std:text:document(teaching)
+}
+
+if(research) {
+    <span><i>"Research"</i></span>
+    std:text:document(research)
+}

@@ -16,7 +16,9 @@
       "js/hres_project_journal.js",
       "js/hres_project_journal_dates.js",
       "js/hres_project_journal_dates_ui.js",
-      "js/hres_project_journal_workflow.js"
+      "js/hres_project_journal_workflow.js",
+      "js/hres_project_journal_admin.js",
+      "js/hres_project_journal_imported_entries.js"
     ],
   "respond": [
     "/do/hres-project-journal"

@@ -35,4 +35,20 @@ if(O.featureImplemented("std:web-publisher")) {
         }
     });
 
+    P.webPublication.feature("hres:researcher-profile:platform-integration", function(publication) {
+
+        P.implementService("std:action_panel:category:hres:person", function(display, builder) {
+            if(P.typesWithProfile.get(display.object.firstType())) {
+                var url = publication.urlForObject(display.object);
+                if(url) {
+                    builder.panel(1).
+                        element(0, {title:"Web profile"}).
+                        link("default", url, "View public profile");
+                }
+            }
+        });
+
+    });
+
 }
+

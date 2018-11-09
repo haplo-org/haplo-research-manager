@@ -8,7 +8,7 @@
 var CanViewDataMonitoringDashboards = O.action("hres-data-monitoring:view-reports").
     title("View data monitoring reports");
 
-P.respond("GET", "/do/hres-data-monitoring/researchers-missing-departments", [
+P.respond("GET,POST", "/do/hres-data-monitoring/researchers-missing-departments", [
 ], function(E) {
     CanViewDataMonitoringDashboards.enforce();
     P.reporting.dashboard(E, {

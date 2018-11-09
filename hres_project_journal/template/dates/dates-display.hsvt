@@ -1,11 +1,24 @@
 
-std:plugin:resources("journal-dates.css")
+std:plugin:resources("journal-dates.js" "journal-dates.css")
+
+if(displayAdminOptions) {
+    if(canForceUpdate) {
+        <form method="GET" action=["/do/hres-project-journal/dates/force-update/" project]> std:form:token()
+            <p><input type="submit" value="Force dates recalculation"></p>
+        </form>
+    }
+    <a href=["/do/hres-project-journal/dates/history/" project]> "View history" </a>
+}
 
 <table id="project_dates_table">
     <tr>
         <th> </th>
-        <th> "Date" </th>
-        <th> "Deadline" </th>
+        <th > "Date completed" </th>
+        unless(hideDeadlines) { <th> "Deadline" </th> }
+        if(displayAlerts) {
+            <th> "Reminder sent" </th>
+        }
+        
     </tr>
     each(display) {
         <tr>
@@ -33,41 +46,53 @@ std:plugin:resources("journal-dates.css")
                         }
                     }
                 </td>
-                do() {
-                    if(requiredMin) {
-                        if(requiredIsInstantaneous) {
-                            <td>
+                unless(^^{hideDeadlines}) {
+                    do() {
+                        if(requiredMax) {
+                            <td class=if(^{displayRequiredIsFixed}) { "admin-required-fixed" }>
                                 yield:previousActual()
-                                std:date(requiredMin)
-                                yield:isEditable()
-                            </td>
-                        } else {
-                            <td>
-                                yield:previousActual()
-                                std:date(requiredMin)
-                                " &mdash; "
+                                if(requiredMin){ <span class="earliest-deadline-date">std:date(requiredMin) " - "</span> }
                                 std:date(requiredMax)
                                 yield:isEditable()
                             </td>
+                        } else {
+                            <td> yield:isEditable() </td>
                         }
-                    } else {
-                        <td> yield:isEditable() </td>
-                    }
-                } previousActual {
-                    if(previousActuals) {
-                        <i> "(next) " </i>
-                    }
-                } isEditable {
-                    if(^^{editable}) {
-                        if(isRequiredEditableByCurrentUser) {
-                            if(requiredMin) { " " }
-                            <a href=["/do/hres-project-journal/edit-date/required/" name "/" ^^{project}]>
-                                if(requiredMin) { "Edit" } else { "Set" }
-                            </a>
+                    } previousActual {
+                        if(previousActuals) {
+                            <i> "(next) " </i>
+                        }
+                    } isEditable {
+                        if(^^{editable}) {
+                            if(isRequiredEditableByCurrentUser) {
+                                if(requiredMin) { " " }
+                                <a href=["/do/hres-project-journal/edit-date/required/" name "/" ^^{project}]>
+                                    if(requiredMin) { "Edit" } else { "Set" }
+                                </a>
+                            }
                         }
                     }
+                }
+                if(^^{displayAlerts}) {
+                    <td class= switch(warning) 
+                        {"alert"}
+                        amber {"amber-alert"}
+                        red {"red-alert"} 
+                        beforeDeployment {"past-alert"} >
+                        each(alerts) {
+                            if(requiredMin) {
+                                std:date(requiredMin) <br>
+                            }
+                        }
+                    </td>
                 }
             }
         </tr>
     }
 </table>
+switch(context)
+{}
+full {
+    <a class="view-earliest">"Show earliest submission dates..."</a>
+    <a class="view-earliest" style="display:none">"Hide earliest submission dates..."</a>
+}

@@ -52,7 +52,11 @@ var makeResearchInstituteGetter = function(name) {
 // --------------------------------------------------------------------------
 
 var HRES_ENTITIES = {
-    'researcher': ['object', A.Researcher],
+    'researcher': function() {
+        var object = this.object;
+        var researchers = O.deduplicateArrayOfRefs(object.every(A.Researcher, Q.PrincipalInvestigator).concat(object.every(A.Researcher)));
+        return researchers;
+    },
 
     'academicYear': ['object', A.AcademicYear],
 
@@ -98,8 +102,27 @@ var _hresFindRoleInResearchInstitute = function(desc, context) {
     // Not found
     return (context === "list") ? [] : undefined;
 };
+
+var _hresMakeCommitteeEntityGetter = function(type, instituteEntities) {
+    var committee;
+    var workflow = this;
+    for(var i = 0; i < instituteEntities.length; i++) {
+        var ri = workflow[instituteEntities[i]+"_maybe"];
+        if(ri) { 
+            var committeeSearchResults = O.query().link(type, A.Type).
+                linkDirectly(ri.ref, A.ResearchInstitute).execute();
+            if(committeeSearchResults.length) {
+                committee = committeeSearchResults[0];
+                break;
+            }
+        }
+    }
+    return committee ? [committee.ref] : [];
+};
+
 var SETUP_ENTITY_PROTOTYPE = function(prototype) {
     prototype._hresFindRoleInResearchInstitute = _hresFindRoleInResearchInstitute;
+    prototype._hresMakeCommitteeEntityGetter = _hresMakeCommitteeEntityGetter;
 };
 
 // --------------------------------------------------------------------------
@@ -140,6 +163,25 @@ var modifyEntities = function(entities, expected) {
     });
 };
 
+/*HaploDoc
+node: /hres_workflow
+sort: 21
+--
+
+h3(function). add(entities)
+
+Adds entities to the default combined application entities. @entities@ is a dictionary of entity names to "definitions":https://docs.haplo.org/dev/standard-plugin/workflow/definition/std-features/entities.
+
+This API cannot be used to change existing entity definitions.
+
+h3(function). modify(entities)
+
+Used to change existing entity definitions. The entitiy definition must already exist.
+
+h3(function). sharedRoles(roles)
+
+Defines application-wide shared roles.
+*/
 var WORKFLOW_ENTITIES_FEATURE = {
     add:    function(entities) { modifyEntities(entities, false); },
     modify: function(entities) { modifyEntities(entities, true ); },
@@ -152,6 +194,21 @@ var WORKFLOW_ENTITIES_FEATURE = {
     }
 };
 
+/*HaploDoc
+title: HRes Workflow
+node: /hres_workflow
+sort: 20
+--
+
+h2(feature). hresWorkflowEntities
+
+This feature allows you to modify entities application-wide.
+
+Enable in your plugin by including @"hres:schema:entities"@ in your @plugin.json@'s @use@ array.
+
+This feature must be loaded before workflow entities are defined, so may require the plugin @loadOrder@ to be changed.
+
+*/
 P.provideFeature("hres:schema:entities", function(plugin) {
     usageOrder.push("plugin feature "+plugin.pluginName);
     plugin.hresWorkflowEntities = WORKFLOW_ENTITIES_FEATURE;
@@ -333,6 +390,16 @@ var refColumnTagToName = function(tag) {
     return r ? r.load().shortestTitle : '';
 };
 
+/*HaploDoc
+node: /hres_schema/workflow
+title: Workflow integration
+--
+h3(service). hres:schema:workflow:dashboard:states:configure
+
+Pass in the name of this service as configurationService when using the @std:dashboard:states@ workflow feature. It will deal with most of the configuration for you.
+It will set up academic year navigation, and columns split by faculty. States still need to be provided by the using plugin.
+*/
+
 // for configurationService in std:dashboard:states specifications
 P.implementService("hres:schema:workflow:dashboard:states:configure", function(spec) {
     spec.columnTag = "faculty";
@@ -350,4 +417,28 @@ P.implementService("hres:schema:workflow:dashboard:states:configure", function(s
         // TODO: Perform permission enforcement without using this temporary API
         dashboard.addQueryFilter(function(query) { query._temp_refPermitsReadByUser(O.currentUser); });
     };
+});
+
+// --------------------------------------------------------------------------
+
+// Downloadable PDFs need header fields
+P.implementService("haplo:workflow:download-pdf:setup:category:hres", function(pdf) {
+    var entities = pdf.M.entities;
+    entities.object.every(A.Date, function(v,d,q) {
+        pdf.headerField(98, "Date", v.toString());
+    });
+    entities.researcher_list.forEach(function(researcher) {
+        pdf.headerField(102, NAME("Researcher"), researcher.title);
+        var studentId = researcher.first(A.StudentId);
+        if(studentId) { pdf.headerField(104, NAME("Student ID"), studentId.toString()); }
+    });
+    entities.project_list.forEach(function(project) {
+        pdf.headerField(120, NAME("Project"), project.title);
+    });
+    entities.faculty_list.forEach(function(faculty) {
+        pdf.headerField(130, NAME("Faculty"), faculty.title);
+    });
+    entities.department_list.forEach(function(department) {
+        pdf.headerField(132, NAME("Department"), department.title);
+    });
 });

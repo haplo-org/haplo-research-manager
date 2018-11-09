@@ -8,7 +8,8 @@
   "depend": ["hres_orcid"],
   "use": ["hres:orcid"],
   "load": [
-      "js/hres_orcid_researcher_profile.js"
+      "js/hres_orcid_researcher_profile.js",
+      "js/orp_test_data.js"
     ],
   "respond": ["/do/orcid-researcher-profile"]
 }

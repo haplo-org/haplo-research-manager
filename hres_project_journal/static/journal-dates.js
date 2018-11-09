@@ -5,15 +5,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
-// Only included if citations are generated on the server
-
-window.hresAuthorCitationValueFetch = function(ref, callback) {
-    jQuery.ajax({
-        url: "/api/hres-author-citation-value/fetch",
-        data: {ref:ref},
-        success: function(body) {
-            callback((body||'').toString());
-        }
+(function($) {
+    
+    $(document).ready(function() {
+       
+        $('.view-earliest').on('click', function() {
+            $('.earliest-deadline-date').toggle();
+            $('.view-earliest').toggle();
+        });
+        
     });
-};
-
+    
+})(jQuery);

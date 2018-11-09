@@ -1,0 +1,3 @@
+pageTitle("Search results: " searchTerm)
+
+template:std:search_results()

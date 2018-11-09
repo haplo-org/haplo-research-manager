@@ -1,0 +1,7 @@
+pageTitle("Thank you!")
+
+<p> "Your ORCID, " render(orcid.onProfile) ", has been successfully added to your profile." </p>
+
+render(note)
+
+<p> <a href="/"> "Back home" </a> </p>

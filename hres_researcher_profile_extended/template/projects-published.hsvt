@@ -1,0 +1,4 @@
+
+each(projects) {
+    std:object:title(.)
+}

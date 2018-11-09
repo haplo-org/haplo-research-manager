@@ -1,3 +1,5 @@
+feature std:page:home
+    element: std:group:everyone right hres_researcher_profile:search_by_subject
 
 group hres:group:researcher-profile:editors as ResearcherProfileEditors
     title: Researcher Profile Editors
@@ -5,3 +7,12 @@ group hres:group:researcher-profile:editors as ResearcherProfileEditors
 # TODO: Some way of specifying Elements on types & their child types
 type hres:type:person:researcher as Researcher
     element: std:group:everyone bottom hres_researcher_profile:profile [sort=20000]
+
+type hres:type:research-institute:university as University
+type hres:type:person:researcher as Researcher
+type std:type:project as Project
+
+attribute std:attribute:job-title as JobTitle
+attribute std:attribute:email as Email
+attribute hres:attribute:research-institute as ResearchInstitute
+

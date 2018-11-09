@@ -1,16 +1,8 @@
 
 each(sections) {
-    if(display) {
-        // <h2> section.title </h2>
-        // render(display)
-        // TODO: Remove assumption of Bootstrap classes from web profile publisher templates
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">section.title</h3>
-          </div>
-          <div class="panel-body">
-            render(display)
-          </div>
-        </div>
-    }
+  if(display) {
+    std:web-publisher:template("hres:repository:common:ui:panel") {
+      render(display)
+    } heading { section.title }
+  }
 }

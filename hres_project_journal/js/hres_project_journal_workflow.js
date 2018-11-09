@@ -4,19 +4,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+/*HaploDoc
+node: /hres_project_journal/workflow
+title: Workflow integration
+--
 
-// Specification has properties:
-//  baseName - base name of date, otherwise uses name of workflow
-//     (project dates are baseName + ':start' & ':finish')
-//  start - selector for state considered the start of the workflow, omit to use the start of the workflow itself
-//  projectEntityName - the name of the entity of the project, defaults to "project"
-//  sortStart, sortFinish - specify exact sorting, otherwise uses sort as below
-//  sort - for date, with sortStart:sort, sortFinish:(sort+5)
-//  categories - categories of project to which this date applies
-//  editRequired - function(action) - passes in Action for editing the deadlines for thiis date (optional)
-//
-//  Note: Probably can get away with just specifying a sort order for simple workflows
-//
+h3(feature). "hres:project_journal:workflow_integration"
+
+Takes a specification with properties:
+
+* baseName - base name of date, otherwise uses name of workflow (project dates are baseName + ':start' & ':finish')
+* start - selector for state considered the start of the workflow, omit to use the start of the workflow itself
+* projectEntityName - the name of the entity of the project, defaults to "project"
+* sortStart, sortFinish - specify exact sorting, otherwise uses sort as below
+* sort - for date, with sortStart:sort, sortFinish:(sort+5)
+* categories - categories of project to which this date applies
+* editRequired - function(action) - passes in Action for editing the deadlines for thiis date (optional)
+* canRepeat - allows the date to repeat, using .nextOccurrence() (optional)
+
+Note: Probably can get away with just specifying a sort order for simple workflows
+
+*/
 
 P.workflow.registerWorkflowFeature("hres:project_journal:workflow_integration",
     function(workflow, spec) {

@@ -7,11 +7,13 @@
   "installSecret": "556f6ad2f709e49e376373808ae7bb42c943ee34",
   "apiVersion": 4,
   "depend": [
+    "haplo_information_pages",
     "hres_schema"
   ],
   "use": ["std:reporting"],
   "load": [
       "js/hres_schema_projects.js",
+      "js/hres_schema_projects_permissions.js",
       "js/hres_schema_projects_reporting.js"
     ],
   "respond": ["/do/hres-projects"]

@@ -1,0 +1,19 @@
+
+feature std:page:home
+    element: std:group:everyone left hres_orcid_obtain:home [sort=10]
+
+attribute hres:attribute:orcid as ORCID
+
+
+# ---------------------------------------------------------------------------
+# ORCID shouldn't be editable by anyone
+
+restriction hres:restriction:orcid
+    title: Obtain ORCIDs through integration
+    label-unrestricted hres:label:can-edit-orcid
+    restrict-type std:type:person
+    attribute-read-only hres:attribute:orcid
+
+label hres:label:can-edit-orcid
+    title: Can Edit ORCID
+    category Restriction

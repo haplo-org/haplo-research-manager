@@ -5,14 +5,16 @@
   "displayName": "Researcher Profile",
   "displayDescription": "Framework for managing Researcher profiles",
   "apiVersion": 4,
-  "privilegesRequired": ["pDatabase"],
+  "privilegesRequired": ["pDatabase", "pFileTransformPipeline"],
   "depend": ["std_document_store"],
   "use": ["std:document_store"],
   "loadPriority": 2200,
   "load": [
       "js/hres_researcher_profile.js",
       "js/hres_researcher_profile_ui.js",
-      "js/hres_researcher_profile_web_publisher.js"
+      "js/hres_researcher_profile_web_publisher.js",
+      "js/hres_researcher_search.js",
+      "js/hres_researcher_profile_transforms.js"
     ],
   "respond": ["/do/researcher-profile"]
 }

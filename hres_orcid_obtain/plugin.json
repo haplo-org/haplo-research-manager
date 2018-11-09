@@ -1,0 +1,22 @@
+{
+  "pluginName": "hres_orcid_obtain",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "ORCID obtain",
+  "displayDescription": "Obtain ORCIDs for researchers",
+  "apiVersion": 4,
+  "depend": [
+      "std_reporting",
+      "haplo_activity_guidance_notes",
+      "hres_orcid_researcher_profile"
+    ],
+  "use": [
+      "std:reporting",
+      "haplo:activity_guidance_notes",
+      "hres:orcid"
+    ],
+  "load": [
+      "js/hres_orcid_obtain.js"
+    ],
+  "respond": ["/do/obtain-orcid"]
+}

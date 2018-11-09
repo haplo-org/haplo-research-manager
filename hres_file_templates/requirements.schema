@@ -2,5 +2,7 @@
 group std:group:administrators as Administrators
 
 type hres:type:research-institute as ResearchInstitute
+type hres:type:research-institute:university as University
 
 attribute hres:attribute:research-institute as ResearchInstitute
+attribute dc:attribute:type as Type

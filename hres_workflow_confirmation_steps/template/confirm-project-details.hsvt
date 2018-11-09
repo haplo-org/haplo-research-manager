@@ -6,4 +6,4 @@ within(confirmDetails) {
 <p> "&nbsp;" </p>
 
 std:object(displayObject)
-render(deferredDates)
+if(deferredDates) { render(deferredDates) }

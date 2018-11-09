@@ -1,0 +1,7 @@
+{
+    "hres:doi:match-to-existing-item-in-list": {
+        "statements": [
+            "hres:repository:match-item-to-existing-in-list"
+        ]
+    }
+}

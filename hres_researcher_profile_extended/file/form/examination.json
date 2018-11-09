@@ -1,0 +1,39 @@
+{
+    "specificationVersion": 0,
+    "formId": "examination",
+    "elements": [{
+        "type": "repeating-section",
+        "path": "examination",
+        "allowDelete": true,
+        "renderDocumentOmitEmpty": true,
+        "elements": [
+            {
+                "type": "text",
+                "name": "title",
+                "path": "title",
+                "label": "Title",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "institution",
+                "path": "institution",
+                "label": "At institution",
+                "required": true
+            },
+            {
+                "type": "text",
+                "name": "url",
+                "path": "url",
+                "label": "URL"
+            },
+            {
+                "type": "text",
+                "name": "date",
+                "path": "date",
+                "inDocument": {"path":"date", "operation":"defined"},
+                "label": "Date"
+            }
+        ]
+    }]
+}

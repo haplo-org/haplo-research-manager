@@ -1,0 +1,6 @@
+
+<div data-quarter=quarter style="text-align:right">
+  std:ui:navigation:arrow("left" url(?year=previousYear quarter=previous))
+  " Q" quarter " " year " "
+  std:ui:navigation:arrow("right" url(?year=nextYear quarter=next))
+</div>

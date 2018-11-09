@@ -56,6 +56,10 @@ var FEATURE = {
     renderedSection: function(delegate) {
         var section = new SectionRendered(delegate);
         gatherSections.push(section);
+    },
+    renderedFormSection: function(delegate) {
+        var section = new SectionFormRendered(delegate);
+        gatherSections.push(section);
     }
 };
 
@@ -114,6 +118,7 @@ Section.prototype._init = function(delegate) {
     this._checkedDelegateProperty('title');
     this._checkedDelegateProperty('sort');
     this._showOnObject = delegate.showOnObject;
+    this.includeInExport = delegate.includeInExport;
 };
 Section.prototype._checkedDelegateProperty = function(name) {
     var value = this._delegate[name];
@@ -122,6 +127,9 @@ Section.prototype._checkedDelegateProperty = function(name) {
 };
 
 Section.prototype.deferredRender = function(profile) {
+    // Don't display anything by default
+};
+Section.prototype.deferredRenderForExport = function(profile) {
     // Don't display anything by default
 };
 Section.prototype.deferredRenderPublished = function(profile) {
@@ -146,11 +154,52 @@ SectionForm.prototype.deferredRender = function(profile) {
     }
 };
 
+SectionForm.prototype.deferredRenderForExport = function(profile) {
+    return this._delegate.deferredRenderForExport ?
+        this._delegate.deferredRenderForExport(profile, profile.document[this.name]) :
+        this.deferredRender(profile);       // fallback to default
+};
+
 SectionForm.prototype.deferredRenderPublished = function(profile) {
     return this.deferredRender(profile);    // exactly the same rendering
 };
 
 SectionForm.prototype.editLink = function(profile) {
+    return "/do/researcher-profile/edit/"+this.name+"/"+profile.ref;
+};
+
+// --------------------------------------------------------------------------
+
+var SectionFormRendered = P.SectionFormRendered = function(delegate) {
+    this._init(delegate);
+    this._checkedDelegateProperty('form');
+};
+SectionFormRendered.prototype = new Section();
+
+SectionFormRendered.prototype.deferredRender = function(profile) {
+    var document = profile.document[this.name];
+    if(document !== undefined) {
+        return this._delegate.deferredRender(profile, document, this);
+    }
+};
+
+SectionFormRendered.prototype.deferredRenderPublished = function(profile) {
+    var document = profile.document[this.name];
+    if(document !== undefined) {
+        if(this._delegate.deferredRenderPublished) {
+            return this._delegate.deferredRenderPublished(profile, document);
+        }
+        return this.deferredRender(profile);
+    }
+};
+
+SectionFormRendered.prototype.deferredRenderForExport = function(profile) {
+    return this._delegate.deferredRenderForExport ?
+        this._delegate.deferredRenderForExport(profile, profile.document[this.name]) :
+        this.deferredRender(profile);       // fallback to default
+};
+
+SectionFormRendered.prototype.editLink = function(profile) {
     return "/do/researcher-profile/edit/"+this.name+"/"+profile.ref;
 };
 
@@ -165,6 +214,12 @@ SectionRendered.prototype.deferredRender = function(profile) {
     if(this._delegate.deferredRender) {
         return this._delegate.deferredRender(profile);
     }
+};
+
+SectionRendered.prototype.deferredRenderForExport = function(profile) {
+    return this._delegate.deferredRenderForExport ?
+        this._delegate.deferredRenderForExport(profile) :
+        this.deferredRender(profile);       // fallback to default
 };
 
 SectionRendered.prototype.deferredRenderPublished = function(profile) {
