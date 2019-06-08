@@ -1,0 +1,28 @@
+{
+  "pluginName": "hres_simple_alerts",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Simple Alerts",
+  "displayDescription": "Support for delivering reminders to users at alert dates that affect them.",
+  "loadPriority": 2100,
+  "apiVersion": 4,
+  "depend": [
+      "std_workflow",
+      "hres_schema",
+      "hres_project_journal",
+      "std_reporting"
+    ],
+  "use": [
+    "std:workflow",
+    "hres:schema:entities",
+    "std:reporting"
+  ],
+  "privilegesRequired": [
+      "pDatabase",
+      "pBackgroundProcessing"
+    ],
+  "load": [
+      "js/hres_simple_alerts.js",
+      "js/alerts_reporting.js"
+    ]
+}

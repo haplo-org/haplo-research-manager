@@ -14,6 +14,9 @@ P.implementService("std:action_panel:home_page", function(display, builder) {
     if(O.currentUser.allowed(CanGenerateTestData)) {
         if(P.data.status === "running") {
             builder.panel(100).element("default", {label:"Generating test data...", indicator:"terminal"});
+        } else if (P.data.status === "failed") {
+            builder.panel(10000).
+                link("default", '/do/hres-development-test-data/failed', 'Test data generation failed', 'terminal');
         } else {
             builder.panel(100).
                 link("top", '/do/hres-development-test-data/generate', 'Generate test data', 'primary');
@@ -77,11 +80,30 @@ P.respond("GET,POST", "/do/hres-development-test-data/done", [
     }, "std:ui:notice");
 });
 
+P.respond("GET,POST", "/do/hres-development-test-data/failed", [
+], function(E) {
+    let error;
+    if(P.data.error) {
+        error = P.data.error.message+", file:"+P.data.error.fileName+", line:"+P.data.error.lineNumber;
+    }
+    E.render({
+        pageTitle: "Test data generation failed",
+        backLink: "/",
+        html: "<p>Test data generation failed with the following error: "+(error || "No error found")+". You can regenerate data <a href=\"/do/hres-development-test-data/generate\">here</a>. This will not work if some data was already generated.</p>"
+    }, "std:ui:notice");
+});
+
+
 // --------------------------------------------------------------------------
 
 P.backgroundCallback("generate", function(data) {
     O.impersonating(O.SYSTEM, function() {
-        generateTestData(data.level||2);
+        try{
+            generateTestData(data.level||2);
+        } catch(e) {
+            P.data.status = "failed";
+            P.data.error = e;
+        }
     });
 });
 

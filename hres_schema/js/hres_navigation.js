@@ -51,13 +51,15 @@ var researchInstituteLinksActionPanel = function(name, childType, childTitle, le
             ];
             O.serviceMaybe("hres:navigation:people_types_for_research_institute_navigation", institutePeopleLinks);
         }
-        var peopleBase = display.object.url()+'/linked/'+T.Person+'?sort=title&type=';
+        var searchBase = display.object.url()+'/linked/';
+        var subtypeParameters = '?sort=title&type=';
         var peoplePanel = builder.panel(200);
         institutePeopleLinks.forEach(function(p) {
             // TODO: Make this check for people a bit quicker?
             var q = O.query().link(display.object.ref).link(p.type,A.Type).limit(1).setSparseResults(true).execute();
+            var rootType = SCHEMA.getTypeInfo(p.type).rootType;
             if(q.length) {
-                peoplePanel.link(p.sort, peopleBase+p.type, p.name);
+                peoplePanel.link(p.sort, searchBase+((rootType != p.type) ? rootType+subtypeParameters : "")+p.type, p.name);
             }
         });
         if(!peoplePanel.empty) { peoplePanel.element(0, {title:"People"}); }
@@ -96,7 +98,7 @@ var researchInstituteLinksActionPanel = function(name, childType, childTitle, le
             }).
             sortByTitle().limit(MAX_INSTITUTES_ON_INSTITUTE_NAVIGATION+1).execute();
         if(researchGroups.length) {
-            builder.panel(400).element("default", {title:NAME('+ResearchGroup')});
+            builder.panel(400).element("default", {title:NAME('+Research Group')});
             _.each(researchGroups, function(rg) {
                 builder.panel(400).link("default", rg.url(), rg.title);
             });

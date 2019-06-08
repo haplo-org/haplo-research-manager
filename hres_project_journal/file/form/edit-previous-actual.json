@@ -1,0 +1,21 @@
+{
+    "specificationVersion": 0,
+    "formId": "edit-previous-actual",
+    "formTitle": "Edit previous",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "date",
+            "path": "newPrevious",
+            "label": "New previous",
+            "validationCustom": {
+                "name": "std:validation:compare_to_date",
+                "data": {
+                    "operation": "<",
+                    "externalData": "oldestPrevious",
+                    "errorMessage": "Date must be before the oldest existing previous date"
+                }
+            }
+        }
+    ]
+}

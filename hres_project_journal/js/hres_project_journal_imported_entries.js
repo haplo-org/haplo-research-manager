@@ -63,7 +63,10 @@ P.provideFeature("hres:project_journal_imported_entries", function(plugin) {
         _.each(spec.implementations, (implementation) => {
             let fullName = prefix+":"+implementation.kind;
             forms[fullName] = implementation.form;
-            let link = implementation.link || getLinkFunction(implementation.kind);
+            let link = (row) => undefined;
+            if(!implementation.hideLink) {
+                link = implementation.link || getLinkFunction(implementation.kind);
+            }
             plugin.implementService("hres:project_journal:get_implementation:"+fullName, function() {
                 return {
                     kindDisplayName: implementation.kindDisplayName,

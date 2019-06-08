@@ -11,7 +11,12 @@ P.researcherProfile.formSection({
     name: "photo",
     title: "Photo",
     sort: 50,
-    form: PhotoForm
+    form: PhotoForm,
+    deferredRenderPublished: function() {
+        // Don't render anything in the standard web publisher panels, because the
+        // photo will always need to be displayed in a different position.
+        // Use the hres:researcher-profile:photo page part instead.
+    }
 });
 
 P.implementService("std:action_panel:category:hres:person", function(display, builder) {

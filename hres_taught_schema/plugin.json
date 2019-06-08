@@ -14,10 +14,11 @@
       "haplo_user_roles_permissions",
       "hres_schema"
     ],
-  "use": ["std:reporting"],
+  "use": ["std:reporting", "hres:schema:names"],
   "load": [
       "js/hres_taught_reporting.js",
-      "js/hres_taught_permissions.js"
+      "js/hres_taught_permissions.js",
+      "js/hres_taught_data_import_model.js"
     ],
   "respond": ["/do/hres-taught-schema"]
 }

@@ -6,7 +6,6 @@
 
 
 P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
-    // TODO: Review whether we want to reveal UoA information (as all labels are visible)
     type(T.Person, {
         labelWith: [A.REFUnitOfAssessment]
     });
@@ -18,6 +17,11 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
 
 P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.attributeRole("Unit of Assessment Lead",         T.REFUnitOfAssessment,  A.Head);
+    
     // UoA Leads get read permissions at all things within their UoA
+    // NOTE: "read-edit" for T.Person doesn't give the permissions you intend. as editing the UoA
+    // will relabel the person to be outside of the Lead's permitted labelset
     setup.roleOversightPermission("Unit of Assessment Lead",      "read",     [T.Person, T.Project]);
+    setup.groupPermission(Group.REFManagers,        "read-edit",        T.Person);
+    setup.groupRestrictionLabel(Group.REFManagers, Label.EditREFUoA);
 });

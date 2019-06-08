@@ -46,6 +46,7 @@ type std:type:project as Project
     title: Project
     search-name: project
     attribute dc:attribute:title [sort=1000]
+    attribute dc:attribute:type [sort=1100]
     attribute hres:aliased-attribute:researchers [sort=1500]
     REMOVE attribute std:attribute:client
     REMOVE attribute std:attribute:project-leader
@@ -55,6 +56,14 @@ type std:type:project as Project
     REMOVE attribute dc:attribute:date
     element: std:group:everyone right std:action_panel {"panel":"project"}
     annotation hres:annotation:project
+type hres:type:project:past
+    title: Project (past)
+    annotation hres:annotation:past-project
+    search-name: project-past
+    search-name: past-project
+    parent-type std:type:project
+    render-icon E511,1,f
+    render-category 4
 
 attribute std:attribute:relationship-manager as RelationshipManager
     # To avoid sending a list of all the person objects to the client in the object editor
@@ -89,11 +98,22 @@ group hres:group:classification-editors as ClassificationEditors
 group hres:group:researchers as Researchers
     title: Researchers
 
+group hres:group:external-researchers as ExternalResearchers
+    title: External Researchers
+
 group hres:group:admin-staff as AdminStaff
     title: Admin Staff
 
 group hres:group:it-support as ITSupport
     title: IT Support
+
+# If the data import framework is installed, then IT support can administrate it
+OPTIONAL group haplo:group:data-import-framework:admin
+    member hres:group:it-support
+
+# If user sync is installed, then IT support can administrate it
+OPTIONAL group haplo:group:user-system-admin
+    member hres:group:it-support
 
 group hres:group:senior-management as SeniorManagement
     title: Senior Management
@@ -156,6 +176,13 @@ attribute hres:attribute:collaborating-institution as CollaboratingInstitution
     search-name: collaborating-institution
     qualifier std:qualifier:null
     data-type text
+
+attribute hres:attribute:participating-organisation
+    title: Participating organisation
+    search-name participating-organisation
+    qualifier std:qualifier:null
+    data-type link
+    linked-type std:type:organisation
 
 attribute hres:attribute:head as Head
     title: Head
@@ -322,6 +349,7 @@ type hres:type:person:researcher-past as ResearcherPast
     parent-type std:type:person
     search-name: researcher-past
     attribute-hide hres:attribute:student-id
+    annotation hres:annotation:past-person
     render-category 3
     render-icon E228,2,f,y E413,1,f,y
     REMOVE element: std:group:everyone right std:action_panel {"panel":"doctoral_researcher"} [sort=10000]
@@ -353,6 +381,7 @@ type hres:type:person:staff-past as StaffPast
     search-name: past staff
     attribute-hide hres:attribute:research-interests
     attribute-hide hres:attribute:supervision-interests
+    annotation hres:annotation:past-person
     render-category 4
     render-icon: E21A,1,f E21B,3,f E413,1,f,y
     REMOVE element: std:group:everyone right std:action_panel {"panel":"staff"}
@@ -362,6 +391,7 @@ type hres:type:research-institute as ResearchInstitute
     title: Research Institute
     search-name: research institute
     attribute dc:attribute:title [sort=10000]
+    attribute std:attribute:configured-behaviour [sort=10001]
     attribute dc:attribute:type [sort=10100]
     attribute hres:aliased-attribute:university [sort=10101]
     attribute hres:aliased-attribute:faculty [sort=10102]
@@ -461,8 +491,6 @@ type hres:type:organisation:funder as Funder
     search-name: funder
     render-icon: E400,3,f
     render-category 5
-
-type hres:type:person:external-researcher as ExternalResearcher
 
 type hres:type:professional-development as ProfessionalDevelopment
     title: Professional development

@@ -144,6 +144,7 @@ P.workflow.registerWorkflowFeature("hres:confirm_roles",
                     var lookupElement = {
                         type: "lookup",
                         path: roleInfo.role,
+                        explanation: roleInfo.explanation,
                         label: "Confirm "+roleInfo.roleTitle,
                         dataSource: "people",
                         required: roleInfo.required || false
@@ -157,7 +158,7 @@ P.workflow.registerWorkflowFeature("hres:confirm_roles",
                             type: "repeating-section",
                             elements: [
                                 _.chain(lookupElement).
-                                    omit("label", "required").
+                                    omit("label", "required", "explanation").
                                     extend({ path: "." }).value()
                             ]
                         }, _.pick(roleInfo, "minimumCount", "maximumCount")).value();

@@ -4,6 +4,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+P.hresSchemaNAME.addTypeNamesFromSchema(T, [
+    ['Taught Student',                  'TaughtStudent'],
+    ['Postgraduate Taught Student',     'PostgraduateTaughtStudent'],
+    ['Undergraduate Student',           'UndergraduateStudent']
+]);
 
 // Navigation for home page
 P.implementService("hres:schema:roles_for_my_links", function(myLink) {
@@ -20,6 +25,12 @@ P.hook("hObjectDisplay", function(response, object) {
             response.buttons["*USERROLES"] = [["/do/haplo-user-roles-permissions/roles/"+object.ref, "Permissions: User roles"]];
         }
     }
+});
+
+// Navigation for research institutes
+P.implementService("hres:navigation:people_types_for_research_institute_navigation", function(institutePeopleLinks) {
+    institutePeopleLinks.push({sort:10000, type:T.PostgraduateTaughtStudent, name:NAME("+Postgraduate Taught Student")});
+    institutePeopleLinks.push({sort:10010, type:T.UndergraduateStudent, name:NAME("+Undergraduate Student")});
 });
 
 P.implementService("haplo:descriptive_object_labelling:setup", function(type) {

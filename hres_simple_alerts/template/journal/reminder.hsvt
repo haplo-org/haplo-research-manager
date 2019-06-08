@@ -1,0 +1,3 @@
+<div>
+   "Reminder sent: " data.title  if(data.date) {" (Deadline: " data.date ")"}
+</div>

@@ -105,7 +105,7 @@ P.reporting.registerReportingFeature("hres:schema:calendar_quarter_navigation",
             previousQuarter = 4;
         }
         dashboard.navigationUI(function(dashboard) {
-            return P.template("calendar-quarter-navigation").deferredRender({
+            return P.template("quarter-navigation").deferredRender({
                 year: currentYear,
                 quarter: currentQuarter,
                 previous: previousQuarter,

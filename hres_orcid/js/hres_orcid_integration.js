@@ -17,6 +17,7 @@ value in configuration data for the key @hres_orcid:credential_name@.
 var KEYCHAIN_ENTRY = O.application.config["hres_orcid:credential_name"] || "ORCID Service";
 var API_PREFIX = O.application.config["hres_orcid:api_base_url"] || 'https://api.sandbox.orcid.org';
 var REQUESTED_SCOPE = O.application.config["hres_orcid:requested_scope"] || '/authenticate'; // Full access with member API would use '/read-limited /orcid-bio/update /activities/update'
+var ENABLED_APPLICATION = O.application.config["hres_orcid:safety_application_hostname"];
 
 // How many seconds to refresh before we seem to need to, to allow for
 // network delays in the previous token getting to us, and grace for
@@ -64,6 +65,11 @@ Uses the ORCID Keychain entry to redirect the user to the correct external page 
 authentication process
 */
 P.implementService("hres:orcid:integration:redirect_to_start_obtain", function() {
+    if(ENABLED_APPLICATION !== O.application.hostname) {
+        console.log("Not starting ORCID sign-up as hres_orcid:safety_application_hostname is not "+
+            "the current hostname. Is this a cloned live application?");
+        return;
+    }
     return O.remote.authentication.urlToStartOAuth(
         false,
         KEYCHAIN_ENTRY,
@@ -118,6 +124,11 @@ P.db.table("putCodes", {
 });
 
 P.implementService("hres:orcid:integration:delete", function(user, spec) {
+    if(ENABLED_APPLICATION !== O.application.hostname) {
+        console.log("Not deleting record from ORCID as hres_orcid:safety_application_hostname is not "+
+            "the current hostname. Is this a cloned live application?");
+        return;
+    }
     let authQuery = P.db.orcids.select().where("userId","=",user.id);
     if(!authQuery.length) { 
         console.log("No authenticated ORCID for user "+user.id);
@@ -158,6 +169,11 @@ var Deleted = P.callback("deleted", function(data, client, response) {
 });
 
 P.implementService("hres:orcid:integration:push_data", function(user, spec) {
+    if(ENABLED_APPLICATION !== O.application.hostname) {
+        console.log("Not pushing record to ORCID as hres_orcid:safety_application_hostname is not "+
+            "the current hostname. Is this a cloned live application?");
+        return;
+    }
     let authQuery = P.db.orcids.select().where("userId","=",user.id);
     if(!authQuery.length) { 
         console.log("No authenticated ORCID for user "+user.id);

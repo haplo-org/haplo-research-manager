@@ -85,3 +85,30 @@ P.workflow.registerWorkflowFeature("hres:project_journal:workflow_integration",
         });
     }
 );
+
+// This generally should not be used. It was implemented to handle the above feature being inappropriately
+// used in change requests for live clients.
+P.workflow.registerWorkflowFeature("hres:project_journal:register_legacy_dates",
+    function(workflow, spec) {
+        spec = spec || {};
+        var baseName = (spec.baseName || workflow.fullName)+':';
+        var defaultSort = spec.sort || 10;
+        P.registerDateDefinition({
+            name: baseName+'start',
+            sort: spec.sortStart || defaultSort,
+            displayName: spec.customStartDisplayName || 
+                    ((spec.displayName || workflow.description)+', submission'),
+            categories: spec.categories,
+            editRequired: spec.editRequired,
+            notForDisplay: true
+        });
+        P.registerDateDefinition({
+            name: baseName+'finish',
+            sort: spec.sortFinish || (defaultSort+5),
+            displayName: spec.customFinishDisplayName || 
+                    ((spec.displayName || workflow.description)+', completion'),
+            categories: spec.categories,
+            editRequired: spec.editRequired,
+            notForDisplay: true
+        });
+});

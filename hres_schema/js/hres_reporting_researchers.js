@@ -15,7 +15,8 @@ P.implementService("std:reporting:collection:researchers:setup", function(collec
         property("hres:row_permissions:additional_labels",  [Label.ActivityIdentity]).
         fact("isExternal",  "boolean",  "Is an external researcher").
         filter(collection.FILTER_DEFAULT, function(select) { select.where("isExternal", "=", null); }).
-        filter("includeExternal", function(select) { });
+        filter("includeExternal", function(select) { }).
+        filter("excludeInternal", function(select) { select.where("isExternal", "=", true); });
         // TODO: Permissions for Researchers? Does it need different label lists for different purposes?
 });
 

@@ -5,8 +5,14 @@ std:object(project "linkedheading")
 switch(action) {}
     editScheduledActual {
         if(date.actual) {
-            std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
+            unless(date.previousActuals.length) {
+                std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
+            } else {
+                std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time. The system will delete all the previous dates if you indicate that the action should occur at a future time.")
+            }
         }
+    } editPreviousActual {
+        std:ui:notice("Enter the dates from latest to oldest. Don't miss dates from your list as you won't be able to insert them in the list in the system later.")
     }
 
 if(error) {
@@ -17,9 +23,26 @@ if(error) {
     std:form(form)
     if(extras.formInstance) { std:form(extras.formInstance) }
     <p>
-        <input type="submit" value="Set date">
+        <input  type="submit"
+                value=switch(action) {
+                        "Set date"
+                    } editPreviousActual {
+                        "Add previous date"
+                    }>
         if(canClear) {
-            <span style="float: right"><input type="submit" value="Delete" name="clear"></span>
+            <span style="float: right">
+                <input  type="submit"
+                        value=switch(action) {
+                                "Delete"
+                            } editScheduledActual {
+                                unlessAll(date.actual date.previousActuals.length) {
+                                    "Delete"
+                                } else {
+                                    "Delete date and previous dates"
+                                }
+                            }
+                        name="clear">
+            </span>
         }
     </p>
 </form>

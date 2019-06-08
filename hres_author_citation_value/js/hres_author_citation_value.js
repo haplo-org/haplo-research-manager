@@ -46,6 +46,11 @@ var createAuthorCitationValue = P.implementTextType("hres:author_citation", "Aut
     render: function(value) {
         return P.template("citation").render(citationTemplateView(value));
     },
+    replaceMatchingRef: function(value, ref, replacementRef) {
+        if(!value.ref || (value.ref.toString() !== ref.toString())) { return; }
+        value.ref = replacementRef.toString();
+        return value;
+    },
     $setupEditorPlugin: function(value) {
         P.template("include_editor_plugin").render();   // hack to include client side support
     }
@@ -103,7 +108,6 @@ var createCiteForPersonObject = function(object) {
         var title = object.firstTitle();
         if(title) {
             if(O.typecode(title) === O.T_TEXT_PERSON_NAME) {
-                // TODO: Better automatic generation of citation from person names?
                 cite = makeCiteFromNames(title.toFields());
             } else {
                 cite = title.toString();
@@ -152,18 +156,28 @@ should refer to the shadowed attribute - ie. A.Author or A.Editor. @spec@ can ha
 
 |object|StoreObject of the author|
 |ref|Ref of the author|
-|last|Last name (*required* if not loading from a StoreObject)|
+|cite|Exact citation string|
+|last|Last name|
 |first|First name|
 |middle|Middle name(s)|
 
-@last@, @first@, and @middle@ are ignored if there is an object or ref to link to.
+@last@, @first@, and @middle@ are ignored if there is an object or ref to link to, or if @cite@ is defined.
 */
 P.implementService("hres:author_citation:append_citation_to_object", function(mutableObject, desc, qual, spec) {
     var citation;
+    var object;
     if("object" in spec) {
-        citation = createValueFromObject(spec.object);
+        object = spec.object;
     } else if("ref" in spec) {
-        citation = createValueFromObject(spec.ref.load());
+        object = spec.ref.load();
+    }
+    if("cite" in spec) {
+        citation = createAuthorCitationValue({
+            cite: spec.cite,
+            ref: object ? object.ref.toString() : null
+        });
+    } else if(object !== undefined) {
+        citation = createValueFromObject(object);
     } else if("last" in spec) {
         citation = createAuthorCitationValue({
             cite: makeCiteFromNames(spec)

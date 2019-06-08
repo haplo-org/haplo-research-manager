@@ -10,21 +10,21 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
         O.service("hres:project_journal:dates", projectRef);
     var project = projectRef.load();
     var isPastProject = O.serviceMaybe("hres:project_journal:is_project_past", project);
-    var deployment = O.serviceMaybe("hres:simple_alerts:get_deployment_date");
+    var deployment = O.serviceMaybe("hres:project_journal:dates:get_alerts_deployment_date");
     var display = [];
     var lastPrefix;
     var displayAlerts = false;
     let displayAdminOptions = !!(O.currentUser.allowed(P.CanForceDatesUpdate) && options.displayAdminOptions);
     projectDates.datesForDisplay().forEach(function(date, i, dates) {
-        if(date.alerts && date.requiredMax) {
+        if(date.alerts && (date.requiredMax || date.scheduled)) {
             displayAlerts = true;
             var now = new XDate();
             var red;
             var amber;
             var beforeDeployment = 0;
+            var deadline = new XDate(date.requiredMax || date.scheduled);
             _.each(date.alerts, function(alert) {
                 var alertStart = new XDate(alert.requiredMin);
-                var deadline = new XDate(date.requiredMax);
                 if(!deployment || deployment.diffDays(alertStart) < 0) {
                     ++beforeDeployment;
                 }
@@ -36,14 +36,27 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
                 }
             });
             date.warning = red || amber;
-            if(isPastProject || date.actual) {
+            if(isPastProject || date.actual || O.serviceMaybe("hres:project_journal:dates:should_hide_deadline_warning", date.name)) {
                 date.warning = "";
             }
             if(beforeDeployment === date.alerts.length) {
-                date.warning = "beforeDeployment";
+                if(deployment.diffDays(deadline) >= 0) {
+                    if(date.warning === "amber") {
+                        date.warning = "amberBefore";
+                    } else if(date.warning === "red") {
+                        date.warning = "redBefore";
+                    } else {
+                        date.warning = "beforeDeployment";
+                    }
+                } else {
+                    date.warning = "beforeDeployment";
+                }
             }
+        } else if(date.alerts && date.actual) {
+            // Can't assume alerts are not calculated from an actual date e.g. workflow actuals can be imported.
+            date.alerts = [];
         }
-        if((!date.warning||date.warning === "beforeDeployment") && ("dates" in options) && options.dates.indexOf(date.name) === -1) { return; }
+        if((!date.warning||date.warning === "beforeDeployment"||date.warning === "amberBefore"||date.warning === "redBefore") && ("dates" in options) && options.dates.indexOf(date.name) === -1) { return; }
         var d = {
             date: date,
             displayName: date.displayName,
@@ -136,6 +149,7 @@ var editVariations = {
                 max: date.requiredIsInstantaneous ? undefined : dateForForm(date.requiredMax)
             };
         },
+        prepareFormInstance: function() {},
         // console.log(new Date(null)) prints null but on the same time 
         // new Date(null) === null is false and that breaks everything
         updateDate: function(document, date) {
@@ -162,11 +176,21 @@ var editVariations = {
             };
         },
         makeDocument: function(date) {
-            var mostRelevantDate = date.actual || date.scheduled;
+            var mostRelevantSavedDate = date.actual || date.scheduled;
             return {
-                required: !!mostRelevantDate,
-                date: dateForForm(mostRelevantDate)
+                date: dateForForm(mostRelevantSavedDate)
             };
+        },
+        prepareFormInstance: function(formInstance, date) {
+            var latestPreviousIndex = date.previousActuals.length-(!date.actual ? 1 : 2);
+            var mostRelevantSavedDate = date.actual || date.scheduled;
+            var externalData = {
+                latestPrevious: (date.previousActuals.length > latestPreviousIndex) ? date.previousActuals[latestPreviousIndex] : undefined
+            };
+            if(mostRelevantSavedDate) {
+                externalData.mostRelevantSavedDate = mostRelevantSavedDate;
+            }
+            formInstance.externalData(externalData);
         },
         updateDate: function(document, date) {
             if(document.date) {
@@ -186,6 +210,28 @@ var editVariations = {
             date.clearActual();
             date.clearScheduled();
         }
+    },
+    "previous-actual": {
+        actionName: "editPreviousActual",
+        form: P.form("edit-previous-actual", "form/edit-previous-actual.json"),
+        extras: function() {},
+        makeDocument: function() {
+            return {};
+        },
+        prepareFormInstance: function(formInstance, date) {
+            // TODO: use repeating section when std:validation:compare_to_date fails and shows the error message
+            // instead of clearing the document.
+            formInstance.externalData({
+                oldestPrevious: (1 > date.previousActuals.length ? date.actual : date.previousActuals[0])
+            });
+        },
+        updateDate: function(document, date) {
+            var newPrevious = _.map([document.newPrevious], function(date) {
+                return new Date(date);
+            });
+            date.unshiftActuals.apply(date, newPrevious);
+        },
+        clearDate: function() {}
     }
 };
 
@@ -218,7 +264,9 @@ P.respond("GET,POST", "/do/hres-project-journal/edit-date", [
 
         var extras = variation.extras(project, date, E);
         var document = variation.makeDocument(date);
-        var form = variation.form.handle(document, E.request);
+        var form = variation.form.instance(document);
+        variation.prepareFormInstance(form, date);
+        form.update(E.request);
         if(form.complete && (!extras || extras.formInstance.complete)) {
             if(E.request.parameters.clear) {
                 variation.clearDate(date);

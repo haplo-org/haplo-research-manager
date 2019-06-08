@@ -6,6 +6,7 @@
 
 
 P.implementService("std:action_panel:category:hres:person", function(display, builder) {
+    if(O.application.config["hres:researcher_profile:prevent_cv_download"]) { return; }
     if(P.typesWithProfile.get(display.object.firstType())) {
         builder.panel(1).link(800, "/do/researcher-profile/download-cv/"+
             display.object.ref, "Download CV");

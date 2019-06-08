@@ -14,13 +14,15 @@
 .hres_author_citation_container_lookup input {
     width: 270px !important;
 }
-.hres_author_citation_container_lookup div div { /* TODO: Make setting width of ref control less of a complete hack */
+/* TODO: Amend this and platform CSS to remove the need to override default object editor styles */
+.hres_author_citation_container_lookup div div {
     width: 290px !important;
 }
 .hres_author_citation_container_qualifiers .hres_author_citation_container_lookup input {
     width: 132px !important;
 }
-.hres_author_citation_container_qualifiers .hres_author_citation_container_lookup div div { /* TODO: Make setting width of ref control less of a complete hack */
+ /* TODO: Amend this and platform CSS to remove the need to override default object editor styles */
+.hres_author_citation_container_qualifiers .hres_author_citation_container_lookup div div {
     width: 152px !important;
 }
 .hres_author_citation_container_citation {

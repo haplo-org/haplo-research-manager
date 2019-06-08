@@ -14,7 +14,7 @@
 */
 
 var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculateOnly) {
-    var flags = impl.flags(ref.load());
+    var flags = [];
     var inputDates = {};
     _.each(impl.calculationDates, function(name) {
         var calculationDate = dates.date(name).getDatesForCalculations();
@@ -26,6 +26,7 @@ var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculate
             flags.push("has:"+name+":previous");
         }
     });
+    flags = flags.concat(impl.flags(ref.load(), inputDates));
 
     var suspensions = P.getSuspensionsForProject(ref);
 
@@ -78,6 +79,8 @@ var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState) {
             }
         });
     });
+
+    P.saveRecalculatedYearRecurringDates(project, dates);
 };
 
 P.implementService("hres:project_journal:dates:request_update", function(ref, dates) {

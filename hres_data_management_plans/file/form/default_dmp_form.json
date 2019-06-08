@@ -1,0 +1,56 @@
+{
+    "specificationVersion": 0,
+    "formId": "default_dmp_form",
+    "formTitle": "Data management plan",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "paragraph",
+            "path": "dataGenerated",
+            "label": "What data or other resources will be generated or reused in this research?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataOrganisation",
+            "label": "How will the data be organised and documented to ensure that it can be understood?  What additional information will someone else need to understand each data file?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataStorage",
+            "label": "Where will the data be stored and backed up during the project?  How will you check that the data can be restored from backups?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "ethicsIssues",
+            "label": "Does the data have any ethical, Data Protection or IPR issues?  How will these be managed?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataRetention",
+            "label": "Which data do you plan to keep and for how long?  Which will be deleted at the end of the project?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataPreservation",
+            "label": "How will the retained data be preserved?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataSharing",
+            "label": "Which data will be shared and how?",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "path": "dataSharingRestrictions",
+            "label": "Are any restrictions on data sharing required?",
+            "required": true
+        }
+    ]
+}

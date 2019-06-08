@@ -10,9 +10,16 @@
             "name": "__projectjournal_date_scheduled",
             "label": "Date",
             "required": {
-                "path": "required",
-                "operation": "===",
-                "value": true
+                "externalData": "mostRelevantSavedDate",
+                "operation": "defined"
+            },
+            "validationCustom": {
+                "name": "std:validation:compare_to_date",
+                "data": {
+                    "operation": ">",
+                    "externalData": "latestPrevious",
+                    "errorMessage": "Date must be after the latest previous date"
+                }
             }
         }
     ]

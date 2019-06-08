@@ -22,20 +22,20 @@ label hres:label:ref-unit-of-assessment:calculated
     category Restriction
 
 restriction hres:restriction:ref-unit-of-assessment:edit
-    title Calculated attribute REF Unit of Assesment
+    REMOVE title Calculated attribute REF Unit of Assesment
+    title Person REF Unit of Assesment
     label-unrestricted hres:label:ref-unit-of-assessment:edit
     restrict-type std:type:person
     attribute-read-only hres:attribute:ref-unit-of-assessment
 
-label hres:label:ref-unit-of-assessment:edit
-    title Allow edit on calculated attribute REF Unit of Assessment
+label hres:label:ref-unit-of-assessment:edit as EditREFUoA
+    REMOVE title Allow edit on calculated attribute REF Unit of Assessment
+    title Allow edit of REF Unit of Assessment
     category Restriction
 
 label std:label:archived as ARCHIVED
 
 # ---------------------------------------------------------------------------
-
-attribute std:attribute:configured-behaviour as ConfiguredBehaviour
 
 attribute hres:attribute:head as Head
 attribute hres:attribute:researcher as Researcher

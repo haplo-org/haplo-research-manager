@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
-// TODO is this in the right place?
+// TODO is this element defined in the right place?
 P.element("search_by_subject", "Find researchers by subject", function(L) {
     L.render({}, "subject_search_box");
 });

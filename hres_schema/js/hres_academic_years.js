@@ -38,6 +38,18 @@ Permissions
 Everyone has permission to read academic year objects, and they're created
 automatically when they're required.
 
+Services
+========
+
+h3(service). hres:academic_year:get_object_version
+
+Usage: \
+O.serviceMaybe("hres:academic_year:get_object_version, object, academicYear);
+
+Returns version of the given 'object' for specified 'academicYear' end date.
+If object doesn't exist at the given time service will return earlier version of it,
+in case if object was never modified it will return original object version.
+
 */
 
 
@@ -188,6 +200,15 @@ P.implementService("hres:academic_year:navigation_bar", function(currentYear) {
     return {year:year, deferred:P.template("academic-year-navigation").deferredRender(year)};
 });
 
+P.implementService("hres:academic_year:get_object_version", function(object, academicYear) {
+    let date = O.serviceMaybe("hres:academic_year:year_info", academicYear);
+    let obj = object.ref.loadVersionAtTime(date.end);
+
+    if(obj) { return obj; }
+    else if(object.history.length > 0) { return object.history[0]; }
+    else { return object; }
+});
+
 // ----------------------------------------------------------------------------------------------------------------
 // Basic reporting navigation
 
@@ -201,6 +222,63 @@ P.reporting.registerReportingFeature("hres:schema:academic_year_navigation", fun
             sq.and(function(ssq) {
                 ssq.where(fact, ">=", year.start).
                     where(fact, "<", year.end);
+            });
+        });
+    });
+    dashboard.navigationUI(function(dashboard) {
+        return P.template("academic-year-navigation").deferredRender(year);
+    });
+});
+
+P.reporting.registerReportingFeature("hres:schema:academic_quarter_navigation",
+    function(dashboard, currentYear, currentQuarter, fact) {
+        var year = currentYear ?
+            O.service("hres:academic_year:year_info", currentYear) :
+            O.service("hres:academic_year:for_date", new Date());
+        var startMonth = (currentQuarter-1)*3;
+        var endMonth = startMonth+3;
+        dashboard.filter(function(select) {
+            select.or(function(sq) {
+                if(!currentYear) { sq.where(fact, "=", null); }
+                sq.and(function(ssq) {
+                    ssq.where(fact, ">=", new XDate(year.start).addMonths(startMonth)).
+                       where(fact, "<", new XDate(year.start).addMonths(endMonth));
+                });
+            });
+        });
+
+        var previousYear = currentYear, nextYear = currentYear;
+        var nextQuarter = currentQuarter+1;
+        var previousQuarter = currentQuarter-1;
+        if(currentQuarter === 4) {
+            nextYear = year.next.ref;
+            nextQuarter = 1;
+        } else if (currentQuarter === 1) {
+            previousYear = year.previous.ref;
+            previousQuarter = 4;
+        }
+        dashboard.navigationUI(function(dashboard) {
+            return P.template("quarter-navigation").deferredRender({
+                year: year.title,
+                quarter: currentQuarter,
+                previous: previousQuarter,
+                previousYear: previousYear,
+                next: nextQuarter,
+                nextYear: nextYear
+            });
+        });
+    }
+);
+
+P.reporting.registerReportingFeature("hres:schema:academic_year_navigation_for_ref", function(dashboard, currentYear, fact) {
+    var year = currentYear ?
+        O.service("hres:academic_year:year_info", currentYear) :
+        O.service("hres:academic_year:for_date", new Date());
+
+    dashboard.filter(function(select) {
+        select.or(function(sq) {
+            sq.and(function(ssq) {
+                ssq.where(fact, "=", year.ref);
             });
         });
     });

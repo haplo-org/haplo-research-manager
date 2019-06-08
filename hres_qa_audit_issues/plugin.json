@@ -1,0 +1,12 @@
+{
+  "pluginName": "hres_qa_audit_issues",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "QA Audit Issues: Haplo Research Manager",
+  "displayDescription": "Issues identification for Haplo Research Manager",
+  "installSecret": "c93e1477f10a410942c4fa139b221a908dd25213",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_qa_audit_issues.js"
+    ]
+}

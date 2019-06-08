@@ -2,9 +2,6 @@
 <link href=url(staticDirectoryUrl "/publisher-view.css") rel="stylesheet">
 scriptTag(staticDirectoryUrl "/publisher-view.js")
 
-
-<h2> pageTitle </h2>
-
 <div id="deadline-notice" style=unless(hasDeadline) { "display:none;" }>
     <div id="deadline-notice-inner">
         within(notice) {

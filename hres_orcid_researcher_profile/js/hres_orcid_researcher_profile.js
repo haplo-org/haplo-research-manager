@@ -42,3 +42,14 @@ P.implementService("std:reporting:collection_category:hres:people:get_facts_for_
         row.orcid = P.ORCID.asString(orcid);
     }
 });
+
+// --------------------------------------------------------------------------
+
+P.implementService("hres:orcid:match-to-existing-record-in-list", function(object, list) {
+    let orcid = object.first(A.ORCID);
+    if(orcid) {
+        return _.find(list, (listObject) => {
+            return listObject.has(orcid, A.ORCID);
+        });
+    }
+});

@@ -8,6 +8,7 @@
 P.implementService("std:reporting:collection_category:hres:people:setup", function(collection) {
     collection.
         indexedFact("nameSortAs", "text", "Sorting by name").
+        fact("contactCategory", "ref", NAME("Contact category")).
         indexedFact("faculty", "ref", NAME('Faculty')).
         indexedFact("department", "ref", NAME('Department')).   // facts included regardless of institute depth for consistency
         indexedFact("school", "ref", NAME('School'));
@@ -22,6 +23,7 @@ P.implementService("std:reporting:collection_category:hres:people:get_facts_for_
     } else if(title) {
         row.nameSortAs = title.toString().toLowerCase();
     }
+    row.contactCategory = object.first(A.Type);
     var institute = object.first(A.ResearchInstitute), safety = 256;
     while(institute && (safety--) > 0) {
         var i = institute.load();
@@ -67,7 +69,7 @@ P.reporting.registerReportingFeature("hres:person_name_column", function(dashboa
     dashboard.
         columns(10, dashboard.isExporting ? PERSON_EXPORT_COLUMNS : makePersonDashboardColumns(spec || {})).
         order(spec.personFact ? [spec.personFact, true] : "nameSortAs").
-        use("std:row_text_filter", {facts:["ref"], placeholder:"Search by name"}).
+        use("std:row_text_filter", {facts:[spec.personFact || "ref"], placeholder:"Search by name"}).
         use("std:row_object_filter", {fact:"faculty", objects:T.Faculty});
     if(P.INSTITUTE_DEPTH > 1) {
         dashboard.use("std:row_object_filter", {fact:"department", objects:T.Department});

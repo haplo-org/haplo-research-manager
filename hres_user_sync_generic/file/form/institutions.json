@@ -1,0 +1,24 @@
+{
+  "specificationVersion": 0,
+    "formId": "institutions",
+    "formTitle": "Institutional structure",
+    "elements": [
+        {
+            "type": "text",
+            "path": "prefix",
+            "label": "Application prefix",
+            "explanation": "The short prefix used in API codes for this application.",
+            "validationRegExp": "^[a-z]{1,16}$",
+            "validationFailureMessage": "a-z only, max 16 characters",
+            "required": true
+        },
+        {
+            "type": "paragraph",
+            "rows": 6,
+            "path": "structure",
+            "label": "Institutional structure",
+            "explanation": "Use * to denote hierarchy.",
+            "required": true
+        }
+    ]
+}

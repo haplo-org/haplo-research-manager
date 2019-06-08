@@ -86,7 +86,7 @@ var HRES_ENTITIES = {
 
 var HRES_SHARED_ROLES = [];
 
-var _hresFindRoleInResearchInstitute = function(desc, context) {
+var _hresFindRoleInResearchInstitute = function(desc) {
     var insts = P.INSTITUTE_PROPERTIES_IN_ORDER;
     for(var x = insts.length - 1; x >= 0; --x) { // reverse order, search from lowest
         var property = insts[x];
@@ -95,12 +95,12 @@ var _hresFindRoleInResearchInstitute = function(desc, context) {
         if(institute) {
             var values = institute.every(desc);
             if(values.length) {
-                return (context === "list") ? values : values[0];
+                return values;
             }
         }
     }
     // Not found
-    return (context === "list") ? [] : undefined;
+    return [];
 };
 
 var _hresMakeCommitteeEntityGetter = function(type, instituteEntities) {
@@ -282,6 +282,19 @@ var isMissingEntityAllowed = function(M, entity) {
 
 // TODO: Cache workflowHasMissingEntities if it's called in more than one place
 var workflowHasMissingEntities = function(M) {
+/*HaploDoc
+node: /hres_workflow
+sort: 300
+--
+
+h3(config). hres:schema:workflow:required_entities:enable
+
+Boolean. Set to true to have tasks sent to the Check missing entities group when a ref cannot be \
+found for some of the @actionableBy@ entities in the state machine so they can debug the issue. \
+In such cases a message saying that there is or is going to routing issues and that the \
+administrators are resolving the issue replaces the action panel of the workflow. By default IT \
+Support group is a member of Check missing entities group.
+*/
     if(!O.application.config["hres:schema:workflow:required_entities:enable"]) { return false; }
     var requiredMaybeProps = requiredEntitiesMaybeProperties[M.workUnit.workType];
     if(requiredMaybeProps) {

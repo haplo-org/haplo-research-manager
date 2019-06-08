@@ -30,6 +30,7 @@ var NAMES = {
     "Committee":                ["getTypeInfo", T, "Committee"],
     "Committee representative": ["getAttributeInfo", A, "CommitteeRepresentative"],
     "Research Administrator":   ["getAttributeInfo", A, "ResearchAdministrator"],
+    "Examiner":                 ["getAttributeInfo", A, "Examiner"],
     "Supervisor":               ["getAttributeInfo", A, "Supervisor"],
     "Assessor":                 ["getAttributeInfo", A, "Assessor"]
 };
@@ -64,6 +65,10 @@ var pluralise = function(name) {
     var match = name.match(/^(.+)y$/);
     if(match) {
         return match[1]+'ies';
+    }
+    var match2 = name.match(/^(.+)( of .+)$/);
+    if(match2) {
+        return pluralise(match2[1])+match2[2];
     }
     if(/ff$/.test(name)) { return name; }
     return name+'s';

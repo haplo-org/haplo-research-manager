@@ -7,7 +7,6 @@
 
 P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
     type(T.Person, {
-        selfLabelling: true,
         labels: [Label.ActivityIdentity],
         labelWith: [A.ResearchInstitute]
     });

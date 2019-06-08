@@ -130,5 +130,13 @@ type hres:type:course-module as CourseModule
 
 group hres:group:taught-students as TaughtStudents
     title: Taught Students
+    member hres:group:undergraduate-students
+    member hres:group:postgraduate-taught-students
+
+group hres:group:undergraduate-students as UndergraduateStudents
+    title: Undergraduate Students
+
+group hres:group:postgraduate-taught-students as PostgraduateTaughtStudents
+    title: Postgraduate Taught Students
 
 group std:group:everyone as Everyone

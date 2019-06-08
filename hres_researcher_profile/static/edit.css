@@ -1,24 +1,26 @@
 /* Haplo Research Manager                            https://haplo.org
- * (c) Haplo Services Ltd 2006 - 2017   https://www.haplo-services.com
+ * (c) Haplo Services Ltd 2006 - 2019            https://www.haplo.com
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+/* Haplo Research Manager                            https://haplo.org
+ * (c) Haplo Services Ltd 2006 - 2017   https://www.haplo-services.com
+ * This Source Code form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-.profile-section {
-    position: relative;
-}
-
-.profile-section:hover h2 {
-    font-weight: bold;
-}
 
 .profile-edit-button {
-    position: absolute;
-    top: 0;
-    right: 0;
+    display: inline-block;
+    margin-right: 4px;
 }
 
 .profile-section-display {
     display: none;
 }
+
+.profile-show-hide {
+    margin-left: 60px;
+}
+

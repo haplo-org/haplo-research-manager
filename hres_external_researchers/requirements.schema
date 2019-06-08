@@ -15,5 +15,6 @@ email-template hres:email-template:external-user-email
 group std:group:administrators as Administrators
 
 group hres:group:external-researcher-account as ExternalResearcherAccount
-    title: External Researcher Account
+    FORCE-REMOVE title: External Researcher Account
+    title: External Researcher (Haplo Managed Account)
 

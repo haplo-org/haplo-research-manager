@@ -9,8 +9,10 @@
     
     $(document).ready(function() {
        
-        $('.profile-show-hide').on('click', function() {
-            $(this).siblings('.profile-section-display').toggle();
+        $(document).on('click', '.profile-show-hide', function(evt) {
+            evt.preventDefault();
+            $(this).hide();
+            $(this).siblings('.profile-section-display').show();
         });
         
     });

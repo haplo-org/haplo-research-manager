@@ -1,0 +1,26 @@
+pageTitle("Generate institutional structure schema requirements")
+backLink("/do/haplo-data-import/admin")
+
+<form method="POST"> std:form:token()
+  std:form(form)
+  <p> <input type="submit" value=if(output) { "Update requirements" } else {"Generate requirements"}> </p>
+</form>
+
+if(output) {
+  <h2> "Generated requirements" </h2>
+  <p> "These requirements can be included in the application " <tt> "requirements.schema" </tt> " file, or manually applied to an application with System Management &raquo; Tools &raquo; Apply requirements." </p>
+  <textarea rows="20" style="width:400px">
+    output
+  </textarea>
+} else {
+  <p style="margin:24px 0">
+    haplo:data-import-framework:documentation("/app/research/institution-structure" "Documentation")
+  </p>
+  <h2> "Example structure" </h2>
+  <pre>
+"Example University
+* Example Faculty
+* * Department of Example Studies
+* * Another department"
+  </pre>
+}

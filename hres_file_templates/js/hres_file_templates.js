@@ -73,7 +73,7 @@ P.respond("GET,POST", "/do/hres-file-templates/edit", [
 });
 
 /*HaploDoc
-node: /hres_file_templates/hres_file_templates
+node: /hres_file_templates/templates
 title: Get template service
 sort: 10
 --

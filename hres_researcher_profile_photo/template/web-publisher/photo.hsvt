@@ -1,4 +1,8 @@
 
-<div class="haplo-repository-researcher-profile-photo">
-    <img src=file alt=altName>    
-</div>
+// WARNING: REPLACEABLE =====================================================
+
+if(file) {
+  render(file)
+} else {
+   <i class="fas fa-user fa-5x mr-3"></i>
+}

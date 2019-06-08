@@ -13,6 +13,7 @@
     ],
   "load": [
       "js/hres_date_calculation.js",
-      "js/hres_date_calculation_modifications.js"
+      "js/hres_date_calculation_modifications.js",
+      "js/hres_date_calculation_recur.js"
     ]
 }

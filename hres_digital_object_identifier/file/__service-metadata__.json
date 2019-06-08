@@ -1,7 +1,8 @@
 {
     "hres:doi:match-to-existing-item-in-list": {
         "statements": [
-            "hres:repository:match-item-to-existing-in-list"
+            "conforms-to hres:repository:match-item-to-existing-in-list",
+            "list-of repository-items"
         ]
     }
 }

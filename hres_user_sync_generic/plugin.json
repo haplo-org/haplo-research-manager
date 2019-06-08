@@ -1,0 +1,18 @@
+{
+  "pluginName": "hres_user_sync_generic",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo Research Manager Generic User Sync",
+  "displayDescription": "Generic user sync support for Haplo Research Manager applications",
+  "apiVersion": 4,
+  "depend": [
+      "hres_schema",
+      "haplo_user_sync_generic"
+    ],
+  "load": [
+      "js/hres_user_sync_generic.js"
+    ],
+  "respond": [
+      "/do/hres-user-sync-generic"
+    ]
+}

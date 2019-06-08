@@ -23,13 +23,18 @@ if(O.featureImplemented("std:web-publisher")) {
                         }
                     }));
                 }
-                return P.template("web-publisher/profile").deferredRender({
-                    sections: _.map(sections, function(section) {
-                        return {
+                var displaySections = [];
+                _.each(sections, function(section) {
+                    var display = section.deferredRenderPublished(profile);
+                    if(display) {
+                        displaySections.push({
                             section: section,
-                            display: section.deferredRenderPublished(profile)
-                        };
-                    })
+                            display: display
+                        });
+                    }
+                });
+                return P.template("web-publisher/profile").deferredRender({
+                    sections: displaySections
                 });
             }
         }

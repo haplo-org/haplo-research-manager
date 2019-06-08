@@ -10,7 +10,9 @@ title: Project dates integration
 sort: 1
 --
 
-Project dates are integrated into the project journal because they're closely related, and need to be displayed in the same UI.
+Project dates are integrated into the project journal because they're closely related, and need to be displayed in the same UI. \
+This integration should be used only if the date in question is expected to happen for every project of the same type, or if the \
+date has a deadline.
 
 Look at comments next to the code for details.
 
@@ -18,7 +20,7 @@ Look at comments next to the code for details.
 
 Update the list entries, then call @requestUpdatesThenCommitIfChanged()@ to commit, which will ask other plugins to recalculate other dates.
 
-Use the @hresProjectDates@ feture to register a date, eg:
+Use the @hresProjectDates@ feature to register a date, eg:
 
 <pre>
 P.hresProjectDates.register({
@@ -90,7 +92,7 @@ var registerDateDefinition = P.registerDateDefinition = function(defn) {
     dateDefinitions = P.dateDefinitions = d;
     P.dateDefinitionsKind = dKind;
     
-    ['editRequired', 'editScheduledActual'].forEach(function(editProperty) {
+    ['editRequired', 'editScheduledActual', 'editPreviousActual'].forEach(function(editProperty) {
         var action = O.action(getEditActionApiCode(editProperty, defn.name)).
             title('Can edit the '+defn.displayName+' project date - '+editProperty+' property').
             allow('hres:project_journal:action', "hres_project_journal:dates:edit_all_dates");
@@ -428,6 +430,7 @@ ProjectDate.prototype.setActual = function(date) {
 ProjectDate.prototype.clearActual = function() {
     this._clearPointInTime("actual");
     if(this.changed) {
+        this.actualIndex = 0;
         var d = this;
         this.$list._pushCommitFn(function() {
             O.serviceMaybe("hres:project_journal:save_all_of_kind", {
@@ -460,6 +463,40 @@ ProjectDate.prototype.nextOccurrence = function(date) {
             deleteAll();
     });
     return this;
+};
+
+ProjectDate.prototype.unshiftActuals = function() {
+    var dates = _.chain(arguments).
+        compact().
+        uniq(function(date) { return date.getTime(); }).
+        sortBy(function(date) { return date.getTime(); }).
+        value();
+    if(dates.length < 1) { return this; } // noop
+    this.changed = true;
+    this.actualIndex += dates.length;
+    this.previousActuals.unshift.apply(this.previousActuals,  dates);
+    var d = this;
+    this.$list._pushCommitFn(function() {
+        _.each(P.db.journal.select().
+            order("datetime").
+            where("project","=",d.$list.ref).
+            where("kind","=","PDATE:"+d.name), function(row) {
+                var index = parseInt(row.identifier,10);
+                if((index < 0) || (index > 1000)) { throw new Error("Unexpected index in implementation"); }
+                row.identifier = ""+(index+dates.length);
+                row.save();
+        });
+        _.each(dates, function(date, index) {
+            O.service("hres:project_journal:save", {
+                project: d.$list.ref,
+                kind: 'PDATE:'+d.name,
+                implementation: 'PDATE',
+                datetime: date,
+                user: O.currentUser,        // TODO: Should this really just use the current user?
+                identifier: ""+index
+            });
+        });
+    });
 };
 
 // Input to date calculations, or undefined if none available
@@ -495,9 +532,9 @@ ProjectDate.prototype.__defineGetter__("hasDateForCalculations", function() {
 });
 
 ProjectDate.prototype.__defineGetter__("previousActuals", function() {
-    if(this.actualIndex === 0) { return []; }   // don't do a database lookup
     if(this.$previousActuals) { return this.$previousActuals; }
-    var previous = [];
+    var previous = this.$previousActuals = [];
+    if(this.actualIndex === 0) { return previous; }   // don't do a database lookup
     var date = this;
     _.each(P.db.journal.select().
         order("datetime").
@@ -507,7 +544,6 @@ ProjectDate.prototype.__defineGetter__("previousActuals", function() {
             if((index < 0) || (index > 1000)) { throw new Error("Unexpected index in implementation"); }
             previous[index] = row.datetime;
     });
-    this.$previousActuals = previous;
     return previous;
 });
 
@@ -531,6 +567,8 @@ ProjectDate.prototype.__defineGetter__("requiredIsInstantaneous", function() {
 ProjectDate.prototype.__defineGetter__("isRequiredEditableByCurrentUser", makeEditableGetter('editRequired'));
 
 ProjectDate.prototype.__defineGetter__("isScheduledActualEditableByCurrentUser", makeEditableGetter('editScheduledActual'));
+
+ProjectDate.prototype.__defineGetter__("isPreviousActualEditableByCurrentUser", makeEditableGetter('editPreviousActual'));
 
 ProjectDate.prototype.__defineGetter__("displayName", function() {
     var n = this.$displayName;
@@ -583,11 +621,17 @@ ProjectDate.prototype._clearPointInTime = function(property) {
 node: /hres_project_journal/project_dates_alerts
 sort: 2
 --
-h3(service). hres:simple_alerts:get_deployment_date
+h3(service). hres:project_journal:dates:get_alerts_deployment_date
 
 *REQUIRED:* Provide an @XDate@ of the date of using alerts in production.
 
 With it, it is possible to select alerts that may affect users.
+
+h3(service). hres:project_journal:dates:should_hide_deadline_warning
+
+Implement this service to return a boolean if all standard warnings (e.g. project date page's traffic lights) for a deadline should be switched off.
+
+The service is called with the deadline date's name as the only argument.
 
 h3(service). hres:project_journal:dates:get_past_alerts_for_project
 
@@ -606,14 +650,15 @@ P.implementService("hres:project_journal:dates:get_past_alerts_for_project", fun
         order("updated",true).
         limit(1);
     var pastAlerts = [];
-    var deployment = O.serviceMaybe("hres:simple_alerts:get_deployment_date");
+    var deployment = O.serviceMaybe("hres:project_journal:dates:get_alerts_deployment_date");
     if(d.length && deployment) {
         var alerts =  createAlertsFromRow(d[0]);
         var today = new XDate().clearTime();
         _.each(alerts, function(alert) {
-            if(alert.date.requiredMin && !alert.deadlineActual) {
+            if(alert.date.requiredMin && alert.deadline && !alert.deadlineActual) {
                 var alertDate = new XDate(alert.date.requiredMin);
-                if(today.diffDays(alertDate) <= 0 && deployment.diffDays(alertDate) > 0) {
+                var deadline = new XDate(alert.deadline);
+                if(today.diffDays(alertDate) <= 0 && deployment.diffDays(deadline) > 0) {
                     pastAlerts.push(alert);
                 }
             }
@@ -667,8 +712,10 @@ An alert is an object with the properties:
 |_. Property |_. Value |
 | project | @StoreObject@ the alert is defined on. |
 | date | @ProjectDate@ of the alert. |
+| deadlineName | The expected name of the alert's deadline date. |
 | deadline | @requiredMax@ of the alert's deadline date if found or @null@. |
 | deadlineActual | @actual@ of the alert's deadline date if found or @null@. |
+| deadlineDisplayName | @displayName@ of the alert's deadline date if found or @null@. |
 
 */
 var createAlertsFromRow = function(row) {
@@ -681,13 +728,29 @@ var createAlertsFromRow = function(row) {
             alerts.push({
                 project: row.project.load(),
                 date: date,
+                deadlineName: deadlineName,
                 deadline: deadlineDate ? deadlineDate.requiredMax : null,
-                deadlineActual: deadlineDate ? deadlineDate.actual : null
+                deadlineActual: deadlineDate ? deadlineDate.actual : null,
+                deadlineDisplayName: deadlineDate ? deadlineDate.displayName : null
             });
         }
     });
     return alerts;
 };
+
+// --------------------------------------------------------------------------
+
+/*HaploDoc
+node: /hres_project_journal/project_dates
+sort: 50
+--
+h3(service). @hres:project_journal:dates@
+
+*REQUIRED:* Provide the ref of the project you want to get dates for. 
+
+Returns a ProjectDateList object for the most recent calculation of dates.
+
+*/
 
 P.implementService("hres:project_journal:dates", function(projectRef) {
     var d = P.db.dates.select().
@@ -695,6 +758,41 @@ P.implementService("hres:project_journal:dates", function(projectRef) {
         order("updated",true).
         limit(1);
     return new ProjectDateList(projectRef, d.length ? d[0].dates : {version:0,dates:[]});
+});
+
+// --------------------------------------------------------------------------
+
+/*HaploDoc
+node: /hres_project_journal/project_dates
+sort: 51
+--
+h3(service). @hres:project_journal:dates:get_date_updates_in_time_range@
+
+Provide:
+*REQUIRED:* @projectRef@ The ref of the project you want to get dates for. 
+*REQUIRED:* @start@ The start of the period you want dates for
+*REQUIRED:* @end@ The end of the period you want dates for 
+
+Returns an array of objects containing properties:
+@dates@ A ProjectDateList object for a given version of the project dates
+@updated@ When the calculation for this set of project dates happened
+
+*/
+
+P.implementService("hres:project_journal:dates:get_date_updates_in_time_range", function(projectRef, start, end) {
+    var d = P.db.dates.select().
+        where("project","=",projectRef).
+        where("updated",">=",start).
+        where("updated","<=",end).
+        order("updated");
+    var dateLists = _.map(d, function(dates) {
+        return {
+            dates: new ProjectDateList(projectRef, dates.dates),
+            updated: dates.updated
+        };
+    });
+    return dateLists;
+
 });
 
 P.implementService("hres:project_journal:dates:scheduled_data:get", function(projectRef, name) {
@@ -717,4 +815,37 @@ P.implementService("hres:project_journal:dates:scheduled_data:set", function(pro
 
 P.implementService("hres_project_journal:dates:all_definitions", function() {
     return dateDefinitionsSorted;
+});
+
+P.implementService("haplo:qa-audit:gather-information", function(audit) {
+    audit.addInformation("dateDefinitionsSorted", "All sorted project date definitions", dateDefinitionsSorted);
+    var alertDefs = _.filter(dateDefinitionsSorted, function(def) {
+        return def.name.indexOf(":alert") !== -1;
+    });
+    var alertDateDefinitionsSorted = _.map(alertDefs, function(def) {
+        var deadlineName = def.name.slice(0, def.name.indexOf(":alert"));
+        var deadlineDef = _.find(dateDefinitionsSorted, function(d) {
+            return d.name === deadlineName;
+        });
+        if(deadlineDef) {
+            def.deadlineDisplayName = deadlineDef.displayName;
+        }
+        return def;
+    });
+    audit.addInformation("alertDateDefinitionsSorted", "All sorted alert project date definitions", alertDateDefinitionsSorted);
+});
+
+P.implementService("haplo:qa-audit:identify-issues", function(audit) {
+    var dateDefinitionsSorted = audit.getInformation("dateDefinitionsSorted");
+    var alertDefinitionsSorted = audit.getInformation("alertDateDefinitionsSorted");
+    var alertsWithoutDeadline = _.filter(alertDefinitionsSorted, function(def) {
+        return !("deadlineDisplayName" in def);
+    });
+    _.each(alertsWithoutDeadline, function(def) {
+        audit.issue(
+            "hres-project-journal/dates/alert-missing-deadline-definition/"+def.name,
+            "Alert is missing associated deadline definition",
+            "For all alerts a date with the name of the alert without the alertXXX suffix must be defined."
+        );
+    });
 });

@@ -22,16 +22,6 @@ P.respond("GET,POST", "/do/hres-ref/units-of-assessment", [
 });
 
 // -------------------------------------------------------------
-// TODO: Should this be on all list types?
-// TODO: Replace with restriction
-
-P.hook('hObjectRender', function(response, object) {
-    if(object.first(A.ConfiguredBehaviour)) {
-        response.hideAttributes.push(A.ConfiguredBehaviour);
-    }
-});
-
-// -------------------------------------------------------------
 
 P.hook('hComputeAttributes', function(response, object) {
     if(object.isKindOfTypeAnnotated('hres:annotation:ref-unit-of-assessment:copy-from-researcher')) {

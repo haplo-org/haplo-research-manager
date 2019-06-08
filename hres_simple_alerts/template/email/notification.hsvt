@@ -1,0 +1,21 @@
+#option:no-tag-attribute-quote-minimisation
+emailSubject(project.title ": " if(reminder.deadline) { reminder.deadlineDisplayName } else { reminder.date.displayName })
+<p> "Reminder of upcoming deadlines:" </p>
+
+within(reminder) {
+    <p> 
+        if(deadline) {
+            deadlineDisplayName
+        } else {
+            date.displayName
+        }
+        <br> description
+        if(deadline) {
+            <br> "Deadline: " <b> std:date(deadline) </b>
+        }
+        if(additionalRender) { render(additionalRender) }
+    </p>
+}
+
+
+<p class="button"><a href=[alertsUrl]> "View deadlines - " project.title </a></p>

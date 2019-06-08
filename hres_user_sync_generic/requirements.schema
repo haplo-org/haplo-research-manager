@@ -1,0 +1,8 @@
+
+type hres:type:person:researcher as Researcher
+type hres:type:person:researcher-past as ResearcherPast
+
+type hres:type:person:staff as Staff
+type hres:type:person:staff-past as StaffPast
+
+type hres:type:person:external-researcher as ExternalResearcher

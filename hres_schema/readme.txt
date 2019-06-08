@@ -30,8 +30,15 @@ Example:
 
 h3(feature). hres:schema:calendar_quarter_navigation
 
-Use this feature on a dashboard to enable quarter navigation. Quarters are 1, 2, 3, and 4, and should probably be passed through the url. Parameters are currentYear, currentQuarter, fact, startDate and endDate. Don't use startDate and endDate. 
+Use this feature on a dashboard to enable quarter navigation. Quarters are 1, 2, 3, and 4, and should be passed through the url. Q1 is January to March. Parameters are currentYear, currentQuarter, fact, startDate and endDate. Don't use startDate and endDate. 
 
 Example:
 <pre>dashboard.use("hres:schema:calendar_quarter_navigation", 2018, 1, "year");</pre>
 
+
+h3(feature). hres:schema:academic_quarter_navigation
+
+Use this feature on a dashboard to enable quarter navigation where quarters line up with the academic year. Quarters are 1, 2, 3, and 4, and should be passed through the url. Q1 is August to October. Parameters are currentYear, currentQuarter, fact, startDate and endDate. Don't use startDate and endDate. 
+
+Example:
+<pre>dashboard.use("hres:schema:academic_quarter_navigation", [Ref of relevant Academic year], 1, "year");</pre>

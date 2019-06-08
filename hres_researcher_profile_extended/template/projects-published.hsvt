@@ -1,4 +1,8 @@
 
-each(projects) {
-    std:object:title(.)
-}
+<ul class="list-group list-group-flush">
+    each(projects) {
+        <li class="list-group-item border-light">
+            std:object:title(.)
+        </li>
+    }
+</ul>

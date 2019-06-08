@@ -1,0 +1,7 @@
+
+attribute hres:attribute:handle as Handle
+    title: Handle
+    search-name: handle
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:hdl

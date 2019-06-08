@@ -6,6 +6,8 @@
   "displayDescription": "Photo section for researcher profile",
   "installSecret": "c1e7a1c700465e3f37e37735227b06acc9164b58",
   "apiVersion": 4,
+  "loadPriority": 2201,
+  "privilegesRequired": ["pDatabase"],
   "depend": [
       "hres_researcher_profile",
       "std_reporting"

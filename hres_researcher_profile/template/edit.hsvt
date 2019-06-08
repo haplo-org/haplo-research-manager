@@ -6,12 +6,14 @@ std:plugin:resources("edit.js" "edit.css")
 each(sections) {
     if(editLink) {
         <div class="profile-section">
-            <h2> section.title </h2>
-            <form method="GET" action=editLink  class="profile-edit-button">
-                <input type="submit" value="Edit">
-            </form>
+            <h2> 
+                <form method="GET" action=editLink class="profile-edit-button">
+                  <input type="submit" value="Edit">
+                </form>
+                section.title
+            </h2>
             if(display) {
-                <a class="profile-show-hide" href="#"> "Show/Hide" </a>
+                <a class="profile-show-hide" href="#"> "show..." </a>
             }
             <div class="profile-section-display">
                 render(display)

@@ -161,6 +161,10 @@ SectionForm.prototype.deferredRenderForExport = function(profile) {
 };
 
 SectionForm.prototype.deferredRenderPublished = function(profile) {
+    // Publisher is always special, so this can be overridden.
+    if(this._delegate.deferredRenderPublished) {
+        return this._delegate.deferredRenderPublished(profile);
+    }
     return this.deferredRender(profile);    // exactly the same rendering
 };
 

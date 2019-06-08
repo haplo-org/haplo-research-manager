@@ -1,0 +1,13 @@
+{
+  "pluginName": "hres_handle_identifier",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Handle Identifier",
+  "displayDescription": "Support for Handle system of identification",
+  "installSecret": "0d224e141bf0c65921f65286841976242c509b81",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_handle_identifier.js"
+    ],
+  "respond": ["/do/hres-handle-identifier"]
+}

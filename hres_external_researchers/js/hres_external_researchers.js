@@ -91,7 +91,6 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
         try {
             user = O.setup.createUser(userDetails);
         } catch (exception) {
-            //TODO: Change regex in haplo/lib/common/kextend_rails_and_ruby.rb to a better one
             E.response.redirect("/do/hres-external-researchers/bad-email/" + userDetails.ref.toString());
             return;
         }
@@ -223,11 +222,15 @@ P.hook("hPostObjectEdit", function(response, object, previous) {
             response.redirectPath = "/do/hres-external-researchers/email-address-in-use/"+
                 object.ref.toString();
         } else {
-            user.setDetails({
-                nameFirst: user.nameFirst,
-                nameLast: user.nameLast,
-                email: email.s()
-            });
+            try {
+                user.setDetails({
+                    nameFirst: user.nameFirst,
+                    nameLast: user.nameLast,
+                    email: email.s()
+                });
+            } catch (exception) {
+                response.redirectPath = "/do/hres-external-researchers/bad-email/"+object.ref;
+            }
         }
     }
 });

@@ -4,6 +4,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+var getArrayOfKeysForObject = function(object, keyName) {
+    var array = [];
+    var obj = {};
+
+    var res = O.query().link([T.TaughtProject, T.StudentProject], A.Type).
+            or(function(sq) {
+                sq.link(object.ref, A.TaughtStudent).link(object.ref, A.Researcher);
+            }).
+            sortBy("date").
+            execute();
+
+    if(res.length !== 0) {
+        obj = {};
+        let project = res[0];
+        let aYear = project.first(A.AcademicYear);
+        obj[keyName] = aYear;
+        array.push(obj);
+    }
+
+    return array;
+};
 
 P.implementService("std:reporting:discover_collections", function(discover) {
     discover("taught_students", "Taught students", ["hres:people"]);
@@ -12,10 +33,12 @@ P.implementService("std:reporting:discover_collections", function(discover) {
 P.implementService("std:reporting:collection:taught_students:setup", function(collection) {
     collection.
         currentObjectsOfType(T.TaughtStudent).
+        fact("academicYear",        "ref",          "Academic year").
         fact("isPastStudent",       "boolean",      "Past student").
         fact("project",             "ref",          "Project").
         fact("supervisor",          "ref",          "Supervisor").
-        fact("moduleCode",          "text",         "Module");
+        fact("moduleCode",          "text",         "Module").
+        useFactAsAdditionalKey("academicYear");
     collection.filter(collection.FILTER_ALL, function(select) {
         select.
             where("isPastStudent", "=", false).
@@ -33,23 +56,30 @@ P.implementService("std:reporting:collection:taught_students:get_facts_for_objec
             execute();
         if(!res.length) { return; }
         
-        var project = res[0];
-        row.project = project.ref;
-        
-        var supervisor = project.first(A.Supervisor);
-        row.supervisor = supervisor ? supervisor : null;
-        
-        var module = project.first(A.CourseModule);
-        var moduleCode = module ? module.load().first(A.Code).s() : null;
-        row.moduleCode = moduleCode ? moduleCode : null;
-        
-        row.isPastStudent = object.isKindOf(T.PostgraduateTaughtStudentPast) ||
-                            object.isKindOf(T.UndergraduateStudentPast);
+        var project = O.serviceMaybe("hres:academic_year:get_object_version", res[0], row.academicYear);
+        var aYear = project.first(A.AcademicYear);
+        if(aYear == row.academicYear) {
+            row.project = project.ref;
+            
+            var supervisor = project.first(A.Supervisor);
+            row.supervisor = supervisor ? supervisor : null;
+            
+            var module = project.first(A.CourseModule);
+            var moduleCode = module ? module.load().first(A.Code).s() : null;
+            row.moduleCode = moduleCode ? moduleCode : null;
+            
+            row.isPastStudent = object.isKindOf(T.PostgraduateTaughtStudentPast) ||
+                                object.isKindOf(T.UndergraduateStudentPast);
+        }   
     });
 
 P.implementService("std:reporting:gather_collection_update_rules", function(rule) {
     rule("taught_students",     T.TaughtProject,     A.TaughtStudent);
     rule("taught_students",     T.StudentProject,    A.TaughtStudent);
+});
+
+P.implementService("std:reporting:collection:taught_students:get_additional_keys_for_object", function(object, collection) {
+    return getArrayOfKeysForObject(object, "academicYear");
 });
 
 P.hook('hPostObjectChange', function(response, object, operation) {
