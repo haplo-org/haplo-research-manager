@@ -6,6 +6,7 @@
   "displayDescription": "Support for Handle system of identification",
   "installSecret": "0d224e141bf0c65921f65286841976242c509b81",
   "apiVersion": 4,
+  "loadPriority": 5100,
   "load": [
       "js/hres_handle_identifier.js"
     ],

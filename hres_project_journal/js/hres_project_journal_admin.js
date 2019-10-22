@@ -20,7 +20,7 @@ P.respond("GET,POST", "/do/hres-project-journal/dates/force-update", [
 ], function(E, project, deleteState) {
     // Should only be visible to Haplo
     if(!O.currentUser.isMemberOf(Group.Administrators)) { O.stop("Not permitted"); }
-    
+
     if(E.request.method === "POST") {
         var list = O.service("hres:project_journal:dates", project.ref);
         var service = !!deleteState ? 
@@ -56,10 +56,11 @@ P.respond("GET", "/do/hres-project-journal/dates/history", [
         where("project", "=", project.ref).
         order("updated", false);
     // version can be 0
-    if(!version && (version !== 0)) { version = q.length-1; }
-    var entry = q[version];
+    if(!version && (version !== 0) && q.length) { version = q.length-1; }
+    var serializableEmptyDates = {version:0,dates:[]};
+    var entry = q.length ? q[version] : undefined;
     var table = P.datesTableDeferredRender(project.ref, {
-        datesList: new P.ProjectDateList(project.ref, entry.dates),
+        datesList: new P.ProjectDateList(project.ref, entry ? entry.dates : serializableEmptyDates),
         displayAdminOptions: true
     }, 'full');
     E.render({

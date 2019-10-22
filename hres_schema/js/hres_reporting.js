@@ -40,9 +40,14 @@ P.implementService("std:reporting:collection_category:hres:people:get_facts_for_
 
 // --------------------------------------------------------------------------
 
-var PERSON_EXPORT_COLUMNS = [{fact:"ref", type:"ref-person-name", heading:"Name"}, "faculty"];
-if(P.INSTITUTE_DEPTH > 1) { PERSON_EXPORT_COLUMNS.push("department"); }
-if(P.INSTITUTE_DEPTH > 2) { PERSON_EXPORT_COLUMNS.push("school"); }
+var makePersonDashboardExportColumns = function(spec) {
+    var columns = [
+        {fact:(spec.personFact || "ref"), type:"ref-person-name", heading:(spec.heading || "Name")}, "faculty"
+    ];
+    if(P.INSTITUTE_DEPTH > 1) { columns.push("department"); }
+    if(P.INSTITUTE_DEPTH > 2) { columns.push("school"); }
+    return columns;
+};
 
 var makePersonDashboardColumns = function(spec) {
     var columns = [
@@ -66,8 +71,9 @@ var makePersonDashboardColumns = function(spec) {
 };
 
 P.reporting.registerReportingFeature("hres:person_name_column", function(dashboard, spec) {
+    if(!spec) { spec = {}; }
     dashboard.
-        columns(10, dashboard.isExporting ? PERSON_EXPORT_COLUMNS : makePersonDashboardColumns(spec || {})).
+        columns(10, dashboard.isExporting ? makePersonDashboardExportColumns(spec) : makePersonDashboardColumns(spec)).
         order(spec.personFact ? [spec.personFact, true] : "nameSortAs").
         use("std:row_text_filter", {facts:[spec.personFact || "ref"], placeholder:"Search by name"}).
         use("std:row_object_filter", {fact:"faculty", objects:T.Faculty});

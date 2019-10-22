@@ -1,0 +1,13 @@
+
+
+type hres:type:research-institute:university as University
+type std:type:person as Person
+
+# ---------------------------------------------------------------------------
+
+attribute std:attribute:address as Address
+attribute std:attribute:job-title as JobTitle
+
+attribute hres:attribute:research-institute as ResearchInstitute
+
+OPTIONAL attribute hres:attribute:grid-id as GridID

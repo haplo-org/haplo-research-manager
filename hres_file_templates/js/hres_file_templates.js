@@ -80,11 +80,11 @@ sort: 10
 
 h3(service). "hres_file_templates:get_template"
 
-Takes a function with two parameters, @userRef@ (optional) and @templateSearchPath@.
+Takes two arguments, @userRef@ (optional) and @templateSearchPath@.
 
 @templateSearchPath@ is an array of template names to look for. Pass @["DEFAULT"]@ to get the default template.
 
-This service will search up the heirarchy of the first RI attributed to the @userRef@ until it finds a template.
+This service will search up the hierarchy of the first RI attributed to the @userRef@ until it finds a template.
 
 If an RI isn't found, the first object of type @University@ is used.
 

@@ -115,7 +115,8 @@ P.hook("hOAuthSuccess", function(response, verifiedUser) {
 
 // Calling plugin's responsibility to ensure that the user/identifier/kind combination 
 // makes a unique key into this database. The different endpoints all have different data
-// sources, so can't always use a ref for the identifier
+// sources, so can't always use a ref for the identifier. The user id should not be used 
+// as an identifier, as this information is already held in the authedUserId field.
 P.db.table("putCodes", {
     authedUserId: { type:"int", indexed:true },
     identifier: { type:"text" },
@@ -193,6 +194,7 @@ P.implementService("hres:orcid:integration:push_data", function(user, spec) {
             attribute("put-code", putCode);
     }
     O.httpClient(P.template("data-update-url").render({
+        apiVersion: spec.apiVersion || "2.1",
         prefix: API_PREFIX,
         orcid: authQuery[0].orcid,
         kind: spec.kind,

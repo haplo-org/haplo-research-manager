@@ -10,16 +10,7 @@ std:plugin:resources("orcid.css" "orcid.js")
     } else {
         <p> <img src=[staticDirectoryUrl "/orcid_icon.png"] id="orcid-icon-floating" alt="ORCID"> </p>
         render(note)
-
-        <form id="orcid-obtain" action="/do/obtain-orcid/obtain" method="POST"> std:form:token()
-            <button id="connect-orcid-button">
-                <img id="orcid-id-logo" src=[staticDirectoryUrl "/orcid_icon.png"] alt="ORCID logo">
-                "Create or Connect your ORCID iD"
-            </button>
-            <p style="font-size:10px; margin:4px; line-height:12px; color:#555; padding-top:3px;">
-                "After you click 'Create or Connect your ORCID iD' you'll be taken to the ORCID site, where you can create a new ORCID, or log in to tell us about your existing ORCID. Afterwards, you'll be sent back here."
-            </p>
-        </form>
+        render(createConnect)
         <p> "Want to find out more about ORCID iDs? " <a href="/do/obtain-orcid/obtain"> "Read more here." </a> </p>
     }
 </div>

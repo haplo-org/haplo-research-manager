@@ -1,0 +1,16 @@
+
+attribute hres:attribute:grid-id
+    title: GRID ID
+    search-name: grid-id
+    qualifier: std:qualifier:null
+    data-type text
+
+type hres:type:research-institute as ResearchInstitute
+    attribute hres:attribute:grid-id [sort=25000]
+
+type hres:type:research-institute:faculty as Faculty
+    attribute-hide hres:attribute:grid-id
+type hres:type:research-institute:department as Department
+    attribute-hide hres:attribute:grid-id
+type hres:type:research-institute:school as School
+    attribute-hide hres:attribute:grid-id

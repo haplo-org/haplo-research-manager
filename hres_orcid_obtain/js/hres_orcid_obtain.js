@@ -28,6 +28,15 @@ var userORCID = function(user) {
     };
 };
 
+var createConnectDeferred = function() {
+    return P.template("create-connect").deferredRender({
+        staticDirectoryUrl: P.staticDirectoryUrl
+    });
+};
+P.implementService("hres:orcid:create-connect-deferred-render", function() {
+    return createConnectDeferred();
+});
+
 P.element("home", "ORCID Home Page",
     function(L) {
         if(!O.currentUser.ref) { return; }
@@ -36,7 +45,8 @@ P.element("home", "ORCID Home Page",
             L.render({
                 staticDirectoryUrl: P.staticDirectoryUrl,
                 note: HomePageNote.deferredRender(),
-                orcid: orcid
+                orcid: orcid,
+                createConnect: createConnectDeferred()
             }, "home");
         }
     }
@@ -51,7 +61,8 @@ P.respond("GET,POST", "/do/obtain-orcid/obtain", [
     E.render({
         staticDirectoryUrl: P.staticDirectoryUrl,
         introduction: IntroductionNote.deferredRender(),
-        orcid: userORCID(O.currentUser)
+        orcid: userORCID(O.currentUser),
+        createConnect: createConnectDeferred()
     });
 });
 
@@ -77,8 +88,26 @@ P.implementService("std:reporting:collection_category:hres:people:setup", functi
     collection.
         fact("haveOrcidToken", "boolean", "Have ORCID Access Token?").
         statistic({
-            name: "orcidComplete", description: "Have ORCID",
+            name: "orcidComplete", description: "ORCID authenticated authors",
             filter: function(select) { select.where("haveOrcidToken","=",true); },
+            aggregate: "COUNT"
+        }).
+        statistic({
+            name:"unauthenticatedOrcid", description: "ORCID unauthenticated authors",
+            filter: function(select) { 
+                select.and(function(sq) {
+                    sq.or(function(sqq) {
+                        sqq.where("haveOrcidToken","=",false).
+                            where("haveOrcidToken","=", null); 
+                        }).
+                    where("orcid", "<>", null);
+                });
+            },
+            aggregate: "COUNT"
+        }).
+        statistic({
+            name:"noOrcid", description: "Authors without an ORCID ID",
+            filter: function(select) { select.where("orcid","=",null); },
             aggregate: "COUNT"
         });
 });
@@ -100,7 +129,12 @@ P.implementService("std:action_panel:activity:menu:"+orcidActivity.replace(/-/g,
     if(O.currentUser.allowed(CanViewORCIDProgress)) {
         builder.panel(9999).
             title("ORCID").
-            link("top", "/do/obtain-orcid/progress-dashboard", "ORCID Progress");
+            link("top", "/do/obtain-orcid/progress-dashboard", "ORCID Progress").
+            link("top", "/do/obtain-orcid/orcid-by-faculty", "ORCID Progress by "+NAME("Faculty"));
+        if(O.service("hres:schema:institute_depth") > 1) {
+            builder.panel(9999).
+                link("top", "/do/obtain-orcid/orcid-by-department", "ORCID Progress by "+NAME("Department"));
+        }
     }
 });
 
@@ -129,4 +163,78 @@ P.respond("GET,POST", "/do/obtain-orcid/progress-dashboard", [
             "haveOrcidToken"
         ]).
         respond();
+});
+
+P.respond("GET,POST", "/do/obtain-orcid/orcid-by-department", [
+], function(E) {
+    CanViewORCIDProgress.enforce();
+    var deptName = NAME("Department");
+    var dashboard = P.reporting.dashboard(E, {
+        kind: "aggregate",
+        collection: "researchers",
+        name: "orcid_by_department",
+        title: "ORCID state by "+deptName,
+        y: "hres:reporting-aggregate-dimension:department",
+        x: "hres:reporting-aggregate-dimension:orcid-states"
+    }).
+    summaryStatistic(0, "orcidComplete").
+    summaryStatistic(1, "unauthenticatedOrcid").
+    summaryStatistic(2, "noOrcid").
+    respond();
+});
+
+
+P.respond("GET,POST", "/do/obtain-orcid/orcid-by-faculty", [
+], function(E) {
+    CanViewORCIDProgress.enforce();
+    var facultyName = NAME("Faculty");
+    var dashboard = P.reporting.dashboard(E, {
+        kind: "aggregate",
+        collection: "researchers",
+        name: "orcid_by_faculty",
+        title: "ORCID state by "+facultyName,
+        y: "hres:reporting-aggregate-dimension:faculty",
+        x: "hres:reporting-aggregate-dimension:orcid-states"
+    }).
+    summaryStatistic(0, "orcidComplete").
+    summaryStatistic(1, "unauthenticatedOrcid").
+    summaryStatistic(2, "noOrcid").
+    respond();
+});
+
+
+var getDimension = function(fact, value, title) {
+    return {
+        title: title,
+        filter: function(select) {
+            if(value === false) {
+                select.or(function(sq) {
+                    sq.where(fact, "=", value).
+                        where(fact,"=", null);
+                });
+            }
+            else {
+                select.where(fact, "=", value);
+            }
+        }
+    };
+};
+
+P.implementService("hres:reporting-aggregate-dimension:orcid-states", function() {
+    return [
+        getDimension("haveOrcidToken", true, "Authenticated ORCID ID"),
+        {
+            title: "Unauthenticated ORCID ID",
+            filter: function(select) {
+                select.and(function(sq) {
+                    sq.or(function(sqq) {
+                        sqq.where("haveOrcidToken", "=", false).
+                            where("haveOrcidToken", "=", null); 
+                        }).
+                    where("orcid", "<>", null);
+                });
+            }
+        },
+        getDimension("orcid", null, "No ORCID ID")
+    ];
 });

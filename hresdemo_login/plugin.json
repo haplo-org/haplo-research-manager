@@ -1,0 +1,17 @@
+{
+  "pluginName": "hresdemo_login",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo Research Manager ADFS Login",
+  "displayDescription": "Login plugin for Haplo Research Manager",
+  "apiVersion": 4,
+  "depend": [
+      "haplo_user_sync"
+    ],
+  "privilegesRequired": ["pSetLoggedInUser", "pStartOAuth"],
+  "load": [
+      "js/hresdemo_login.js"
+    ],
+  "respond": ["/do/hresdemo-login"],
+  "allowAnonymousRequests": true
+}

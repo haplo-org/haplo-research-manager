@@ -1,0 +1,13 @@
+{
+  "pluginName": "hres_grid_id",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "GRID Id",
+  "displayDescription": "GRID identifier support for Haplo RM",
+  "installSecret": "f1ae574aad43829de8c0762d88c7fdb507490bc1",
+  "apiVersion": 4,
+  "depend": ["hres_schema"],
+  "load": [
+    ],
+  "respond": []
+}

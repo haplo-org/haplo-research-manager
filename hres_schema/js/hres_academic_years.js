@@ -213,12 +213,15 @@ P.implementService("hres:academic_year:get_object_version", function(object, aca
 // Basic reporting navigation
 
 P.reporting.registerReportingFeature("hres:schema:academic_year_navigation", function(dashboard, currentYear, fact) {
+    var yearNow = O.service("hres:academic_year:for_date", new Date());
     var year = currentYear ?
         O.service("hres:academic_year:year_info", currentYear) :
-        O.service("hres:academic_year:for_date", new Date());
+        yearNow;
     dashboard.filter(function(select) {
         select.or(function(sq) {
-            if(!currentYear || currentYear == year.ref) { sq.where(fact, "=", null); }
+            if(yearNow.ref == year.ref) {
+                sq.where(fact, "=", null);
+            }
             sq.and(function(ssq) {
                 ssq.where(fact, ">=", year.start).
                     where(fact, "<", year.end);

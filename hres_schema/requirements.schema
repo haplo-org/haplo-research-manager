@@ -133,6 +133,10 @@ qualifier hres:qualifier:co-investigator as CoInvestigator
     title: Co-Investigator
     search-name: co-investigator
 
+qualifier hres:qualifier:formal as Formal
+    title: Formal
+    search-name: formal
+
 # -------- Attributes ------------------------------
 
 attribute dc:attribute:date as Date

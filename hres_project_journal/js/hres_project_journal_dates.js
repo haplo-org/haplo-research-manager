@@ -656,7 +656,7 @@ P.implementService("hres:project_journal:dates:get_past_alerts_for_project", fun
         var today = new XDate().clearTime();
         _.each(alerts, function(alert) {
             if(alert.date.requiredMin && alert.deadline && !alert.deadlineActual) {
-                var alertDate = new XDate(alert.date.requiredMin);
+                var alertDate = new XDate(alert.date.requiredMin).clearTime();
                 var deadline = new XDate(alert.deadline);
                 if(today.diffDays(alertDate) <= 0 && deployment.diffDays(deadline) > 0) {
                     pastAlerts.push(alert);
@@ -692,7 +692,7 @@ P.implementService("hres:project_journal:dates:get_alerts_for_today", function()
         var alerts = createAlertsFromRow(row);
         _.each(alerts, function(alert) {
             if(alert.date.requiredMin && !alert.deadlineActual) {
-                var alertDate = new XDate(alert.date.requiredMin);
+                var alertDate = new XDate(alert.date.requiredMin).clearTime();
                 if(today.diffDays(alertDate) === 0) {
                     alertsForToday.push(alert);
                 }

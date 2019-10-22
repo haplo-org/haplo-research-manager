@@ -3,7 +3,8 @@ feature std:page:home
     element: std:group:everyone left hres_orcid_obtain:home [sort=10]
 
 attribute hres:attribute:orcid as ORCID
-
+attribute dc:attribute:author as Author
+type hres:type:person:researcher as Researcher
 
 # ---------------------------------------------------------------------------
 # ORCID shouldn't be editable by anyone

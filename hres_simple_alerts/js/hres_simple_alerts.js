@@ -54,7 +54,7 @@ var sendReminders = function(reminders) {
         let projectHasOverrideAndIsPast = O.serviceMaybe("hres:schema:override_project_is_past", project);
         if(!projectHasAnyIndicatorThatCurrent || projectHasOverrideAndIsPast) { return; }
         var entities = standaloneEntities.constructEntitiesObject(project.ref);
-        var diffDays = new XDate().clearTime().diffDays(new XDate(reminder.deadline));
+        var diffDays = new XDate().clearTime().diffDays(new XDate(reminder.deadline).clearTime());
         if(diffDays === 0) {
             reminder.description = "Deadline today";
         } else if (diffDays > 0) {

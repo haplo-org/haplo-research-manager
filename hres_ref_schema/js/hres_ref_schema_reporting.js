@@ -47,7 +47,7 @@ var CanViewREFSchemaDashboards = O.action("hres_ref_schema:view_dashboards").
 
 P.implementService("std:action_panel:activity:menu:ref", function(display, builder) {
     if(O.currentUser.allowed(CanViewREFSchemaDashboards)) {
-        builder.panel(10).
+        builder.panel(20).
             link(750, "/do/hres-ref/researchers-missing-uoa", "Researchers missing Unit of Assessment");
     }
 });
@@ -69,6 +69,6 @@ P.respond("GET,POST", "/do/hres-ref/researchers-missing-uoa", [
             select.where("refUnitOfAssessment", "=", null);
         }).
         summaryStatistic(0, "count").
-        use("hres:person_name_column", {heading: "Researcher"}).
+        use("hres:person_name_column", {heading: "Researcher", personNameStyle:"wide"}).
         respond();
 });

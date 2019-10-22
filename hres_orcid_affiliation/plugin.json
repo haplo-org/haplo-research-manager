@@ -1,0 +1,17 @@
+{
+  "pluginName": "hres_orcid_affiliation",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "ORCID Affiliation",
+  "displayDescription": "Affiliation information for ORCID integrations from Haplo RM",
+  "installSecret": "5fe42ebac7eb635be526e44256364c1c264dc935",
+  "apiVersion": 4,
+  "depend": [
+      "hres_orcid",
+      "hres_schema"
+    ],
+  "load": [
+      "js/hres_orcid_affiliation.js"
+    ],
+  "respond": ["/do/hres-orcid-affiliation"]
+}

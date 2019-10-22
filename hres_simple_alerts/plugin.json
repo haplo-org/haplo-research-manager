@@ -4,7 +4,7 @@
   "pluginVersion": 1,
   "displayName": "Simple Alerts",
   "displayDescription": "Support for delivering reminders to users at alert dates that affect them.",
-  "loadPriority": 2100,
+  "loadPriority": 30000,
   "apiVersion": 4,
   "depend": [
       "std_workflow",

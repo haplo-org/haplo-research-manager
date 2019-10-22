@@ -3,9 +3,13 @@ std:layout:wide()
 pageTitle("Dates history")
 
 <p>
-    <i> "Version: " </i> version unless(next) { " (current)" } <br>
-    <i> "Action: " </i> entry.reason.action <br>
-    <i> "Created: " </i> std:date(entry.updated)
+    if(entry) {
+        <i> "Version: " </i> version unless(next) { " (current)" } <br>
+        <i> "Action: " </i> entry.reason.action <br>
+        <i> "Created: " </i> std:date(entry.updated)
+    } else {
+        <i> "No versions found." </i>
+    }
 </p>
 
 <div style="float:right;">

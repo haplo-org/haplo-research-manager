@@ -52,14 +52,12 @@ var docstoreHasKey = function(key) {
 P.implementService("hres:data_management_plan:docstore_has_key", docstoreHasKey);
 
 P.implementService("hres:data_management_plan:dmp_key_for_project", function(project) {
-    let dmpSourceTypes = SCHEMA.getTypesWithAnnotation('hres:annotation:dmp-source');
-    let dmp;
-    _.each(dmpSourceTypes, (type) => {
-        let possibleSourceObjects = O.query().link(type, A.Type).link(project, A.Project).execute();
-        dmp = _.chain(possibleSourceObjects).filter((obj) => {
-            let objIsValid = O.service("hres:data_management_plan:object_is_valid_source", obj);
-            return objIsValid && docstoreHasKey(obj);
-        }).first().value();
-    });
-    return dmp.ref;
+    let possibleSourceObjects = O.query().
+        link(SCHEMA.getTypesWithAnnotation('hres:annotation:dmp-source'), A.Type).
+        link(project, A.Project).execute();
+    let dmp = _.chain(possibleSourceObjects).filter((obj) => {
+        let objIsValid = O.service("hres:data_management_plan:object_is_valid_source", obj);
+        return objIsValid && docstoreHasKey(obj);
+    }).first().value();
+    return dmp ? dmp.ref : undefined;
 });

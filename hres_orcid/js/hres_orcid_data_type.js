@@ -10,8 +10,14 @@ var SERVICE_PREFIX = 'https://orcid.org/';
 // --------------------------------------------------------------------------------------------------------------------
 
 var deferredRenderORCID = function(orcid) {
+    if(!orcid) { return undefined; }
+    var orcidText = orcid.toString();
+    var q = P.db.orcids.select().where("orcid","=",orcidText);
+    
+    if(!q.length) { orcidText += " (unauthenticated)"; }
     return P.template("type/orcid").deferredRender({
         orcid: orcid,
+        orcid_text: orcidText,
         SERVICE_PREFIX: SERVICE_PREFIX
     });
 };
@@ -58,7 +64,10 @@ P.ORCID = {
         if(!orcid) { return undefined; }
         var orcidFields = orcid.toFields();
         if(orcidFields.type === "hres:orcid") {
-            return orcidFields.value[0];
+            var orcidText = orcidFields.value[0];
+            var q = P.db.orcids.select().where("orcid","=",orcidText);
+            if(!q.length) { orcidText += " (unauthenticated)"; }
+            return orcidText;
         }
     },
     deferredRender: function(orcid) {

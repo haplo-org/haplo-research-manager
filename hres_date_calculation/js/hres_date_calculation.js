@@ -20,6 +20,7 @@ var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculate
         var calculationDate = dates.date(name).getDatesForCalculations();
         if(calculationDate.min) {
             inputDates[name] = [calculationDate.min, calculationDate.max];
+            flags.push("has:"+name);
         }
         if(calculationDate.previousActual) {
             inputDates[name+":previous"] = [calculationDate.previousActual, calculationDate.previousActual];

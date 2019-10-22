@@ -1,0 +1,9 @@
+
+pageTitle("No Haplo Research Manager Account")
+
+std:ui:notice("You don't have an account")
+
+<p> "You entered a valid Haplo Research Manager username and password. However, you do not currently have access to this system."</p>
+
+<p> "Please contact IT services for further assistance." </p>
+

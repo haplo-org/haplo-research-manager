@@ -16,7 +16,7 @@ P.hook("hPostObjectChange", function(response, object, operation) {
 P.hook("hTempObjectAutocompleteTitle", function(response, object) {
     if(object.isKindOf(T.Person)) {
         var riRef = object.first(A.ResearchInstitute);
-        if(riRef) {
+        if(riRef && O.isRef(riRef)) {
             var ri = riRef.load();
             response.title += " ("+ri.title+")";
         }
