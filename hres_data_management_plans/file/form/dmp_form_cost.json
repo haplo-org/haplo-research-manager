@@ -1,0 +1,50 @@
+{
+    "specificationVersion": 0,
+    "formId": "dmp_form_cost",
+    "formTitle": "Costs",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "repeating-section",
+            "path": "costs",
+            "minimumCount": 0,
+            "required": true,
+            "elements": [
+                {
+                    "type": "text",
+                    "path": "title",
+                    "label": "Title",
+                    "required": true
+                },
+                {
+                    "type": "paragraph",
+                    "path": "description",
+                    "label": "Description"
+                },
+                {
+                    "type": "section",
+                    "template": "oforms:grid:row",
+                    "label": "Value and currency",
+                    "elements": [
+                        {
+                            "type": "number",
+                            "path": "value"
+                        },
+                        {
+                            "type": "choice",
+                            "path": "currency_code",
+                            "choices": [
+                                ["gbp", "GBP"],
+                                ["eur", "EUR"],
+                                ["usd", "USD"],
+                                ["aud", "AUD"],
+                                ["nzd", "NZD"]
+
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

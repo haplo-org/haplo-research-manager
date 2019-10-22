@@ -1,0 +1,108 @@
+{
+    "specificationVersion": 0,
+    "formId": "dmp_form_dataset",
+    "formTitle": "DMP Datasets",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "repeating-section",
+            "path": "datasets",
+            "minimumCount": 1,
+            "required": true,
+            "elements": [
+                {
+                 "type": "section",
+                 "label": "Title",
+                 "explanation": "Either search for a pre-existing dataset",
+                 "elements": [       
+                        {
+                            "type": "lookup",
+                            "path": "datasetTitle",
+                            "dataSource": "datasets"
+                        },
+                        {
+                            "type": "text",
+                            "path": "title",
+                            "explanation": "Or enter the name manually here",
+                            "required": {
+                                "path": "datasetTitle",
+                                "operation": "not-defined"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "path": "description",
+                    "label": "Description of the dataset"
+                },
+                {
+                    "type": "choice",
+                    "path": "type",
+                    "label": "Type of dataset",
+                    "required": true,
+                    "choices": [
+                        ["text", "Text"],
+                        ["image", "Image"],
+                        ["software", "Software"],
+                        ["sound", "Sound"]
+                    ]
+                },
+                {
+                    "type": "repeating-section",
+                    "path": "keywords",
+                    "label": "Keywords to describe the dataset",
+                    "explanation": "Enter one keyword per box",
+                    "elements": [
+                        {
+                            "type": "text",
+                            "path": "keyword"
+                        }
+                    ]
+                },
+                {
+                    "type": "choice",
+                    "path": "personal_data",
+                    "label": "Does this dataset contain personal data?",
+                    "required": true,
+                    "style": "radio",
+                    "choices": [
+                        ["yes", "Yes"],
+                        ["no", "No"],
+                        ["unknown", "Unknown"]
+                    ]
+                },
+                {
+                    "type": "choice",
+                    "path": "sensitive_data",
+                    "label": "Does this dataset contain sensitive data?",
+                    "required": true,
+                    "style": "radio",
+                    "choices": [
+                        ["yes", "Yes"],
+                        ["no", "No"],
+                        ["unknown", "Unknown"]
+                    ]
+                },
+                {
+                    "type": "repeating-section",
+                    "path": "data_quality_assurances",
+                    "label": "Data Quality Assurance",
+                    "inlineGuidanceNote": "E.g. We use file naming convention...",
+                    "elements": [
+                        {
+                            "type": "paragraph",
+                            "path": "."
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "path": "preservation_statement",
+                    "label": "Data preservation statement",
+                    "inlineGuidanceNote": "E.g. Must be preserved to enable..."
+                }
+            ]
+        }
+    ]
+}

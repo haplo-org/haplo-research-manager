@@ -1,0 +1,17 @@
+
+type std:type:project as Project
+type std:type:person as Person
+
+OPTIONAL type hres:type:proposal as Proposal
+OPTIONAL type hres:type:ethics-application as EthicsApplication
+OPTIONAL type hres:type:dataset as Dataset
+
+group hres:repository:group:data-management-plan:can-access-api as CanAccessDMPApi
+    title: Can access DMP API
+
+service-user hres:repository:service-user:data-management-plan
+    title: API User
+    group hres:repository:group:data-management-plan:can-access-api
+
+
+label std:label:concept as Concept

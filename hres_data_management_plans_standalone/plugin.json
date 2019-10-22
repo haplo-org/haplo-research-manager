@@ -1,0 +1,14 @@
+{
+  "pluginName": "hres_data_management_plans_standalone",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Hres Data Management Plan Standalone",
+  "displayDescription": "Generic data managment plans standalone implementation for API access",
+  "installSecret": "1b1a0d201979ef2d9817303b9dc4d86996ca3fe0",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_data_management_plans_standalone.js"
+    ],
+  "allowAnonymousRequests": true,
+  "respond": ["/api/hres-data-management-plans-standalone"]
+}

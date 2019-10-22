@@ -1,0 +1,4 @@
+
+<form method="POST"> std:form:token()
+  render(deferred)
+</form>

@@ -16,6 +16,12 @@ attribute hres:attribute:grant-id as GrantID
     qualifier std:qualifier:null
     data-type text
 
+attribute hres:attribute:objectives as Objectives
+    title: Objectives
+    search-name: objectives
+    qualifier std:qualifier:null
+    data-type text-paragraph
+
 # -------- Qualifiers ------------------------------
 
 qualifier hres:qualifier:principal-investigator as PrincipalInvestigator
@@ -31,6 +37,7 @@ qualifier std:qualifier:null as Null
 
 type std:type:project as Project
     attribute hres:attribute:grant-id
+    attribute hres:attribute:objectives
 
 type hres:type:person:researcher as Researcher
 type hres:type:person:staff as Staff

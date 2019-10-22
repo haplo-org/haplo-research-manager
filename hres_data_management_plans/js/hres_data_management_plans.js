@@ -4,60 +4,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-var defaultDMPForm = P.form("default_dmp_form", "form/default_dmp_form.json");
-
-var dmpDocstoreSpec = {
-    name: "dmpDocstore",
-    title: "Data management plan",
-    formsForKey: function(key) {
-        let dmpForm = O.serviceMaybe("hres:data_management_plans:form_for_key", key);
-        return dmpForm ? [dmpForm] : [defaultDMPForm];
-    },
-    panel: 675,
-    priority: 100,
-    path: "/do/hres-data-management-plans/dmp-form",
-    blankDocumentForKey: function(key) {
-        return {};
-    },
-    keyIdType: "ref",
-    keyToKeyId(key) {
-        if(key.workUnit) {
-            let object = key.workUnit.ref.load();
-            if(object.first(A.Project) && 
-                !O.service("hres:data_management_plan:docstore_has_key", object.ref) &&
-                O.service("hres:data_management_plan:dmp_key_for_project", object.first(A.Project))) {
-                return O.service("hres:data_management_plan:dmp_key_for_project", object.first(A.Project));
-            }
-            return object.ref;
-        } else {
-            return O.isRef(key) ? key : key.ref;
+P.implementService("std:action_panel:project", function(display, builder) {
+    let panel = builder.panel(1).element(0, {title: "Data management plan"});
+    let ref = display.object.ref;
+    if(P.dmpDocstore.instance(ref).hasCommittedDocument) {
+        panel.
+            link("default", "/do/hres-data-management-plans/edit-dmp/"+ref, "Edit").
+            link("default", "/do/hres-data-management-plans/view-dmp/"+ref, "View");
+        if(P.DEFAULT_DMP_TEMPLATE) {
+            panel.link("default", "/do/hres-data-management-plans/generate-download/"+ref, "Download");
         }
+    } else {
+        panel.title("Data management plan").
+            link("default", "/do/hres-data-management-plans/edit-dmp/"+ref, "Add");
     }
-};
-
-var dmpDocstore = P.defineDocumentStore(dmpDocstoreSpec);
-
-P.provideFeature("hres:data_management_plan", function(plugin) {
-    plugin.dmpDocstore = {
-        docstore: dmpDocstore,
-        spec: dmpDocstoreSpec
-    };
 });
 
-var docstoreHasKey = function(key) {
-    let instance = dmpDocstore.instance(key);
-    return !!instance && instance.hasCommittedDocument;
-};
-
-P.implementService("hres:data_management_plan:docstore_has_key", docstoreHasKey);
-
-P.implementService("hres:data_management_plan:dmp_key_for_project", function(project) {
-    let possibleSourceObjects = O.query().
-        link(SCHEMA.getTypesWithAnnotation('hres:annotation:dmp-source'), A.Type).
-        link(project, A.Project).execute();
-    let dmp = _.chain(possibleSourceObjects).filter((obj) => {
-        let objIsValid = O.service("hres:data_management_plan:object_is_valid_source", obj);
-        return objIsValid && docstoreHasKey(obj);
-    }).first().value();
-    return dmp ? dmp.ref : undefined;
+P.implementService("std:action_panel:research_data", function(display, builder) {
+    let project = display.object.first(A.Project);
+    if(project && P.dmpDocstore.instance(project)) {
+        let document = P.dmpDocstore.instance(project).lastCommittedDocument;
+        let needsSecuring = false;
+        _.each(["personal_data", "sensitive_data"], (field) => {
+            // TODO: fix this assumption - depositer should choose which of the datasets
+            // listed in the DMP the output record refers to at point as part of the deposit process
+            if(document.datasets[0][field] === "yes" || document.datasets[0][field] === "unknown") {
+                needsSecuring = true;
+            }    
+        });
+        let accessLevel = display.object.first(A.AccessLevel);
+        if(!accessLevel || accessLevel.behaviour === "hres:list:file-access-level:open") {
+            builder.panel(1).style("special").element(1, {
+                deferred: P.template("dataset-unrestricted-warning").deferredRender()
+            });
+        }
+    }
 });

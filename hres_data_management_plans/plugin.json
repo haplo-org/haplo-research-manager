@@ -6,12 +6,19 @@
   "displayDescription": "Generic data managment plans implementation",
   "installSecret": "3869714a23edd6827a2198478cef16c7b3987364",
   "apiVersion": 4,
-  "privilegesRequired": ["pDatabase"],
+  "privilegesRequired": ["pDatabase", "pFileTransformPipeline"],
+  "depend": [
+      "std_document_store",
+      "hres_digital_object_identifier"
+    ],
   "use": [
-    "std:document_store"
+    "std:document_store",
+    "hres:doi"
   ],
   "load": [
-      "js/hres_data_management_plans.js"
+      "js/hres_data_management_plans.js",
+      "js/dmp_forms.js",
+      "js/dmp_document.js"
     ],
   "respond": ["/do/hres-data-management-plans"]
 }
