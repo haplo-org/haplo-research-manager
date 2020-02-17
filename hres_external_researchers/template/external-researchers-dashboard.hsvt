@@ -3,14 +3,18 @@ std:layout:wide()
 
 <table class="tablesort">
     <tr>
-        <th> "Name" </th><th> "External access account" </th><th> "Revoke access" </th><th> "Link sent" </th><th> "Account activated" </th>
+        <th> i("Name") </th>
+        <th> i("External access account") </th>
+        <th> i("Revoke access") </th>
+        <th> i("Link sent") </th>
+        <th> i("Account activated") </th>
     </tr>
     each(researchers) {
         <tr>
             <td data-sort=surname><a href=url> name </a></td>
             if(externalAccess) {
                 <td> "&#10003;" </td> // tick
-                <td><a href=["/do/hres-external-researchers/revoke-access/" ref]> "Revoke" </a></td>
+                <td><a href=["/do/hres-external-researchers/revoke-access/" ref] role="button"> i("Revoke") </a></td>
             } else {
                 <td></td><td></td>
             }

@@ -1,7 +1,7 @@
-pageTitle("Missing information")
+pageTitle(i("Missing information"))
 std:object(object "linkedheading")
 <p> "&nbsp;" </p>
-<p> "The following information required for the application above to proceed is missing:" </p>
+<p> i("The following information required for the application above to proceed is missing:") </p>
 <ul>
   each(missingEntities) {
     <li> . </li>

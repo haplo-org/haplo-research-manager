@@ -43,7 +43,7 @@ P.implementService("std:action_panel:home_page_my_links", function(display, buil
     if(userRef) { 
         var person = userRef.load();
         if(person.isKindOf(T.Researcher) || person.isKindOf(T.Staff)) {
-            builder.link(500, "/do/hres-projects/research-projects/"+userRef, NAME("My projects"));
+            builder.link(500, "/do/hres-projects/research-projects/"+userRef, NAME("hres:schema:my_links:my_projects", "My projects"));
         }
     }
 });
@@ -71,8 +71,7 @@ P.respond("GET,POST", "/do/hres-projects/research-projects", [
                 ssq.where("principalInvestigator", "=", researcher.ref);
                 _.each(coInvestigatorFacts, (f) => ssq.where(f, "=", researcher.ref));
             });
-        }).
-        columns(100, [
+        }).columns(100, [
             {fact:"ref", heading:"Project", link:true}
         ]).
         columns(600, [

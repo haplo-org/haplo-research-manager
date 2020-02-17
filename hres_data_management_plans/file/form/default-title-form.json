@@ -1,6 +1,6 @@
 {
     "specificationVersion": 0,
-    "formId": "default_dmp_form",
+    "formId": "default-title-form",
     "formTitle": "Data management plan",
     "class": "oforms-no-autofocus",
     "elements": [
@@ -21,9 +21,9 @@
             "label": "Language",
             "required": true,
             "choices": [
-                ["en", "EN"],
-                ["fr", "FR"],
-                ["es", "ES"]
+                ["en", "English"],
+                ["fr", "French"],
+                ["es", "Spanish"]
             ]
         }
     ]

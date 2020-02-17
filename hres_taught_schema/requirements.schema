@@ -139,4 +139,6 @@ group hres:group:undergraduate-students as UndergraduateStudents
 group hres:group:postgraduate-taught-students as PostgraduateTaughtStudents
     title: Postgraduate Taught Students
 
+group hres:group:researchers as Researchers
+group hres:group:admin-staff as AdminStaff
 group std:group:everyone as Everyone

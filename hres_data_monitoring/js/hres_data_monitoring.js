@@ -11,11 +11,12 @@ var CanViewDataMonitoringDashboards = O.action("hres-data-monitoring:view-report
 P.respond("GET,POST", "/do/hres-data-monitoring/researchers-missing-departments", [
 ], function(E) {
     CanViewDataMonitoringDashboards.enforce();
+    var i = P.locale().text("template");
     P.reporting.dashboard(E, {
         kind:"list",
         collection:"researchers",
         name:"researchers_missing_departments",
-        title:NAME("+Researcher")+" without academic departments"
+        title: i["NAME(+Researcher) without academic departments"]
     }).
         filter(function(select) {
             select.where("faculty", "=", null);

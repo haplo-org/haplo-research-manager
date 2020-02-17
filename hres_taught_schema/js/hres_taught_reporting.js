@@ -87,3 +87,10 @@ P.hook('hPostObjectChange', function(response, object, operation) {
         O.serviceMaybe("hres_repo_schema_outputs:update_outputs");
     }
 });
+
+P.implementService("std:reporting:collection:ethics:get_facts_for_object", function(object, row) {
+    var researcherRef = object.first(A.Researcher);
+    if(researcherRef && researcherRef.load().isKindOf(T.TaughtStudent)) {
+        row.isResearcherTaught = true;
+    }
+});

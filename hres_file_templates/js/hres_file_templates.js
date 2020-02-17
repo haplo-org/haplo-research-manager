@@ -24,7 +24,8 @@ P.hook('hGetReportsList', function(response) {
 P.respond("GET", "/do/hres-file-templates/admin", [
 ], function(E) {
     CanConfigureTemplates.enforce();
-    var fileTemplates = [{name: "DEFAULT", title: "Default template"}];
+    var i = P.locale().text("template");
+    var fileTemplates = [{name: "DEFAULT", title: i["Default template"]}];
     O.serviceMaybe("hres_file_templates:discover", function(name, title) {
         fileTemplates.push({name: name, title: title});
     });
@@ -50,9 +51,10 @@ P.respond("GET,POST", "/do/hres-file-templates/show", [
     var document = fileTemplates.length ? fileTemplates[0].document : {};
     var form = editTemplateForm.instance(document);
     E.render({form:form});
+    var i = P.locale().text("template");
     E.renderIntoSidebar({elements:[{
         href: "/do/hres-file-templates/edit/"+templateName,
-        label: "Edit", indicator: "primary"
+        label: i["Edit"], indicator: "primary"
     }]}, "std:ui:panel");
 });
 

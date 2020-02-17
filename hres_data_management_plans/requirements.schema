@@ -1,26 +1,29 @@
 attribute std:attribute:project as Project
-attribute hres:attribute:objectives as ProjectDescription
-attribute hres:attribute:researcher as Researcher
 attribute std:attribute:email as EmailAddress
-attribute hres:attribute:abstract as DistributionDescription
 attribute std:attribute:file as File
-attribute hres:attribute:file-access-level as AccessLevel
-attribute hres:attribute:retention-review-date as AvailableUntil
-attribute hres:attribute:orcid as Orcid
-attribute hres:attribute:digital-object-identifier-doi as DOI
-attribute hres:attribute:funder as Funder
+attribute hres:attribute:objectives as Objectives
+attribute hres:attribute:researcher as Researcher
 attribute hres:attribute:research-institute as ResearchInstitute
-
-type std:type:project as Project
-type hres:type:dataset as Dataset
 
 type std:type:organisation
     attribute std:attribute:file
+type std:type:project as Project
 
 # OPTIONAL schema
+OPTIONAL type hres:type:dataset as Dataset
+    element: std:group:everyone right std:action_panel {"panel": "dmp_dataset_panel"}
 OPTIONAL type hres:type:proposal as Proposal
 OPTIONAL type hres:type:ethics-application as EthicsApplication
 
 OPTIONAL attribute hres:attribute:grant-id as GrantId
 OPTIONAL attribute hres:attribute:proposal-stage as ProposalStage
+OPTIONAL attribute hres:attribute:abstract as Abstract
+OPTIONAL attribute hres:attribute:file-access-level as FileAccessLevel
+OPTIONAL attribute hres:attribute:retention-review-date as RetentionReviewDate
+OPTIONAL attribute hres:attribute:orcid as Orcid
+OPTIONAL attribute hres:attribute:funder as Funder
+OPTIONAL attribute hres:attribute:keywords as Keywords
+OPTIONAL attribute hres:attribute:data-type as DataType
+OPTIONAL attribute hres:attribute:project-dates as ProjectDates
 
+OPTIONAL group hres:group:repository-editors as RepositoryEditors

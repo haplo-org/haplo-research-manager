@@ -13,11 +13,11 @@ std:plugin:resources("my-subscriptions.js" "my-subscriptions.css")
 <p>"Subscribe with the link below by registering it with your chosen Calendar application."</p>
 <p>
   <button class="copy-url-button" alt="Copy to clipboard" data-clipboard-target-id="calendarUrl">std:icon:description("E208,1,f E246,1,e" "small")</button> "&nbsp;"
-  <input type="text" id="calendarUrl" name="calendarUrl" class="calendar-url" readonly="readonly" value=calendarUrl>
+  <input type="text" id="calendarUrl" name="calendarUrl" class="calendar-url" readonly="readonly" value=calendarUrl aria-label=i("Calendar Url")>
 </p>
 <p class="copy-url-success hidden">"Copied!"</p>
 <p class="copy-url-failure hidden">"Copy failed. Try copying the URL manually with Ctrl+C."</p>
-<p><a href="/do/hres-calendar-subscriptions/generate-new-url"><button>"Reset calendar subscription link"</button></a></p>
+<p>std:ui:button-link("/do/hres-calendar-subscriptions/generate-new-url") { "Reset calendar subscription link" }</p>
 
 <h2>"Subscribing to your calendar"</h2>
 
@@ -44,9 +44,9 @@ std:plugin:resources("my-subscriptions.js" "my-subscriptions.css")
 <h3>"Outlook 2016"</h3>
 <ol>
   <li>"Copy the iCalendar subscription link from the box near the top of this page."</li>
-  <li>"In the Outlook 2016 Calendar click the "Open Calendar" dropdown. Select "From Internet""</li> 
+  <li>"In the Outlook 2016 Calendar click the 'Open Calendar' dropdown. Select 'From Internet'"</li> 
   <li>"Paste the link into the field. Click OK."</li>
-  <li>"Click "Yes" that you want to add this calendar to outlook and subscribe to updates."</li> 
+  <li>"Click 'Yes' that you want to add this calendar to outlook and subscribe to updates."</li> 
 </ol>
 
 <h3>"macOS Calendar"</h3>
@@ -55,7 +55,7 @@ std:plugin:resources("my-subscriptions.js" "my-subscriptions.css")
   <li>"In Calendar, choose File &gt; New Calendar Subscription."</li> 
   <li>"Paste calendar’s link, then click Subscribe."</li>
   <li>"Enter a name for the calendar and choose a color to help you identify it on your calendar."</li>
-  <li>"Selet how frequent you want the calendar to update and click OK."</li>
+  <li>"Select how frequently you want the calendar to update and click OK."</li>
 </ol>
 
 <p>"If your calendar application isn't listed above, please visit the help section for your calendar provider."</p>

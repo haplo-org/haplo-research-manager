@@ -518,6 +518,7 @@ ProjectDate.prototype.getDatesForCalculations = function() {
         // "previous" is clearer for use in calculations, as the
         // ProjectDateList may not be committed when this function is called
         d.previousActual = this.latestActual;
+        d.previousActuals = this.previousActuals;
     }
     return d;
 };

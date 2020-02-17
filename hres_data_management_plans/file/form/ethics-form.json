@@ -1,0 +1,38 @@
+{
+    "specificationVersion": 0,
+    "formId": "ethics-form",
+    "formTitle": "Ethical issues",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "choice",
+            "style": "radio-horizontal",
+            "path": "ethical_issues_exist",
+            "label": "Are there ethics issues related to the data this DMP describes?",
+            "required": true,
+            "choices": [
+                ["yes", "Yes"],
+                ["no", "No"],
+                ["unknown", "Unknown"]
+            ]
+        },
+        {
+            "type": "repeating-section",
+            "path": "ethicalIssues",
+            "minimumCount": 0,
+            "allowDelete": true,
+            "elements": [
+                {
+                    "type": "text",
+                    "path": "report",
+                    "label": "Location of the report on ethical issues"
+                },
+                {
+                    "type": "paragraph",
+                    "path": "description",
+                    "label": "Description"
+                }
+            ]
+        }
+    ]
+}

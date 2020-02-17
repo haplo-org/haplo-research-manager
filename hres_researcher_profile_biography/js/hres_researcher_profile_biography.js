@@ -16,5 +16,16 @@ P.researcherProfile.formSection({
     includeInExport: true,
     deferredRenderForExport: (profile, document) => {
         return P.template("export/biography").deferredRender(document);
+    },
+    deferredRenderPublished: function(profile, document) {
+        if(!(profile && profile.document && 
+            profile.document.biography &&
+            profile.document.biography.biography)) {
+            return;
+        }
+        return P.template("web-publisher/biography").deferredRender({
+            biography: profile.document.biography.biography,
+            teaching: profile.document.biography.teaching
+        });
     }
 });

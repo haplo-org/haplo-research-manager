@@ -1,4 +1,4 @@
-pageTitle("Configure templates")
+pageTitle(i("Configure templates"))
 
 each(fileTemplates) {
     <p> <a href=["/do/hres-file-templates/show/" name]> title </a> </p>

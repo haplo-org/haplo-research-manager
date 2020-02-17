@@ -1,3 +1,4 @@
 <div>
-   "Reminder sent: " data.title  if(data.date) {" (Deadline: " data.date ")"}
+   i("Reminder sent: {} {deadline}") { data.title } deadline{ 
+        if(data.date) { i("(Deadline: {})") { data.date } } }
 </div>

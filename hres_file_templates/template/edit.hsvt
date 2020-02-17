@@ -1,7 +1,7 @@
-pageTitle("Edit templates")
-backLink("/do/hres-file-templates/show/" templateName) { "Cancel" }
+pageTitle(i("Edit templates"))
+backLink("/do/hres-file-templates/show/" templateName) { i("Cancel") }
 
 <form method="POST"> std:form:token()
     std:form(form)
-    <p><input type="submit" value="Save"></p>
+    <p><input type="submit" value=i("Save")></p>
 </form>

@@ -22,7 +22,7 @@ P.respond("GET,POST", "/api/hres-data-management-plans-standalone/get-plan", [
 ], function(E, projectRef) {
     O.impersonating(O.serviceUser("hres:repository:service-user:data-management-plan"), () => { 
         E.response.body = JSON.stringify({
-            dmp: O.service("hres:data_management_plans:get_dmp", projectRef)
+            dmp: O.service("hres:data_management_plans:get_dmp_for_project", projectRef)
         }, undefined, 2);
         E.response.kind = "json";
     });

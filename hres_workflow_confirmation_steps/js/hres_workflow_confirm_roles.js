@@ -247,8 +247,9 @@ P.respond("GET,POST", "/do/hres-workflow-confirmation-steps/confirm-roles", [
         }
         return E.response.redirect(object.url());
     }
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: (SPECIFICATIONS[workUnit.workType].pageTitle || "Confirm roles"),
+        pageTitle: (SPECIFICATIONS[workUnit.workType].pageTitle || i["Confirm roles"]),
         backLink: object.url(),
         form: form
     });

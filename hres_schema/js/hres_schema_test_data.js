@@ -13,7 +13,11 @@ P.implementService("hres:development:generate-test-data-end", function(action) {
     action(100, function(generator) {
 
         console.log("Generating research projects...");
-        _.each(O.query().link(T.Researcher, A.Type).execute(), function(researcher) {
+        let query = O.query().link(T.Researcher, A.Type);
+        if(generator.debug) {
+            query.limit(5);
+        }
+        _.each(query.execute(), function(researcher) {
             var project = O.object();
             project.appendType(T.Project);
             project.appendTitle(generator.randomProjectName());
@@ -24,7 +28,7 @@ P.implementService("hres:development:generate-test-data-end", function(action) {
                 var sharedInstitute = researcher.first(A.ResearchInstitute);
                 if(sharedInstitute) {
                     var ci = generator.randomPersonFromInstitute(sharedInstitute, T.Researcher);
-                    if(ci.ref != researcher.ref) { project.append(ci, A.Researcher, Q.CoInvestigator); }
+                    if(ci && ci.ref != researcher.ref) { project.append(ci, A.Researcher, Q.CoInvestigator); }
                 }
             }
             project.save();

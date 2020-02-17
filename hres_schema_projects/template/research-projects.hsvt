@@ -2,9 +2,7 @@
 std:layout:wide()
 
 if(canCreateProject) { 
-    <form method="GET" action=["/do/hres-projects/new-project/" researcher.ref]>
-      <input type="submit" value="Create new Project">
-    </form>
+    std:ui:button-link("/do/hres-projects/new-project/" researcher.ref) { "Create new Project" }
 }
 
 <p> "&nbsp;" </p>

@@ -26,6 +26,11 @@ var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculate
             inputDates[name+":previous"] = [calculationDate.previousActual, calculationDate.previousActual];
             flags.push("has:"+name+":previous");
         }
+        var previousActuals = calculationDate.previousActuals || [];
+        for(var i = 1; i <= previousActuals.length; i++) {
+            var flag = "has:"+name+":previous:"+i;
+            flags.push(flag); //So we can check how many times this has happened previously
+        }
     });
     flags = flags.concat(impl.flags(ref.load(), inputDates));
 

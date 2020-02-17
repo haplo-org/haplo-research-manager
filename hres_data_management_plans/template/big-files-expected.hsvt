@@ -1,0 +1,6 @@
+
+<p>"Dear Library Staff,"</p>
+
+<p>user.name " has submitted a data management plan for the project: " project.title ", which has large expected files."</p>
+
+<a href=std:object:url(project)> "View project" </a>

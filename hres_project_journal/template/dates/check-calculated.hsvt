@@ -1,25 +1,25 @@
 
-pageTitle("Project dates inconsistencies")
+pageTitle(i("Project dates inconsistencies"))
 
 std:layout:wide()
 
 <form method="GET" action="/do/hres-project-journal/dates/recalculate-all" style="float:right;"> std:form:token()
   if(ignorestate) { <input type="hidden" name="ignorestate" value=ignorestate> }
   <input type="hidden" name="count" value=inconsistencies>
-  <input type="submit" value="Update all stored dates">
+  <input type="submit" value=i("Update all stored dates")>
 </form>
 
-<p> <i> "Found " inconsistencies " inconsistent dates, across " projects " projects." </i> </p>
+<p> <i> i("Found {} inconsistent dates, across {projects} projects.") {inconsistencies} projects{projects} </i> </p>
 
 <table>
     <thead>
         <tr>
-            <th> "Project" </th>
-            <th> "Date" </th>
-            <th> "Field" </th>
-            <th> "Stored" </th>
-            <th> "Calculated" </th>
-            <th> "Difference" </th>
+            <th> i("Project") </th>
+            <th> i("Date") </th>
+            <th> i("Field") </th>
+            <th> i("Stored") </th>
+            <th> i("Calculated") </th>
+            <th> i("Difference") </th>
         </tr>
     </thead>
     <tbody>

@@ -5,6 +5,7 @@
   "displayName": "ORCID",
   "displayDescription": "ORCID support for data type and OAuth integrate with the ORCID service.",
   "apiVersion": 4,
+  "loadPriority": 5200,
   "privilegesRequired": ["pDatabase", "pStartOAuth", "pHTTPClient"],
   "load": [
       "js/hres_orcid_data_type.js",

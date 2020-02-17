@@ -79,6 +79,49 @@ P.reporting.registerReportingFeature("hres:schema:calendar_month_navigation",
     }
 );
 
+P.reporting.registerReportingFeature("hres:schema:calendar_year_and_month_navigation",
+    function(dashboard, currentYear, currentMonth, fact, startDate, endDate) {
+        dashboard.filter(function(select) {
+            select.or(function(sq) {
+                if(!currentYear) { sq.where(fact, "=", null); }
+                sq.and(function(ssq) {
+                    ssq.where(fact, ">=", startDate || new Date(currentYear, currentMonth)).
+                       where(fact, "<", endDate || new Date(currentYear, currentMonth+1));
+                       // JS wraps months, so adding 1 always returns the first day of the mext month
+                });
+            });
+        });
+        let monthName = new XDate(currentYear, currentMonth).toString("MMMM");
+        let previousMonth = currentMonth-1;
+        let nextMonth = currentMonth+1;
+        let previousYear, nextYear, monthPreviousYear, monthNextYear;
+        previousYear = currentYear-1;
+        nextYear = currentYear+1;
+        monthNextYear = monthPreviousYear = currentYear;
+        
+        if(currentMonth === 0) { 
+            previousMonth = 11;
+            monthPreviousYear = currentYear-1;
+        } else if (currentMonth === 11) {
+            nextMonth = 0;
+            monthNextYear = currentYear+1;
+        }
+        dashboard.navigationUI(function(dashboard) {
+            return P.template("calendar-year-and-month-navigation").deferredRender({
+                monthName: monthName,
+                month: currentMonth,
+                previousMonth: previousMonth,
+                nextMonth: nextMonth,
+                year: currentYear,
+                previousYear: previousYear,
+                nextYear: nextYear,
+                monthPreviousYear: monthPreviousYear,
+                monthNextYear: monthNextYear
+            });
+        });
+    }
+);
+
 P.reporting.registerReportingFeature("hres:schema:calendar_quarter_navigation",
     function(dashboard, currentYear, currentQuarter, fact, startDate, endDate) {
         var startMonth = (currentQuarter-1)*3;

@@ -4,20 +4,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-// 
-// Adds a state into workflows for confirming relevant details about a project are correct,
-// or requesting changes if incorrect
-//
-// Specification includes:
-//  exitStates: array of possible status to transition to. Consuming plugin should resolve if necessary
-//  path: the consuming plugin's respond path
-//  actionableBy: who is doing the confirming
-//  notifyChangeRequested: role to send notification if detail changes are requested
-//  details: an array of objects containing:
-//       entity: a workflow entity to query
-//       attrs: and array of attributes of the above entity that should be confirmed
-//  redirect:  optional function giving an alternative url to redirect to after this state
-//
+/*HaploDoc
+node: /hres_workflow_confirmation_steps/confirm_details
+title: Confirm details
+sort: 1
+--
+Adds a state into workflows for confirming relevant details about a project are correct,\
+ or requesting changes if incorrect
+
+Specification includes:
+
+ * exitStates: array of possible status to transition to. Consuming plugin should resolve if necessary
+ * path: the consuming plugin's respond path
+ * actionableBy: who is doing the confirming
+ * notifyChangeRequested: role to send notification if detail changes are requested
+ * redirect:  optional function giving an alternative url to redirect to after this state
+ * details: an array of objects containing:
+ * * entity: a workflow entity to query
+ * * attrs: and array of attributes of the above entity that should be confirmed
+*/
 
 var TEXT = {
     "status:wait_confirm_details": "Waiting for details to be confirmed",

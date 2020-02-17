@@ -14,8 +14,8 @@
     margin-left: 6px;
 }
 
-#project_dates_table tr:hover td a {
-    background: #aaa;
+#project_dates_table:hover tr td a {
+    background: #757575;
 }
 
 #project_dates_table tr td:nth-child(2) {

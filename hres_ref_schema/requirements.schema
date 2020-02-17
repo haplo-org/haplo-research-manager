@@ -74,6 +74,7 @@ type hres:type:ref-unit-of-assessment as REFUnitOfAssessment
     attribute hres:attribute:head [sort=12000]
     attribute hres:attribute:ref-panel [sort=15000]
     apply-schema-template hres:template-type:list
+    element: std:group:everyone right std:action_panel {"panel":"uoa_navigation","style":"links"} [sort=20000] 
 
 type hres:type:ref-unit-of-assessment-2014 as REFUnitOfAssessment2014
     title: REF Unit of Assessment (2014)

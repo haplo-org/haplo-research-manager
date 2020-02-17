@@ -21,7 +21,8 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     // UoA Leads get read permissions at all things within their UoA
     // NOTE: "read-edit" for T.Person doesn't give the permissions you intend. as editing the UoA
     // will relabel the person to be outside of the Lead's permitted labelset
-    setup.roleOversightPermission("Unit of Assessment Lead",      "read",     [T.Person, T.Project]);
+    setup.roleOversightPermission("Unit of Assessment Lead",      "read",     [T.Project]);
+    setup.roleOversightPermission("Unit of Assessment Lead", "read-edit", [T.Person]);
     setup.groupPermission(Group.REFManagers,        "read-edit",        T.Person);
     setup.groupRestrictionLabel(Group.REFManagers, Label.EditREFUoA);
 });

@@ -1,4 +1,4 @@
-<p> "Welcome to " applicationName ". Your external account has been created, and to get started you need to set your password." </p>
-<p><a href=[welcomeUrl]> "Click here to set password." </a></p>
-<p> "This link will work only once. Once you've set your password, you can discard this email." </p>
-<p> "Please use the alternative external user login link on the home page." </p>
+<p> i("Welcome to {}. Your external account has been created, and to get started you need to set your password.") { applicationName } </p>
+<p><a href=[welcomeUrl]> i("Click here to set password.") </a></p>
+<p> i("This link will work only once. Once you've set your password, you can discard this email.") </p>
+<p> i("Please use the alternative external user login link on the home page.") </p>

@@ -10,25 +10,34 @@ var CanGenerateTestData = O.action("hres:development:generate-test-data").
     allow("group", Group.Administrators);
 
 P.implementService("std:action_panel:home_page", function(display, builder) {
-    if(P.data.status === "done") { return; }
     if(O.currentUser.allowed(CanGenerateTestData)) {
         if(P.data.status === "running") {
             builder.panel(100).element("default", {label:"Generating test data...", indicator:"terminal"});
         } else if (P.data.status === "failed") {
             builder.panel(10000).
-                link("default", '/do/hres-development-test-data/failed', 'Test data generation failed', 'terminal');
+                link("default", '/do/hres-development-test-data/failed', 'Test data generation failed', 'terminal').
+                link("top", '/do/hres-development-test-data/generate?debug=1', 'Debug: Generate test data', 'secondary').
+                link("top", "/do/hres-development-test-data/delete-data", "Delete generated data", 'terminal');
+        } else if(P.data.status === "done") {
+            builder.panel(100).
+                element("top", {"label": "Data generation complete"}).
+                link("top", '/do/hres-development-test-data/generate?debug=1', 'Debug: Generate test data', 'secondary').
+                link("top", "/do/hres-development-test-data/delete-data", "Delete generated data", 'terminal');
         } else {
             builder.panel(100).
-                link("top", '/do/hres-development-test-data/generate', 'Generate test data', 'primary');
+                link("top", '/do/hres-development-test-data/generate', 'Generate test data', 'primary').
+                link("top", '/do/hres-development-test-data/generate?debug=1', 'Debug: Generate test data', 'secondary').
+                link("top", '/do/hres-development-test-data/delete-data', 'Delete all test data', 'terminal');
         }
     }
 });
 
 P.respond("GET,POST", "/do/hres-development-test-data/generate", [
-    {parameter:"level", as:"int", optional:true}
-], function(E, level) {
+    {parameter:"level", as:"int", optional:true},
+    {parameter:"debug", as:"int", optional:true}
+], function(E, level, debug) {
     CanGenerateTestData.enforce();
-    if(O.query().link([T.Person],A.Type).setSparseResults(true).execute().length) {
+    if(!debug && O.query().link([T.Person],A.Type).setSparseResults(true).execute().length) {
         O.stop("There's some data already in this application.");
     }
     if(E.request.method === "GET") {
@@ -39,11 +48,12 @@ P.respond("GET,POST", "/do/hres-development-test-data/generate", [
         if(haveAny(T.School)) { existingDepth = 3; }
         else if(haveAny(T.Department)) { existingDepth = 2; }
         else if(haveAny(T.Faculty)) { existingDepth = 1; }
+        let debugText = debug ? "\nYou are in debug mode, which will create at most approx 5 people of each type on an RI at the lowest level you select." : "\nThis will take some time.";
         if(existingDepth) {
             render = {
                 pageTitle: "Generate test data?",
                 backLink: "/",
-                text: "Would you like to initialise this development application with test data?\nAn existing institution structure of "+existingDepth+" has been detected.\nTest data generation will use this existing structure.\nThis will take some time.",
+                text: "Would you like to initialise this development application with test data?\nAn existing institution structure of "+existingDepth+" has been detected.\nTest data generation will use this existing structure."+debugText,
                 options: [
                     {label:"Generate",parameters:{level:existingDepth}}
                 ]
@@ -60,14 +70,15 @@ P.respond("GET,POST", "/do/hres-development-test-data/generate", [
             render = {
                 pageTitle: "Generate test data?",
                 backLink: "/",
-                text: "Would you like to initialise this development application with test data?\nClick the button corresponding to the institution structure depth. Most institutions are two level.\nThis will take some time.",
+                text: "Would you like to initialise this development application with test data?\nClick the button corresponding to the institution structure depth. Most institutions are two level."+debugText,
                 options: options
             };
         }
         return E.render(render, "std:ui:confirm");
     }
-    O.background.run("hres_development_test_data:generate", {level:level||2});
+    O.background.run("hres_development_test_data:generate", {level:level||2, debug:debug});
     P.data.status = "running";
+    P.data.start = P.data.start || new Date().toString();
     E.response.redirect("/do/hres-development-test-data/done");
 });
 
@@ -93,16 +104,66 @@ P.respond("GET,POST", "/do/hres-development-test-data/failed", [
     }, "std:ui:notice");
 });
 
+P.respond("GET,POST", "/do/hres-development-test-data/delete-data", [
+    {parameter:"from", as:"string", optional:true}
+], function(E, from) {
+    CanGenerateTestData.enforce();
+    if(P.data.status === "running") { O.stop("Please wait for the data to be generated before deleting it."); }
+    if(P.data.deletionStatus === "running") { O.stop("Deletion in progress"); }
+    from = from || P.data.start;
+    let generationStarted = new Date(from);
+    if(E.request.method === "GET") {
+        return E.render({
+            pageTitle: "Delete data?",
+            backLink: "/",
+            text: "Would you like to delete all data created since "+generationStarted.toString()+"?\nNB: this doesn't reset roles assigned to RIs",
+            options: [{
+                label: "Delete data"
+            }]
+        }, "std:ui:confirm");
+    }
+    O.background.run("hres_development_test_data:delete", {from:from});
+    P.data.deletionStatus = "running";
+    E.response.redirect("/");
+});
+
+P.respond("GET", "/do/hres-development-test-data/data-deletion-status", [
+], function(E) {
+    E.render({
+        pageTitle: "Data deletion status",
+        backLink: "/",
+        message: "Status: "+P.data.deletionStatus+"\nError: "+P.data.deletionError
+    }, "std:ui:notice");
+});
 
 // --------------------------------------------------------------------------
 
 P.backgroundCallback("generate", function(data) {
     O.impersonating(O.SYSTEM, function() {
         try{
-            generateTestData(data.level||2);
+            generateTestData(data.level||2, !!data.debug);
         } catch(e) {
             P.data.status = "failed";
             P.data.error = e;
+        }
+    });
+});
+
+P.backgroundCallback("delete", function(data) {
+    O.impersonating(O.SYSTEM, function() {
+        try {
+            let from = new XDate(data.from);
+            O.query().linkToAny(A.Type).execute().each(object => {
+                let created = new XDate(object.creationDate);
+                if(from.diffSeconds(created) > 0) {
+                    object.deleteObject();
+                }
+                // enhancement: revert objects modified since 'from' date to last version before 'from'
+            });
+            P.data.deletionStatus = "done";
+        } catch(e) {
+            P.data.deletionStatus = "failed";
+            P.data.deletionError = e;
         }
     });
 });
@@ -111,7 +172,7 @@ P.backgroundCallback("generate", function(data) {
 
 const JOINING_WORDS = ['and', 'of', 'by', 'the', 'a', 'that', 'on', 'where'];
 
-var generateTestData = function(instituteStructureDepth) {
+var generateTestData = function(instituteStructureDepth, debug) {
     var peopleTypesLeaf = [];
     var peopleTypesNonLeaf = [];
     var usedNames = {}, usedProjectNames = {};
@@ -244,14 +305,15 @@ var generateTestData = function(instituteStructureDepth) {
                     seen[person.ref.toString()] = true;
                 }
             }
-            return people;       
+            return people;
         },
         addSomePeopleFromInstitute: function(min, max, institutionRef, typeOfPerson, object, desc, qual) {
             var number = Math.round(min + ((max-min)*Math.random()));
             for(var x = 0; x < number; ++x) {
                 this.addPersonFromInstitute(institutionRef, typeOfPerson, object, desc, qual);
             }
-        }
+        },
+        debug: debug
     };
 
     generator.setPeopleTypes({
@@ -366,11 +428,25 @@ var generateTestData = function(instituteStructureDepth) {
         }
 
         // Make people for all departments
+        // in the test case, only make people for one lowest level RI
+        var debugPeoplesCreated = false;
+        var debugInstituteChanged;
         institutes.forEach(function(info) {
+            if(debug) {
+                if(debugPeoplesCreated) { return; }
+                if(info.level > instituteStructureDepth) { return; }
+                var hasPeople = O.query().link(T.Person, A.Type).link(info.object.ref, A.ResearchInstitute).limit(1).execute();
+                 // so can run debug a couple of times, generating data for different RIs
+                if(hasPeople.length) { return; }
+            }
             var peoples = info.isLeaf ? peopleTypesLeaf : peopleTypesNonLeaf;
             peoples.forEach(function(spec) {
                 var list = info.people.get(spec.type);
-                var count = Math.round(spec.min + (spec.max - spec.min)*Math.random());
+                var max = spec.max;
+                if(debug) {
+                    max = (spec.min > 5) ? spec.min : 5;
+                }
+                var count = Math.round(spec.min + (max - spec.min)*Math.random());
                 for(var x = 0; x < count; ++x) {
                     list.push(generator.createPerson(info.object, spec));
                 }
@@ -379,10 +455,15 @@ var generateTestData = function(instituteStructureDepth) {
                     info.parent.people.set(spec.type, info.parent.people.get(spec.type).concat(list));
                 }
             });
+            if(debug) {
+                debugPeoplesCreated = true;
+                debugInstituteChanged = info;
+            }
         });
 
         // Make unassociated staff members
         for(var c = 0; c < 70; c++) {
+            if(debug) { break; }
             generator.createPerson(undefined, ADMIN_STAFF_SPEC);
         }
 
@@ -405,6 +486,7 @@ var generateTestData = function(instituteStructureDepth) {
 
         // Update institutions with roles
         institutes.forEach(function(info) {
+            if(debugInstituteChanged && (debugInstituteChanged.object.ref != info.object.ref)) { return; }
             var inst = info.object.mutableCopy();
             O.service("hres:development:generate-test-data-update-institute", generator, info, inst);
             inst.save();
@@ -414,6 +496,7 @@ var generateTestData = function(instituteStructureDepth) {
         // Committees
         generator.committeeTypes.forEach(function(i) {
             _.each(O.query().linkDirectly(i.instituteType, A.Type).execute(), function(ri) {
+                if(debugInstituteChanged && debugInstituteChanged.object.ref != ri.ref) { return; }
                 if(Math.random() < i.probability) {
                     var committee = O.object();
                     committee.appendType(i.type);
@@ -427,20 +510,24 @@ var generateTestData = function(instituteStructureDepth) {
             });
         });
 
-        // Funders
-        var funders = [];
-        // Test data taken from http://www.rin.ac.uk/system/files/attachments/List-of-major-UK-research-funders.pdf
-        _.each(P.loadFile("test_funders.json").readAsJSON(), function(name) {
-            var funder = O.object();
-            funder.appendType(T.Funder);
-            funder.appendTitle(name);
-            funder.save();
-            funders.push(funder);
-        });
-        generator.funders = funders;
+        // can run more than once in debug mode, but don't (for now) want to re run this part
+        var existingFunders = debug ? O.query().link(T.Funder, A.Type).limit(1).execute() : false;
+        if(!existingFunders || !existingFunders.length) {
+            // Funders
+            var funders = [];
+            // Test data taken from http://www.rin.ac.uk/system/files/attachments/List-of-major-UK-research-funders.pdf
+            _.each(P.loadFile("test_funders.json").readAsJSON(), function(name) {
+                var funder = O.object();
+                funder.appendType(T.Funder);
+                funder.appendTitle(name);
+                funder.save();
+                funders.push(funder);
+            });
+            generator.funders = funders;
 
-        // Taxonomy and other plugins?
-        generateTestTaxonomy();
+            // Taxonomy and other plugins?
+            generateTestTaxonomy();
+        }
         var ends = [];
         O.serviceMaybe("hres:development:generate-test-data-end", function(sort, fn) { ends.push({sort:sort, fn:fn}); });
         _.sortBy(ends,'sort').forEach(function(x) { x.fn(generator); });

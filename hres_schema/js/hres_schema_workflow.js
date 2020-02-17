@@ -206,7 +206,7 @@ This feature allows you to modify entities application-wide.
 
 Enable in your plugin by including @"hres:schema:entities"@ in your @plugin.json@'s @use@ array.
 
-This feature must be loaded before workflow entities are defined, so may require the plugin @loadOrder@ to be changed.
+This feature must be loaded before workflow entities are defined, so may require the plugin @loadPriority@ to be changed.
 
 */
 P.provideFeature("hres:schema:entities", function(plugin) {

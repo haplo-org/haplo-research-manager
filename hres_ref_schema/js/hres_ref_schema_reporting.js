@@ -52,23 +52,20 @@ P.implementService("std:action_panel:activity:menu:ref", function(display, build
     }
 });
 
-P.implementService("std:reporting:dashboard:ref_confirm_progress:setup", function(dashboard) {
-    dashboard.columns(70, ["refUnitOfAssessment"]);
-});
-
 P.respond("GET,POST", "/do/hres-ref/researchers-missing-uoa", [
 ], function(E) {
     CanViewREFSchemaDashboards.enforce();
+    var i = P.locale().text("template");
     P.reporting.dashboard(E, {
         name: "researcher_ref_uoa",
         kind: "list",
         collection: "researchers",
-        title: "Researchers missing Unit of Assessment"
+        title: i["Researchers missing Unit of Assessment"]
     }).
         filter((select) => {
             select.where("refUnitOfAssessment", "=", null);
         }).
         summaryStatistic(0, "count").
-        use("hres:person_name_column", {heading: "Researcher", personNameStyle:"wide"}).
+        use("hres:person_name_column", {heading: i["Researcher"], personNameStyle:"wide"}).
         respond();
 });

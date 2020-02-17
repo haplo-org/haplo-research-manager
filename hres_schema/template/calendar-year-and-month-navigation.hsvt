@@ -1,0 +1,9 @@
+<div data-month=month data-year=year style="text-align:right">
+    std:ui:navigation:arrow("left" url(?year=monthPreviousYear month=previousMonth))
+    " " monthName " "
+    std:ui:navigation:arrow("right" url(?year=monthNextYear month=nextMonth))
+
+    std:ui:navigation:arrow("left" url(?year=previousYear month=month))
+    " " year " "
+    std:ui:navigation:arrow("right" url(?year=nextYear month=month))
+</div>

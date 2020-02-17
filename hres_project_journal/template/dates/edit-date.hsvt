@@ -1,4 +1,4 @@
-pageTitle("Edit " date.displayName " for " project.title)
+pageTitle(i("Edit {} for {projectTitle}") {date.displayName} projectTitle{project.title})
 
 std:object(project "linkedheading")
 
@@ -6,17 +6,17 @@ switch(action) {}
     editScheduledActual {
         if(date.actual) {
             unless(date.previousActuals.length) {
-                std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time.")
+                std:ui:notice(i("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time."))
             } else {
-                std:ui:notice("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time. The system will delete all the previous dates if you indicate that the action should occur at a future time.")
+                std:ui:notice(i("The system already has a date recorded for this event. Setting a new date with this form will override the recorded date, indicating that the action did not occur at that time. The system will delete all the previous dates if you indicate that the action should occur at a future time."))
             }
         }
     } editPreviousActual {
-        std:ui:notice("Enter the dates from latest to oldest. Don't miss dates from your list as you won't be able to insert them in the list in the system later.")
+        std:ui:notice(i("Enter the dates from latest to oldest. Don't miss dates from your list as you won't be able to insert them in the list in the system later."))
     }
 
 if(error) {
-    std:ui:notice("Please complete all required fields.")
+    std:ui:notice(i("Please complete all required fields."))
 }
 
 <form method="POST"> std:form:token()
@@ -25,20 +25,20 @@ if(error) {
     <p>
         <input  type="submit"
                 value=switch(action) {
-                        "Set date"
+                        i("Set date")
                     } editPreviousActual {
-                        "Add previous date"
+                        i("Add previous date")
                     }>
         if(canClear) {
             <span style="float: right">
                 <input  type="submit"
                         value=switch(action) {
-                                "Delete"
+                                i("Delete")
                             } editScheduledActual {
                                 unlessAll(date.actual date.previousActuals.length) {
-                                    "Delete"
+                                    i("Delete")
                                 } else {
-                                    "Delete date and previous dates"
+                                    i("Delete date and previous dates")
                                 }
                             }
                         name="clear">

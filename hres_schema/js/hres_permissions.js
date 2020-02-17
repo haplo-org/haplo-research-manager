@@ -68,3 +68,6 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
 O.action("std:action:administrator_override").
     allow("group", Group.Administrators).
     allow("group", Group.ITSupport);
+
+O.action("haplo:action:accessibility-statement:can-edit-statements").
+    allow("group", Group.ITSupport);

@@ -2,7 +2,12 @@
 each(sections) {
   if(display) {
     std:web-publisher:template("hres:repository:common:ui:panel") {
-      render(display)
-    } heading { section.title }
+      <div class="card border-0 bg-light mb-1">
+        <div class="card-body">
+          <h2> section.title </h2>
+          render(display)
+        </div>
+      </div>
+    }
   }
 }

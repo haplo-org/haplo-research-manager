@@ -5,6 +5,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
+/*HaploDoc
+node: /hres_schema/researchers
+title: Researchers collection
+--
+
+The researchers collection contains facts about Researchers and External Researchers. The default filter for \
+the collection excludes External researchers. If a dashboard using this collection needs to include External Researchers\
+ one of the filters to include them should be used. These are @includeExternal@, which will include both Researchers \
+and External Researchers in the dashboard, and @excludeInternal@, which will make the dashboard show only External \
+Researchers.
+
+*/
+
 P.implementService("std:reporting:discover_collections", function(discover) {
     discover("researchers", "Researchers", ["hres:people"]);
 });

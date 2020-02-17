@@ -13,7 +13,7 @@ each(sections) {
                 section.title
             </h2>
             if(display) {
-                <a class="profile-show-hide" href="#"> "show..." </a>
+                <a class="profile-show-hide" href="#" role="button"> "show..." </a>
             }
             <div class="profile-section-display">
                 render(display)

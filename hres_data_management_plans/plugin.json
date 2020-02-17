@@ -9,16 +9,22 @@
   "privilegesRequired": ["pDatabase", "pFileTransformPipeline"],
   "depend": [
       "std_document_store",
-      "hres_digital_object_identifier"
+      "std_reporting",
+      "hres_digital_object_identifier",
+      "std_workflow",
+      "hres_schema_projects",
+      "hres_schema"
     ],
   "use": [
     "std:document_store",
+    "std:reporting",
     "hres:doi"
   ],
   "load": [
       "js/hres_data_management_plans.js",
       "js/dmp_forms.js",
-      "js/dmp_document.js"
+      "js/dmp_document.js",
+      "js/dmp_reporting.js"
     ],
   "respond": ["/do/hres-data-management-plans"]
 }

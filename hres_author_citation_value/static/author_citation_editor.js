@@ -13,6 +13,11 @@
     var shadowedAttributes = {};
     var descChoosesQualifiers = {};
 
+    window.authorCitationEditorValueAddMappings = function(refTitleMap) {
+        refTitleMap = JSON.parse(refTitleMap);
+        $.extend(objectTitles, refTitleMap);
+    };
+
     var AuthorCitationEditorValue = function(value, desc, lookupDesc) {
         this.initialValue = value || {};
         this.desc = desc;

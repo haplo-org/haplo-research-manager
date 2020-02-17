@@ -1,6 +1,6 @@
-<p>Please describe the changes you'd like made to the project.</p>
+<p id="changesLabel">Please describe the changes you'd like made to the project.</p>
 
 <form method="POST">{{>std:form_csrf_token}}
-  <p><textarea rows="12" cols="80" name="changes"></textarea></p>
+  <p><textarea rows="12" cols="80" name="changes" aria-labelledby="changesLabel"></textarea></p>
   <p><input type="submit" value="Request changes">&nbsp;<a href="{{backLink}}">Cancel</a></p>
 </form>

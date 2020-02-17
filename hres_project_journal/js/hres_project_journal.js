@@ -290,12 +290,13 @@ P.respond("GET,POST", "/do/hres-project-journal/fix-imported-nulls", [
         });
         E.response.redirect("/do/hres-project-journal/fix-imported-nulls?count="+count);
     }
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Fix nulls imported into project journal data?",
+        pageTitle: i["Fix nulls imported into project journal data?"],
         backLink: "/",
-        text: count ? "Fixed "+count+" journals" : "",
+        text: count ? O.interpolateString(i["Fixed {count} journals"], {count: count}) : "",
         options: [
-            {label:"Fix"}
+            {label:i["Fix"]}
         ]
     }, "std:ui:confirm");
 });

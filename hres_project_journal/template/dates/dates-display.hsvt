@@ -4,19 +4,19 @@ std:plugin:resources("journal-dates.js" "journal-dates.css")
 if(displayAdminOptions) {
     if(canForceUpdate) {
         <form method="GET" action=["/do/hres-project-journal/dates/force-update/" project]> std:form:token()
-            <p><input type="submit" value="Force dates recalculation"></p>
+            <p><input type="submit" value=i("Force dates recalculation")></p>
         </form>
     }
-    <a href=["/do/hres-project-journal/dates/history/" project]> "View history" </a>
+    <a href=["/do/hres-project-journal/dates/history/" project] role="button"> i("View history") </a>
 }
 
 <table id="project_dates_table">
     <tr>
         <th> </th>
-        <th > "Date completed" </th>
-        unless(hideDeadlines) { <th> "Deadline" </th> }
+        <th > i("Date completed") </th>
+        unless(hideDeadlines) { <th> i("Deadline") </th> }
         if(displayAlerts) {
-            <th> "Reminder sent" </th>
+            <th> i("Reminder sent") </th>
         }
         
     </tr>
@@ -27,30 +27,30 @@ if(displayAdminOptions) {
                 <td>
                     ifAll(^^{editable} isPreviousActualEditableByCurrentUser) {
                         " "
-                        <a href=["/do/hres-project-journal/edit-date/previous-actual/" name "/" ^^{project}]>
-                            "Add previous"
+                        <a href=["/do/hres-project-journal/edit-date/previous-actual/" name "/" ^^{project}] role="button">
+                            i("Add previous")
                         </a>
                         ifAny(^{hasScheduledActual} previousActuals.length) {
                             " "
                         }
                     }
-                    each(previousActuals) { <i> "(previous) " </i> std:date(.) <br> }
+                    each(previousActuals) { <i> previous " " </i> std:date(.) <br> }
                     if(actual) {
                         std:date(actual)
                     } else {
                         if(scheduled) {
-                            if(previousActuals) { <i> "(next) " </i> }
+                            if(previousActuals) { <i> next " " </i> }
                             std:date(scheduled)
                         } else {  
                             // If there are previous dates, then note that we're waiting a new actual
-                            if(previousActuals) { <i> "(waiting next)" </i> }
+                            if(previousActuals) { <i> waiting next </i> }
                         }
                     }
                     if(^^{editable}) {
                         if(isScheduledActualEditableByCurrentUser) {
                             " "
-                            <a href=["/do/hres-project-journal/edit-date/scheduled-actual/" name "/" ^^{project}]>
-                                if(^{hasScheduledActual}) { "Edit" } else { "Set" }
+                            <a href=["/do/hres-project-journal/edit-date/scheduled-actual/" name "/" ^^{project}] role="button">
+                                if(^{hasScheduledActual}) { i("Edit") } else { i("Set") }
                             </a>
                         }
                     }
@@ -69,14 +69,14 @@ if(displayAdminOptions) {
                         }
                     } previousActual {
                         if(previousActuals) {
-                            <i> "(next) " </i>
+                            <i> next " " </i>
                         }
                     } isEditable {
                         if(^^{editable}) {
                             if(isRequiredEditableByCurrentUser) {
                                 if(requiredMin) { " " }
-                                <a href=["/do/hres-project-journal/edit-date/required/" name "/" ^^{project}]>
-                                    if(requiredMin) { "Edit" } else { "Set" }
+                                <a href=["/do/hres-project-journal/edit-date/required/" name "/" ^^{project}] role="button">
+                                    if(requiredMin) { i("Edit") } else { i("Set") }
                                 </a>
                             }
                         }
@@ -104,6 +104,6 @@ if(displayAdminOptions) {
 switch(context)
 {}
 full {
-    <a class="view-earliest">"Show earliest submission dates..."</a>
-    <a class="view-earliest" style="display:none">"Hide earliest submission dates..."</a>
+    <a class="view-earliest" role="button">i("Show earliest submission dates...")</a>
+    <a class="view-earliest" style="display:none" role="button">i("Hide earliest submission dates...")</a>
 }

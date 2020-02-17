@@ -1,0 +1,22 @@
+{
+    "specificationVersion": 0,
+    "formId": "existing-datasets",
+    "formTitle": "Existing datasets",
+    "elements": [
+        {
+            "type": "repeating-section",
+            "path": "datasets",
+            "minimumCount": 0,
+            "allowDelete": true,
+            "required": true,
+            "elements": [
+                {
+                    "type": "choice",
+                    "path": ".",
+                    "label": "Select a dataset related to this project",
+                    "choices": "linkedDatasets"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+<br>
+std:ui:button-link("/do/hres-data-management-plans/get-related-datasets/" key) { "Add datasets from Haplo repository" }

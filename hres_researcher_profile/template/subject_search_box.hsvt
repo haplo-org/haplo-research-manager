@@ -1,15 +1,15 @@
 std:plugin:resources("home_search_box.css")
 <div id="search_box">
   <div>
-    <span> "Find a researcher" </span>
+    <span id="find-a-researcher"> i("Find a researcher") </span>
     <form action="/do/researcher-profile/search/researcher">
-      <input name="searchTerm">
+      <input name="searchTerm" aria-labelledby="find-a-researcher">
     </form>
   </div>
   <div>
-    <span> "Find research" </span>
+    <span id="find-research"> i("Find research") </span>
     <form action="/do/researcher-profile/search/research">
-      <input name="searchTerm">
+      <input name="searchTerm" aria-labelledby="find-research">
     </form>
   </div>
 </div>

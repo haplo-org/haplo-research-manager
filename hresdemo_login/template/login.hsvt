@@ -12,7 +12,7 @@ std:ui:button-link(beginUrl) { "Login to Haplo Research Manager" }
 
 <div id="login-externals">
   <h3> "External supervisors and examiners" </h3>
-  <p><a href="/do/authentication/login?auth=haplo"> "Log in with your email address &nbsp;&raquo;" </a></p>
+  <p><a href="/do/authentication/login?auth=haplo" role="button"> "Log in with your email address &nbsp;&raquo;" </a></p>
 </div>
 
 

@@ -322,5 +322,6 @@ P.respond("GET", "/do/hres-schema-admin/ensure-academic-years", [
 ], function(E) {
     if(!O.currentUser.isMemberOf(Group.Administrators)) { O.stop("Not permitted"); }
     ensureAcademicYearsInFutureAvailable();
-    E.render({message:"Done", pageTitle:"Ensure academic years"}, "std:ui:notice");
+    var i = P.locale().text("template");
+    E.render({message:i["Done"], pageTitle:i["Ensure academic years"]}, "std:ui:notice");
 });

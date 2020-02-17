@@ -1,4 +1,4 @@
-pageTitle("Templates")
+pageTitle(i("Templates"))
 backLink("/do/hres-file-templates/admin")
 
 std:document(form)

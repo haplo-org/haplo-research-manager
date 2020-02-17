@@ -40,6 +40,7 @@ P.implementService("haplo:descriptive_object_labelling:setup", function(type) {
     });
 
     type(T.TaughtStudent, {
+        selfLabelling: true,
         labels: [Label.ActivityIdentity],
         labelWith: [A.ResearchInstitute]
     });
@@ -70,7 +71,8 @@ P.implementService("haplo:user_roles_permissions:setup", function(setup) {
     setup.roleProjectPermission("Taught Module Leader",        "read-edit",     TAUGHT_TYPES);
 
     setup.groupPermission(Group.Everyone, "read", T.CourseModule);
-    setup.groupPermission(Group.Everyone, "read", T.TaughtStudent);
+    setup.groupPermission(Group.Researchers, "read", T.TaughtStudent);
+    setup.groupPermission(Group.AdminStaff, "read", T.TaughtStudent);
 
     // Roles
     setup.groupPersonalRole(Group.TaughtStudents,       "Is: Taught Student");

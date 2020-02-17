@@ -108,21 +108,21 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
         }
         E.response.redirect(researcher.url());
     }
-
+    var i = P.locale().text("template");
     if(detailsMissing) {
         E.render({
-            pageTitle: "Missing data",
+            pageTitle: i["Missing data"],
             backLink: researcher.url(),
             researcher: researcher,
             userDetails: userDetails
         }, "details-missing");
     } else {
         E.render({
-            pageTitle: "Request external access",
+            pageTitle: i["Request external access"],
             backLink: researcher.url(),
             researcher: researcher,
             userDetails: userDetails,
-            text: "Confirm external access for the "+NAME("External Researcher"),
+            text: i["Confirm external access for the NAME(External Researcher)"],
             form: form
         });
     }
@@ -131,8 +131,9 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
 P.respond("GET", "/do/hres-external-researchers/bad-email", [
     {pathElement:0, as: "object"}
 ], function(E, researcher) {
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Invalid Email Address",
+        pageTitle: i["Invalid Email Address"],
         backLink: researcher.url(),
         researcher: researcher
     }, "bad-email");
@@ -166,10 +167,11 @@ P.respond("GET,POST", "/do/hres-external-researchers/reactivate-user", [
             appUrl: O.application.url
         });
     }
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Reactivate user",
+        pageTitle: i["Reactivate user"],
         backLink: researcher.url(),
-        text: "The "+NAME("External Researcher")+" has a previously existing user account. Confirm to reactivate it.",
+        text: i["The NAME(External Researcher) has a previously existing user account. Confirm to reactivate it."],
         form: form
     }, "request-external-access");
 });
@@ -184,11 +186,12 @@ P.respond("GET,POST", "/do/hres-external-researchers/revoke-access", [
         user.setIsActive(false);
         return E.response.redirect(researcher.url());
     }
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Revoke access",
+        pageTitle: i["Revoke access"],
         backLink: researcher.url(),
-        text: "Confirm revocation of "+researcher.title+"'s external access",
-        options: [{label: "Confirm"}]
+        text: O.interpolateString(i["Confirm revocation of {title}'s external access"], {title: researcher.title}),
+        options: [{label: i["Confirm"]}]
     }, "request-external-access");
 });
 
@@ -203,11 +206,15 @@ P.respond("GET,POST", "/do/hres-external-researchers/resend-access", [
         P.sendEmail(user, "new_user", emailView);
         return E.response.redirect(researcher.url());
     }
+    var i = P.locale().text("template");
     var view = {
-        pageTitle: "Resend password setting email",
+        pageTitle: i["Resend password setting email"],
         backLink: researcher.url(),
-        text: "Email "+researcher.title+" instructions for getting started on "+O.application.name,
-        options: [{ label: "Confirm" }]
+        text: O.interpolateString(i["Email {title} instructions for getting started on {application}"], {
+            title: researcher.title,
+            application: O.application.name
+        }),
+        options: [{ label: i["Confirm"] }]
     };
     E.render(view, "std:ui:confirm");
 });
@@ -238,13 +245,12 @@ P.hook("hPostObjectEdit", function(response, object, previous) {
 P.respond("GET", "/do/hres-external-researchers/email-address-in-use", [
     {pathElement:0, as:"object"}
 ], function(E, researcher) {
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Email address already in use",
+        pageTitle: i["Email address already in use"],
         backLink: researcher.url(),
-        message: "The email address is already in use by another user. The record will "+
-            "be updated however the user account for "+researcher.title+
-            " will not be updated with this email address",
-        dismissText: "OK",
+        message: O.interpolateString(i["The email address is already in use by another user. The record will be updated however the user account for {researcher} will not be updated with this email address"], {researcher: researcher.title}),
+        dismissText: i["OK"],
         dismissLink: researcher.url()
     }, "std:ui:notice");
 });

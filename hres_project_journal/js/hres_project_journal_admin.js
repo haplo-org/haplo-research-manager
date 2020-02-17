@@ -14,6 +14,9 @@
 var CanForceDatesUpdate = P.CanForceDatesUpdate = O.action("hres:project_journal:force_manual_dates_recalculation").
     title("Can force manual project dates calculation");
 
+var CanSeeProjectDatesHistory = P.CanSeeProjectDatesHistory = O.action("hres:project_journal:project_dates_history_access").
+    title("Can see project dates history");
+
 P.respond("GET,POST", "/do/hres-project-journal/dates/force-update", [
     {pathElement:0, as:"object"},
     {parameter:"deleteState", as:"int", optional:true}
@@ -32,14 +35,15 @@ P.respond("GET,POST", "/do/hres-project-journal/dates/force-update", [
         });
         return E.response.redirect(project.url());
     }
+    var i = P.locale().text("template");
     E.render({
-        pageTitle: "Recalculate dates for: "+project.title,
+        pageTitle: i["Recalculate dates for:"] +" "+project.title,
         backLink: project.url(),
-        text: "Recalculate project dates for this project. This should only be required in exceptional circumstances."+
-            "\nDeleting the state for the dates will reset any errors that have been persisted in 'periodEndRules'. Use with caution.",
+        text: i["Recalculate project dates for this project. This should only be required in exceptional circumstances."]+
+            "\n"+i["Deleting the state for the dates will reset any errors that have been persisted in 'periodEndRules'. Use with caution."],
         options: [
-            {label:"Confirm"},
-            {label:"Confirm and delete previous state", parameters: {deleteState:1} }
+            {label:i["Confirm"]},
+            {label:i["Confirm and delete previous state"], parameters: {deleteState:1} }
         ]
     }, "std:ui:confirm");
 });
@@ -50,7 +54,7 @@ P.respond("GET", "/do/hres-project-journal/dates/history", [
     {pathElement:0, as:"object"},
     {parameter:"version", as:"int", optional:true}
 ], function(E, project, version) {
-    CanForceDatesUpdate.enforce();
+    CanSeeProjectDatesHistory.enforce();
     
     var q = P.db.dates.select().
         where("project", "=", project.ref).
@@ -219,16 +223,15 @@ P.respond("GET,POST", "/do/hres-project-journal/dates/recalculate-all", [
         E.response.redirect("/do/hres-project-journal/dates/check-calculated");
     }
     
-    var text = "Recalculate all project dates in this application.\n"+
-        "This should only be used if you understand the causes behind all "+count+
-        " entries in the 'inconsistencies' table, and agree with the corrected calculated dates";
+    var i = P.locale().text("template");
+    var text = O.interpolateString(i["Recalculate all project dates in this application. \n This should only be used if you understand the causes behind all {count} entries in the 'inconsistencies' table, and agree with the corrected calculated dates"], {count: count});
     E.render({
-        pageTitle: "Recalculate all dates",
+        pageTitle: i["Recalculate all dates"],
         backLink: "/do/hres-project-journal/dates/check-calculated",
         text: !!ignorestate ?
-            text+"\nYou will delete all saved state associated with the project dates in the system." : 
+            text+"\n"+i["You will delete all saved state associated with the project dates in the system."] : 
             text,
-        options: [{label: "Confirm"}]
+        options: [{label: i["Confirm"]}]
     }, "std:ui:confirm");
     
 });

@@ -1,5 +1,5 @@
 
-pageTitle("Imported " kind ": " std:date(date))
+pageTitle(i("Imported {kind}: {}") {std:date(date)} kind{kind})
 backLink(std:object:url(project))
 
 std:object(project "linkedheading")

@@ -17,11 +17,13 @@ P.implementService("std:reporting:collection_category:hres:people:setup", functi
 P.implementService("std:reporting:collection_category:hres:people:get_facts_for_object", function(object, row) {
     // Use name of person to create a string to use for sorting
     var title = object.first(A.Title);
-    if(O.typecode(title) === O.T_TEXT_PERSON_NAME) {
-        var fields = title.toFields();
-        row.nameSortAs = _.compact([fields.last, fields.first, fields.title]).join(", ").toLowerCase();
-    } else if(title) {
-        row.nameSortAs = title.toString().toLowerCase();
+    if(title) {
+        if(O.typecode(title) === O.T_TEXT_PERSON_NAME) {
+            var fields = title.toFields();
+            row.nameSortAs = _.compact([fields.last, fields.first, fields.title]).join(", ").toLowerCase();
+        } else if(title) {
+            row.nameSortAs = title.toString().toLowerCase();
+        }
     }
     row.contactCategory = object.first(A.Type);
     var institute = object.first(A.ResearchInstitute), safety = 256;
@@ -51,7 +53,7 @@ var makePersonDashboardExportColumns = function(spec) {
 
 var makePersonDashboardColumns = function(spec) {
     var columns = [
-        {fact:(spec.personFact || "ref"), type:"ref-person-name", link:true, heading:(spec.heading || "Name"), style:(spec.personNameStyle || "small")}
+        {fact:(spec.personFact || "ref"), type:"ref-person-name", link: true, heading:(spec.heading || "Name"), style:(spec.personNameStyle || "small")}
     ];
     if(P.INSTITUTE_DEPTH > 1) {
         columns.push({
@@ -112,4 +114,8 @@ P.implementService("hres:reporting-aggregate-dimension:department", function() {
 
 P.implementService("hres:reporting-aggregate-dimension:school", function() {
     return getResearchInstituteAggregateDimension("school", T.School);
+});
+
+P.implementService("hres:reporting-aggregate-dimension:committee", function() {
+    return getResearchInstituteAggregateDimension("committee", T.Committee);
 });

@@ -14,7 +14,7 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
     var display = [];
     var lastPrefix;
     var displayAlerts = false;
-    let displayAdminOptions = !!(O.currentUser.allowed(P.CanForceDatesUpdate) && options.displayAdminOptions);
+    let displayAdminOptions = !!((O.currentUser.allowed(P.CanForceDatesUpdate) || O.currentUser.allowed(P.CanSeeProjectDatesHistory)) && options.displayAdminOptions);
     projectDates.datesForDisplay().forEach(function(date, i, dates) {
         if(date.alerts && (date.requiredMax || date.scheduled)) {
             displayAlerts = true;
@@ -252,7 +252,8 @@ P.respond("GET,POST", "/do/hres-project-journal/edit-date", [
 
     var prevent = O.serviceMaybe("hres:project_journal:dates:prevent_date_edit:"+name, variationName, project);
     if(prevent) {
-        var options = prevent.url ? [{action:prevent.url, label:prevent.label || "More information..."}] : [];
+        var i = P.locale().text("template");
+        var options = prevent.url ? [{action:prevent.url, label:prevent.label || i["More information..."]}] : [];
         E.render({
             pageTitle: date.displayName,
             additionalUI: prevent.additionalUI,

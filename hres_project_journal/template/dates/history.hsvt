@@ -1,14 +1,14 @@
 
 std:layout:wide()
-pageTitle("Dates history")
+pageTitle(i("Dates history"))
 
 <p>
     if(entry) {
-        <i> "Version: " </i> version unless(next) { " (current)" } <br>
-        <i> "Action: " </i> entry.reason.action <br>
-        <i> "Created: " </i> std:date(entry.updated)
+        <i> i("Version:") " " </i> version unless(next) { " " current } <br>
+        <i> i("Action:") " " </i> entry.reason.action <br>
+        <i> i("Created:") " " </i> std:date(entry.updated)
     } else {
-        <i> "No versions found." </i>
+        <i> i("No versions found.") </i>
     }
 </p>
 
@@ -16,14 +16,14 @@ pageTitle("Dates history")
     <p>
     // Previous can be 0, which is falsey in HSVT
     if(version) {
-        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=previous]>
-            "Previous"
+        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=previous] role="button">
+            i("Previous")
         </a>
     }
     " "
     if(next) {
-        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=next]>
-            "Next"
+        <a href=["/do/hres-project-journal/dates/history/" project.ref ? version=next] role="button">
+            i("Next")
         </a>
     }
     </p>
