@@ -1,0 +1,18 @@
+{
+  "pluginName": "hres_publication_common",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Research Publication Common Features",
+  "displayDescription": "Common features for research focused publications",
+  "installSecret": "c8d95b24867a675c4e4396b546ef61f8d5476d4d",
+  "apiVersion": 4,
+  "depend": [
+    "std_web_publisher",
+    "hres_schema"
+  ],
+  "use": ["std:web-publisher"],
+  "load": [
+      "js/hres_publication_common.js"
+    ],
+  "respond": ["/do/hres-publication-common"]
+}

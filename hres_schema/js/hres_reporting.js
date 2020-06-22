@@ -74,13 +74,16 @@ var makePersonDashboardColumns = function(spec) {
 
 P.reporting.registerReportingFeature("hres:person_name_column", function(dashboard, spec) {
     if(!spec) { spec = {}; }
-    dashboard.
-        columns(10, dashboard.isExporting ? makePersonDashboardExportColumns(spec) : makePersonDashboardColumns(spec)).
-        order(spec.personFact ? [spec.personFact, true] : "nameSortAs").
-        use("std:row_text_filter", {facts:[spec.personFact || "ref"], placeholder:"Search by name"}).
-        use("std:row_object_filter", {fact:"faculty", objects:T.Faculty});
-    if(P.INSTITUTE_DEPTH > 1) {
-        dashboard.use("std:row_object_filter", {fact:"department", objects:T.Department});
+    dashboard.columns(10, dashboard.isExporting ? makePersonDashboardExportColumns(spec) : makePersonDashboardColumns(spec));
+    if(!spec.ignoreOrdering) {
+        dashboard.order(spec.personFact ? [spec.personFact, true] : "nameSortAs");
+    }
+    if(!spec.ignoreFilters) {
+        dashboard.use("std:row_text_filter", {facts:[spec.personFact || "ref"], placeholder:"Search by name"}).
+            use("std:row_object_filter", {fact:"faculty", objects:T.Faculty});
+        if(P.INSTITUTE_DEPTH > 1) {
+            dashboard.use("std:row_object_filter", {fact:"department", objects:T.Department});
+        }
     }
 });
 

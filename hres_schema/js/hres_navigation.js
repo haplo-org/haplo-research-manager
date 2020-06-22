@@ -41,28 +41,34 @@ P.onResearchInstituteChange.push(function() {
 
 var institutePeopleLinks;
 
+var canSeeInstitutePeopleLinks = O.action("hres_navigation:can_see_institute_people_links").
+    title("Can see institute people links").
+    allow("group", Group.Everyone);
+
 var researchInstituteLinksActionPanel = function(name, childType, childTitle, level) {
     P.implementService(name, function(display, builder) {
-        // People
-        if(!institutePeopleLinks) {
-            institutePeopleLinks = [
-                {sort:1000, type:T.Researcher, name:NAME("+Researcher")},
-                {sort:9000, type:T.Staff,      name:NAME("+Staff")}
-            ];
-            O.serviceMaybe("hres:navigation:people_types_for_research_institute_navigation", institutePeopleLinks);
-        }
-        var searchBase = display.object.url()+'/linked/';
-        var subtypeParameters = '?sort=title&type=';
-        var peoplePanel = builder.panel(200);
-        institutePeopleLinks.forEach(function(p) {
-            // TODO: Make this check for people a bit quicker?
-            var q = O.query().link(display.object.ref).link(p.type,A.Type).limit(1).setSparseResults(true).execute();
-            var rootType = SCHEMA.getTypeInfo(p.type).rootType;
-            if(q.length) {
-                peoplePanel.link(p.sort, searchBase+((rootType != p.type) ? rootType+subtypeParameters : "")+p.type, p.name);
+        if(O.currentUser.allowed(canSeeInstitutePeopleLinks)) {
+            // People
+            if(!institutePeopleLinks) {
+                institutePeopleLinks = [
+                    {sort:1000, type:T.Researcher, name:NAME("+Researcher")},
+                    {sort:9000, type:T.Staff,      name:NAME("+Staff")}
+                ];
+                O.serviceMaybe("hres:navigation:people_types_for_research_institute_navigation", institutePeopleLinks);
             }
-        });
-        if(!peoplePanel.empty) { peoplePanel.element(0, {title:"People"}); }
+            var searchBase = display.object.url()+'/linked/';
+            var subtypeParameters = '?sort=title&type=';
+            var peoplePanel = builder.panel(200);
+            institutePeopleLinks.forEach(function(p) {
+                // TODO: Make this check for people a bit quicker?
+                var q = O.query().link(display.object.ref).link(p.type,A.Type).limit(1).setSparseResults(true).execute();
+                var rootType = SCHEMA.getTypeInfo(p.type).rootType;
+                if(q.length) {
+                    peoplePanel.link(p.sort, searchBase+((rootType != p.type) ? rootType+subtypeParameters : "")+p.type, p.name);
+                }
+            });
+            if(!peoplePanel.empty) { peoplePanel.element(0, {title:"People"}); }
+        }
         // Child institute
         if(childType && (P.INSTITUTE_DEPTH > level)) {
             var childInstitutes = O.query().

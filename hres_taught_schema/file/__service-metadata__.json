@@ -1,0 +1,21 @@
+{
+    "haplo:data-import-framework:setup-model:hres:course-modules": {
+        "statements": [
+            "conforms-to haplo:data-import-framework:setup-model"
+        ],
+        "metadata": {
+            "name": "hres:course-modules",
+            "title": "Course modules",
+            "description": "Information about taught students' course modules."
+        }
+    },
+    "haplo:data-import-framework:filter:hres:module-code-to-ref": {
+        "statements": [
+            "conforms-to haplo:data-import-framework:filter"
+        ],
+        "metadata": {
+            "name": "hres:module-code-to-ref",
+            "description": "Convert module code to Ref value."
+        }
+    }
+}

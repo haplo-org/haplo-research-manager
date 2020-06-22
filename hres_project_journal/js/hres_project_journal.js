@@ -29,8 +29,10 @@ var UPDATE_FIELDS = ['datetime','ref','user','data'];
 
 var selectJournalEntries = function(specification) {
     var select = P.db.journal.select().
-        order("datetime",true).
-        where("project","=",specification.project);
+        order("datetime",true);
+    if("project" in specification) {
+        select.where("project", "=", specification.project);
+    }
     if("academicYear" in specification && specification.academicYear) {
         select.where("academicYear","=",specification.academicYear);
     }

@@ -162,6 +162,7 @@ P.respond("GET,POST", "/do/hres-data-management-plans/edit-dmp", [
         currentDoc = instance.currentDocument;
     if(!currentDoc.ethical_issues_exist) { P.addEthicsIssues(instance, projectRef); }
     if(!currentDoc.costs) { P.addCostingInformation(instance, projectRef); }
+    if(!currentDoc.title) { currentDoc.title = projectRef.load().title; }
 
     instance.handleEditDocument(E, {
         gotoPage: function(instance, E, formId) {

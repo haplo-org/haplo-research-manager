@@ -230,13 +230,17 @@ var getDatasetDistributions = function(dataset) {
 var getProjectInfo = function(project) {
     let description = project.every(A.Objectives),
         dates = O.serviceMaybe("hres:project_journal:dates", project.ref),
-        start = dates.date("project-start"),
-        end = dates.date("project-end");
+        start,
+        end;
     if(!dates) {
         dates = getAttributeMaybe("ProjectDates", project)[0];
-        start = dates.start;
-        end = dates.end;
+        if(dates) {
+            start = dates.start;
+            end = dates.end;
+        }
     } else {
+        start = dates.date("project-start");
+        end = dates.date("project-end");
         start = start.actual || start.requiredMin || start.requiredMax;
         end = end.actual || end.requiredMin || end.requiredMax;
     }

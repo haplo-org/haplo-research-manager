@@ -1,4 +1,4 @@
-title: HRES External researchers
+title: External researchers
 --
 
 This plugin adds support for managing external researchers. This is needed whenever an institution requires people who aren't a part of their institution to access the system.

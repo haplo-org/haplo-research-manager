@@ -1,4 +1,4 @@
-title: HRES Workflow Confirmation Steps
+title: Workflow Confirmation Steps
 --
 h2. Background
 

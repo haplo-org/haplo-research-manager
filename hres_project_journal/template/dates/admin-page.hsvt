@@ -1,0 +1,37 @@
+
+pageTitle(i("Project dates administration"))
+
+
+<h1>i("Inconsistencies table")</h1>
+
+<p> i("The contents of the inconsistencies table are calculated by checking all projects with stored project dates, ignorning those that have been edited manually, and computing the difference between the original and recalculated project dates - for this reason it might take some time to update. ") <b> i("NOTE: ") </b> i("Since this table is updated manually, the listed inconsistencies refer only to the inconsistencies present at its last update, so some rows might be out of date.") </p>
+
+<p> <b> i("Using the table") </b><br>
+
+    i("The table is automatically ordered by project ref and filtered to show only dates with defined inconsistencies.") <br>
+    i("To show unfiltered information across all checked dates (i.e. all stored and correctly registered project dates regardless of their inconsistencies), you can use the 'Show all dates in table' button. To filter the table to show only inconsistencies again use the 'Show only inconsistencies' button.") <br>
+    i("By default the table is in ascending order by project ref, switching to descending order and ordering by date name, stored date, calculated date and difference are all possible using the buttons at hand.") <br>
+</p>
+
+<p><a href="/do/hres-project-journal/dates/display-inconsistencies" style="font-size: 15px;" > i("View table of project dates inconsistencies")</a></p>
+
+
+<h1>i("Updating all project dates")</h1>
+
+<p> i("Dates might need to be updated aplication-wide as a result of, for example, a change in an application's project dates files.")<b> i(" If you aren't sure this update needs to happen, ask.") </b> i(" This will recalculate all project dates in this application (in the background) and should only be used if you understand the causes behind ")<i>i("all")</i> i(" entries in the Inconsistencies table, linked above, ") <i>i("and")</i> i(" agree with the corrected calculated dates.") </p>
+
+<p> i("This might take some time to update, a status message will appear below after it has been run for the first time.") </p>
+
+<i>status</i>
+
+<br>
+
+<form method="GET" action="/do/hres-project-journal/dates/recalculate-all" style="float:left;"> std:form:token()
+  if(ignorestate) { <input type="hidden" name="ignorestate" value=ignorestate> }
+  <input type="submit" value=i("Update all stored dates")>
+</form>
+
+if(errorLocation) {
+    <p style="color:#b94a48;">errorLocation</p>
+    <p style="color:#b94a48;">errorMessage</p>
+}

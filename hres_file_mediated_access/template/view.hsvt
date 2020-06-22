@@ -1,15 +1,15 @@
 
 std:plugin:resources("view.js")
 
+if(deferred) {
+    render(deferred)
+}
+
 <div id="deadline-notice" style=unless(hasDeadline) { "display:none;" }>
     within(notice) {
         template:std:ui:notice()
     }
 </div>
-
-if(deferred) {
-    render(deferred)
-}
 
 each(files) {
     <div class="released-file">

@@ -1,20 +1,4 @@
-if(first) {
-    each(first) {
-        template:citation()
-        if(qualifier) { <i> " (" qualifier ")" </i> }
-        ", "
-    }
-}
-if(penultimate) {
-    within(penultimate) {
-        template:citation()
-        if(qualifier) { <i> " (" qualifier ")" </i> }
-        " and "
-    }
-}
-if(last) {
-    within(last) {
-        template:citation()
-        if(qualifier) { <i> " (" qualifier ")" </i> }
-    }
+std:text:list:readable(. "en:default") {
+  template:citation()
+  if(qualifier) { <i> " (" qualifier ")" </i> }
 }

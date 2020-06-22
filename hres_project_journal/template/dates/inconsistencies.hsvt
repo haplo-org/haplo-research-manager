@@ -1,0 +1,117 @@
+pageTitle(i("Project dates inconsistencies"))
+backLink(backLink)
+
+std:layout:wide()
+
+<form method="GET" action="/do/hres-project-journal/dates/calculate-inconsistencies" style="float:right;"> std:form:token()
+  if(ignorestate) { <input type="hidden" name="ignorestate" value=ignorestate> }
+  <input type="submit" value=i("Update inconsistencies table")>
+</form>
+
+<p> <i>status</i> </p>
+
+if(errorLocation) {
+    <p> <b> "Table not updated" </b> </p>
+    <p style="color:#b94a48;">errorLocation</p>
+    <p style="color:#b94a48;">errorMessage</p>
+}
+else {
+    if(tableDefined) {
+
+        <p> <i> i("Found a total of {} inconsistent dates - checked {dates} dates across {projects} projects.") {inconsistencies} dates{dates} projects{projects} </i> </p>
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(showAll) {
+            <input type="submit" value=i("Show only inconsistencies in table")>
+          }
+          else {
+            <input type="hidden" name="showAll" value="true">
+            <input type="submit" value=i("Show all dates in table")>
+            }
+        </form>
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(descending) {
+            <input type="submit" value=i("Switch to ascending order")>
+            if(orderBy) { <input type="hidden" name="orderBy" value=orderBy> }
+            if(showAll) { <input type="hidden" name="showAll" value="true"> }
+          }
+          else {
+            <input type="hidden" name="descending" value="true">
+            <input type="submit" value=i("Switch to descending order")>
+            if(orderBy) { <input type="hidden" name="orderBy" value=orderBy> }
+            if(showAll) { <input type="hidden" name="showAll" value="true"> }
+          }
+        </form>
+
+        <br><br>
+
+        <b> "Order by:" </b><br>
+
+        if(orderBy) {
+            <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+              if(descending) { <input type="hidden" name="descending" value=descending> }
+              if(showAll) { <input type="hidden" name="showAll" value=showAll> }
+              <input type="submit" value=i("Project ref")>
+            </form>
+        }
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(descending) { <input type="hidden" name="descending" value=descending> }
+          if(showAll) { <input type="hidden" name="showAll" value=showAll> }
+          <input type="hidden" name="orderBy" value="name">
+          <input type="submit" value=i("Date name")>
+        </form>
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(descending) { <input type="hidden" name="descending" value=descending> }
+          if(showAll) { <input type="hidden" name="showAll" value=showAll> }
+          <input type="hidden" name="orderBy" value="original">
+          <input type="submit" value=i("Stored date")>
+        </form>
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(descending) { <input type="hidden" name="descending" value=descending> }
+          if(showAll) { <input type="hidden" name="showAll" value=showAll> }
+          <input type="hidden" name="orderBy" value="recalculated">
+          <input type="submit" value=i("Calculated date")>
+        </form>
+
+        <form method="GET" action="/do/hres-project-journal/dates/display-inconsistencies" style="float:left;"> std:form:token()
+          if(descending) { <input type="hidden" name="descending" value=descending> }
+          if(showAll) { <input type="hidden" name="showAll" value=showAll> }
+          <input type="hidden" name="orderBy" value="difference">
+          <input type="submit" value=i("Difference")>
+        </form>
+    }
+}
+
+<br>
+
+if(tableDefined) {
+    <table>
+        <thead>
+            <tr>
+                <th> i("Project") </th>
+                <th> i("Date") </th>
+                <th> i("Field") </th>
+                <th> i("Stored") </th>
+                <th> i("Calculated") </th>
+                <th> i("Difference") </th>
+            </tr>
+        </thead>
+        <tbody>
+            each(displayValues) {
+                <tr>
+                    <td> <a href=["/" ref]> ref </a> </td>
+                    <td> name </td>
+                    <td> field </td>
+                    <td> std:date:time(original) </td>
+                    <td> if(recalculated) { std:date:time(recalculated) } </td>
+                    <td> difference </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else { <p> <b> i("Please run the update via the button on the right to populate the table.") </b> </p> }

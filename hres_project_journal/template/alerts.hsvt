@@ -1,0 +1,41 @@
+
+pageTitle("Alerts administration")
+
+<h2> "Remove alerts for this project stage or status behaviour" </h2>
+<form action="" method="POST" > std:form:token()
+    <p> <input type="text" name="add" placeholder="Behaviour to remove" style="width:200px">
+    <input type="submit" value="Remove"> </p>
+</form>
+
+<h2> "Reinstate alerts for this project stage or status behaviour" </h2>
+<form action="" method="POST" > std:form:token()
+    <p> <input type="text" name="remove" placeholder="Behaviour to reinstate" style="width:200px">
+    <input type="submit" value="Reinstate"> </p>
+</form>
+
+if(error) {
+    <p style="color:#b94a48;">"Error: " error</p>
+}
+
+<br>
+
+<h2> "Current project statuses/stages with no alerts" </h2>
+<table>
+    <tr>
+        <th> "Display Name" </th>
+        <th> "Behaviour" </th>
+    </tr>
+    each(noAlertStatusOrStages) {
+    <tr>
+        <td> noAlertTitle </td>
+        <td> noAlert </td>
+    </tr>
+  }
+</table>
+
+<br><br><br>
+
+<p> <b>"Guidance: "</b> "To find a behaviour for a listed stage or status, please use the System Management tool." </p>
+<p> "For example, to find the behaviour for Graduated (phd:list:doctoral-research-project-stage:graduated):" </p>
+<p> "In System Management, under Schema." </p>
+<p> "Lists -- Doctoral Research Project Stage -- edit Graduated -- Configured Behaviour" </p>

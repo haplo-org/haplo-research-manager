@@ -4,6 +4,35 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+
+/*HaploDoc
+node: /hres_project_journal/dates/dates_ui
+sort: 10
+--
+
+h2. Services
+
+h3(service). "hres:project_journal:dates:ui:should_grey_out_dates"
+
+Implement in client namespace, takes project ref and date object, sets opacity to 0.3 in project dates table for specified dates, must return a boolean. \
+
+ e.g. To grey out any future dates for a student's project status (relative to when that status was applied):
+
+<pre>language=javascript
+P.implementService("hres:project_journal:dates:ui:should_grey_out_dates", function(projectRef, date) {
+    let hasCertainStatus = projectRef.load().has(O.behaviourRef("client:list:doctoral-research-project-status:certain-status"), A. DoctoralResearchProjectStatus);
+    date = date.actual || date.scheduled || date.requiredMin || date.requiredMax;
+    let journalQuery = O.service("hres:project_journal:select", { project: projectRef, kind: "certain_status_effective_from" });
+    let dateOccursAfterStatusApplied;
+    if(journalQuery.length > 0) {
+        dateOccursAfterStatusApplied = date ? new XDate(date).getTime() > new XDate(journalQuery[0].datetime).getTime() : false;
+    }
+    return hasCertainStatus && dateOccursAfterStatusApplied;
+});
+</pre>
+
+*/
+
 var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef, options, context) {
     var projectDates = ("datesList" in options) ?
         options.datesList :
@@ -15,6 +44,7 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
     var lastPrefix;
     var displayAlerts = false;
     let displayAdminOptions = !!((O.currentUser.allowed(P.CanForceDatesUpdate) || O.currentUser.allowed(P.CanSeeProjectDatesHistory)) && options.displayAdminOptions);
+    let isSuperUser = O.currentUser.isSuperUser;
     projectDates.datesForDisplay().forEach(function(date, i, dates) {
         if(date.alerts && (date.requiredMax || date.scheduled)) {
             displayAlerts = true;
@@ -61,7 +91,8 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
             date: date,
             displayName: date.displayName,
             hasScheduledActual: !!(date.scheduled || date.actual),
-            displayRequiredIsFixed: !!(date.requiredIsFixed && displayAdminOptions)
+            displayRequiredIsFixed: !!(date.requiredIsFixed && displayAdminOptions),
+            displayGreyedDate: O.serviceMaybe("hres:project_journal:dates:ui:should_grey_out_dates", projectRef, date)
         };
         var split = date.displayName.split(',');
         if(split.length > 1) {
@@ -82,7 +113,8 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
         displayAdminOptions: displayAdminOptions,
         canForceUpdate: O.currentUser.isMemberOf(Group.Administrators),
         displayAlerts: displayAlerts,
-        context: context
+        context: context, 
+        isSuperUser: isSuperUser
     });
 };
 

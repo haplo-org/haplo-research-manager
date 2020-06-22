@@ -7,6 +7,11 @@ if(displayAdminOptions) {
             <p><input type="submit" value=i("Force dates recalculation")></p>
         </form>
     }
+    if(isSuperUser) {
+        <form method="GET" action=["/do/hres-project-journal/dates/state-table/" project]> std:form:token()
+            <p><input type="submit" value=i("View state table for this project")></p>
+        </form>
+    }
     <a href=["/do/hres-project-journal/dates/history/" project] role="button"> i("View history") </a>
 }
 
@@ -34,16 +39,16 @@ if(displayAdminOptions) {
                             " "
                         }
                     }
-                    each(previousActuals) { <i> previous " " </i> std:date(.) <br> }
+                    each(previousActuals) { <i> "(" i("Previous") ") "</i> std:date(.) <br> }
                     if(actual) {
                         std:date(actual)
                     } else {
                         if(scheduled) {
-                            if(previousActuals) { <i> next " " </i> }
+                            if(previousActuals) { <i> "(" i("Next") ") "</i> }
                             std:date(scheduled)
                         } else {  
                             // If there are previous dates, then note that we're waiting a new actual
-                            if(previousActuals) { <i> waiting next </i> }
+                            if(previousActuals) { <i> "(" i("Waiting next") ")"</i> }
                         }
                     }
                     if(^^{editable}) {
@@ -58,18 +63,26 @@ if(displayAdminOptions) {
                 unless(^^{hideDeadlines}) {
                     do() {
                         if(requiredMax) {
-                            <td class=if(^{displayRequiredIsFixed}) { "admin-required-fixed" }>
+                            <td class= if(^{displayGreyedDate}) {
+                                    "no-longer-applicable"
+                                } else {
+                                    if(^{displayRequiredIsFixed}) {
+                                        "admin-required-fixed"
+                                    }
+                                }>
                                 yield:previousActual()
                                 if(requiredMin){ <span class="earliest-deadline-date">std:date(requiredMin) " - "</span> }
                                 std:date(requiredMax)
                                 yield:isEditable()
                             </td>
                         } else {
-                            <td> yield:isEditable() </td>
+                            <td>
+                                yield:isEditable()
+                            </td>
                         }
                     } previousActual {
                         if(previousActuals) {
-                            <i> next " " </i>
+                            <i> " (" i("Next") ")" </i>
                         }
                     } isEditable {
                         if(^^{editable}) {
@@ -83,13 +96,17 @@ if(displayAdminOptions) {
                     }
                 }
                 if(^^{displayAlerts}) {
-                    <td class= switch(warning) 
-                        {"alert"}
-                        amber {"amber-alert alert"}
-                        amberBefore {"amber-alert past-alert alert"}
-                        red {"red-alert alert"} 
-                        redBefore {"red-alert past-alert alert"}
-                        beforeDeployment {"past-alert alert"} >
+                    <td class= if(^{displayGreyedDate}) {
+                            "no-longer-applicable"
+                        } else {
+                            switch(warning) {"alert"}
+                                amber {"amber-alert alert"}
+                                amberBefore {"amber-alert past-alert alert"}
+                                red {"red-alert alert"} 
+                                redBefore {"red-alert past-alert alert"}
+                                beforeDeployment {"past-alert alert"}
+                        }
+                    >
                         each(alerts) {
                             if(requiredMin) {
                                 std:date(requiredMin) <br>
@@ -107,3 +124,6 @@ full {
     <a class="view-earliest" role="button">i("Show earliest submission dates...")</a>
     <a class="view-earliest" style="display:none" role="button">i("Hide earliest submission dates...")</a>
 }
+
+
+

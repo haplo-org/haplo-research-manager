@@ -1,0 +1,31 @@
+
+pageTitle("Search")
+
+std:web-publisher:block("header") {
+  <h1> "Search" </h1>
+  unless(showingResults) {
+    // On small displays, showing this text wastes vertical space and pushes results down
+    <p> searchPrompt </p>
+  }
+}
+
+<div class="row panel-colour haplo-search-form">
+  <div class="panel">
+    render(search.form)
+  </div>
+</div>
+
+if(showingResults) {
+  <div class="haplo-admissions-results">
+    render(search.results)
+  </div>
+} else {
+  <div class="haplo-search-keywords">
+    <h3> "Keywords" </h3>
+    <div>
+      each(keywords) {
+        <span> <a href=[SEARCH_PATH ? q=concat("keywords:\"" . "\"")]> . </a> </span>
+      }
+    </div>
+  </div>
+}

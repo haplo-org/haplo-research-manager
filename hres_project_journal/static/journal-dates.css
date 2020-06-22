@@ -51,3 +51,7 @@
 #project_dates_table td.admin-required-fixed {
     background-color: #fcc;
 }
+
+#project_dates_table td.no-longer-applicable {
+    opacity: 0.3;
+}

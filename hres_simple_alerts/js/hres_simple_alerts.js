@@ -67,11 +67,12 @@ var sendReminders = function(reminders) {
         if(recipients) { 
             var to = recipients.to;
             var cc = recipients.cc;
+            var customTemplate = O.serviceMaybe("hres:simple_alerts:custom_template_for_notification:"+reminder.date.name, project);
             var specification = {
-                template: P.template("email/notification"),
+                template:  customTemplate ? customTemplate.template : P.template("email/notification"),
                 to: to,
                 cc: cc,
-                view: {
+                view: customTemplate ? customTemplate.view : {
                     reminder: reminder,
                     alertsUrl: project.url(true),
                     project: project

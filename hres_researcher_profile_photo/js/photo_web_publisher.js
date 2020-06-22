@@ -56,13 +56,13 @@ if(O.featureImplemented("std:web-publisher")) {
 
     P.webPublication.pagePart({
         name: "hres:researcher-profile:photo",
-        category: "hres:repository:person:photo-display", // categeory used for rendering to avoid a dependency
+        category: "hres:publication:person:photo-display", // category used for rendering to avoid a dependency
         deferredRender: function(E, context, options) {
             return deferredRenderPhoto(context.publication, context.object, 160, 100);
         }
     });
 
-    P.implementService("hres:repository:person:photo-display:listing", function(publication, width, height) {
+    P.implementService("hres:person:photo-display:listing", function(publication, width, height) {
         return function(object) {
             return deferredRenderPhoto(publication, object, width, height);
         };

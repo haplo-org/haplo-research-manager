@@ -4,18 +4,41 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
-/*
+/*HaploDoc
+node: /hres_schema/hres_names
+title: NAMEs
+sort: 10
+--
+Support for NAME() for basic schema objects, with plural support.
 
-    Support for NAME() for basic schema objects, with plural support.
+List of type names below will be translated to the name of the type in the schema.
 
-    List of type names below will be translated to the name of the type in the schema.
+Prefix with '+' for the plural version, eg
+* NAME('Faculty') -> Faculty
+* NAME('+Faculty') -> Faculties
 
-    Prefix with '+' for the plural version, eg
-        NAME('Faculty') -> Faculty
-        NAME('+Faculty') -> Faculties
+The pluraliser is very simple, and is intended to be extended as requirements are discovered.
 
-    The pluraliser is very simple, and is intended to be extended as requirements
-    are discovered.
+h3(feature). "hres:schema:names"
+
+Use this feature in your plugin to get access to:
+
+* addTypeNamesFromSchema
+* addAttributeNamesFromSchema
+* addQualifierNamesFromSchema
+* addGroupNames
+
+When you want to make a new bit of schema available for NAME interpolation:
+
+<pre>language=javascript
+P.hresSchemaNAME.addTypeNamesFromSchema(T, [
+    ['Easter egg', 'EasterEgg']
+]);
+</pre>
+
+To use, add @NAME("Easter egg")@ as normal, and if a different plugin modified the type to give it a new title,\
+ NAME will return the new title.
+
 */
 
 var NAMES = {

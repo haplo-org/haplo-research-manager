@@ -1,4 +1,4 @@
-title: HRES Application numbers
+title: Application numbers
 --
 
 This plugin provides a service for generating application numbers. 

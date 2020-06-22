@@ -73,13 +73,7 @@ var createCitationListDisplayValue = P.implementTextType("hres:author_citation_l
                 qualifier: data.qualifier ? SCHEMA.getQualifierInfo(data.qualifier).name : null
             });
         });
-        var lastValueView = valueViews.pop();
-        var penultimateValueView = valueViews.pop();
-        return P.template("citation_list").render({
-            first: valueViews,
-            penultimate: penultimateValueView,
-            last: lastValueView
-        });
+        return P.template("citation_list").render(valueViews);
     }
 });
 
@@ -228,24 +222,13 @@ h3(service). O.service("hres:author_citation:citation_string_from_object", objec
 Returns a concatenated string of all of the citation strings for values in the @object@ 's @desc@, joined \
 with commas and "and" nicely for presentation in bibliographic publication citations and other string-only views.
 */
-P.implementService("hres:author_citation:citation_string_from_object", function(object, desc) {
-    var names = [];
-    object.every(desc, function(v) {
-        if(O.isRef(v)) {
-            names.push(v.load().title);
-        } else {
-            names.push(v.toString());
-        }
-    });
-    if(names.length) {
-        if(names.length === 1) {
-            return names[0];
-        } else {
-            var lastName = names.pop();
-            return names.join(', ')+' and '+lastName;
-        }
-    }
-});
+var citationStringFromObjectImpl = function(object, desc) {
+    return _.unescape(P.template("citation_string_from_object").render(
+        object.every(desc)
+    ));
+};
+P.implementService("hres:author_citation:citation_string_from_object", citationStringFromObjectImpl);
+P.implementService("hres:author_citation:citation_string_from_object:as_function", function() { return citationStringFromObjectImpl; });
 
 // --------------------------------------------------------------------------
 

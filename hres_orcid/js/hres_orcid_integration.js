@@ -79,11 +79,11 @@ P.implementService("hres:orcid:integration:redirect_to_start_obtain", function()
 
 P.hook("hOAuthSuccess", function(response, verifiedUser) {
     try {
-        console.log("ORCID response", verifiedUser);
         var auth = JSON.parse(verifiedUser);
         if(auth.service !== KEYCHAIN_ENTRY) {
             return; // not this OAuth provider
         }
+        console.log("ORCID response ", verifiedUser);
 
         if(!(auth.token && auth.token.orcid && O.currentUser.isMemberOf(GROUP["std:group:everyone"]))) {
             O.stop("Invalid ORCID association");

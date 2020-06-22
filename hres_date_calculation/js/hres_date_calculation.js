@@ -38,7 +38,6 @@ var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculate
 
     // Allow plugins to add dates and flags not stored in workflows or project journal
     O.serviceMaybe("hres_date_calculation:add_input_information", ref, inputDates, flags);
-
     var operation = calculateOnly ? "compute" : "update";
     var service = ignorePreviousState ?  
         "haplo:date_rule_engine:"+operation+"_dates_ignoring_previous_state" :
@@ -61,16 +60,14 @@ var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculate
     return outputDates;
 };
 
-var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState) {
+var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState, calculateOnly) {
     var impls = [];
     var project = ref.load();
     if(O.serviceImplemented("hres_date_calculation:get_implementations_for_project")) {
         O.service("hres_date_calculation:get_implementations_for_project", project, impls);
     }
-
     _.each(impls, function(impl) {
-        var recalculated = recalculateDates(impl, ref, dates, ignorePreviousState);
-
+        var recalculated = recalculateDates(impl, ref, dates, ignorePreviousState, calculateOnly);
         // result = [start, end <,problem string>]
         _.each(impl.calculationDates, function(name) {
             var date = dates.date(name);
@@ -85,12 +82,11 @@ var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState) {
             }
         });
     });
-
     P.saveRecalculatedYearRecurringDates(project, dates);
 };
 
-P.implementService("hres:project_journal:dates:request_update", function(ref, dates) {
-    saveRecalculatedDatesToJournal(ref, dates);
+P.implementService("hres:project_journal:dates:request_update", function(ref, dates, calculateOnly) {
+    saveRecalculatedDatesToJournal(ref, dates, false, calculateOnly);
 });
 
 // --------------------------------------------------------------------------

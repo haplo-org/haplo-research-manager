@@ -4,6 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
+var HIDE_UNAUTHENTICATED_TEXT = O.application.config["hres_orcid:hide_unauthenticated_text"];
 
 var SERVICE_PREFIX = 'https://orcid.org/';
 
@@ -14,7 +15,7 @@ var deferredRenderORCID = function(orcid) {
     var orcidText = orcid.toString();
     var q = P.db.orcids.select().where("orcid","=",orcidText);
     
-    if(!q.length) { orcidText += " (unauthenticated)"; }
+    if(!q.length && !HIDE_UNAUTHENTICATED_TEXT) { orcidText += " (unauthenticated)"; }
     return P.template("type/orcid").deferredRender({
         orcid: orcid,
         orcid_text: orcidText,

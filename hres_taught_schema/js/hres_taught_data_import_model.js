@@ -17,3 +17,21 @@ P.implementService("haplo_user_sync_generic:gather_groups_and_people_types", fun
         typePast: T.PostgraduateTaughtStudentPast
     });
 });
+
+P.implementService("haplo:data-import-framework:setup-model:hres:course-modules", function(model) {
+    model.addDestination({
+        name: "course-module",
+        title: "Course module",
+        displaySort: 1,
+        kind: "object",
+        objectType: T.CourseModule
+    });
+});
+
+P.implementService("haplo:data-import-framework:filter:hres:module-code-to-ref", function() {
+    return function(value) {
+        var modules = O.query().link(T.CourseModule, A.Type).freeText(value, A.Code).execute();
+        var m = modules.length ? modules[0] : undefined;
+        return m ? (m.ref||undefined) : undefined;
+    };
+});

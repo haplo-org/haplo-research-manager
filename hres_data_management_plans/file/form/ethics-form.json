@@ -25,7 +25,8 @@
                 {
                     "type": "text",
                     "path": "report",
-                    "label": "Location of the report on ethical issues"
+                    "label": "Location of the report on ethical issues",
+                    "inlineGuidanceNote": "Please include a URL to any report on the ethical issues related to this DMP. This could be an ethics application inside of Haplo or an external source."
                 },
                 {
                     "type": "paragraph",

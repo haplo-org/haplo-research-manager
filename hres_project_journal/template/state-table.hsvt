@@ -1,0 +1,16 @@
+
+    <h2> "State table for this project" </h2>
+    <br>
+    <table>
+        <tr>
+            <th> "Date name" </th>
+            <th> "Period last updated" </th>
+        </tr>
+        each(stateTableRows) {
+            <tr>
+                <td> name </td>
+                <td> periodLastUpdated </td>
+            </tr>
+        }
+    </table>
+    <br><br><br>

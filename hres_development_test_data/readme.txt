@@ -1,4 +1,4 @@
-title: HRES Development Test Data
+title: Development Test Data
 --
 h2. Institute structure
 

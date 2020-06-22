@@ -292,6 +292,11 @@ attribute hres:attribute:supervision-interests
     data-type link
     linked-type std:type:subject
 
+attribute hres:attribute:keywords as Keywords
+    title: Keywords
+    search-name: keywords
+    qualifier std:qualifier:null
+    data-type text
 
 # -------- Aliased attributes ----------------------
 

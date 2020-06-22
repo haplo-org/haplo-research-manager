@@ -58,6 +58,25 @@ For example:
     );
 </pre>
 
+h3(service). hres:simple_alerts:custom_template_for_notification
+
+To set the custom template for a specific reminder, implement @hres:simple_alerts:custom_template_for_notification:alert-name@ with a project attribute. It should return an object with fields @template@ and @view@. @template@ should be defined as a P.template.
+
+For example:
+
+<pre>language=javascript
+    // from a client/workflow plugin
+    P.implementService("res:simple_alerts:custom_template_for_notification:the_name_of_my_alert",
+        function(project) {
+            return {
+                template: P.template("notification/alert"),
+                view: {
+                    attribute1: attribute1.value
+                }
+        }
+    );
+</pre>
+
 h3. Config
 
 | **Field** | **Type** | **Default** | **Description** |

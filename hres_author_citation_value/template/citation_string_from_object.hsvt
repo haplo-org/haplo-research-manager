@@ -1,0 +1,3 @@
+std:text:list:readable(. "en:default") {
+  std:text:object-value(.)
+}

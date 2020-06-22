@@ -10,44 +10,43 @@ node: /hres_schema/academic_years
 title: Academic years
 --
 
-Using Academic Years
-====================
+h2. Using Academic Years
 
-Your objects should include a calendar year in the A.Date attributes.
+Your objects should include a calendar year in the @A.Date@ attributes.
 
-Add an annotation to your type definition so that the academic year will
+Add an annotation to your type definition so that the academic year will \
 be set and updated when the object changes. In your requirements.schema file:
 
-    annotation hres:annotation:academic-year:apply
+ * @annotation hres:annotation:academic-year:apply@
 
 
-Workflows
-=========
+h2. Workflows
 
-use("hres:schema") to set up entities and tags.
+@use("hres:schema")@ to set up entities and tags.
 
+<pre>language=javascript
 use("std:dashboard:states", {
     configurationService: "hres:schema:workflow:dashboard:states:configure",
     // rest ofstd:dashboard:states specification
 });
+</pre>
 
 
-Permissions
-===========
+h2. Permissions
 
-Everyone has permission to read academic year objects, and they're created
+Everyone has permission to read academic year objects, and they're created \
 automatically when they're required.
 
-Services
-========
+h2. Services
 
 h3(service). hres:academic_year:get_object_version
 
-Usage: \
-O.serviceMaybe("hres:academic_year:get_object_version, object, academicYear);
+Usage:
 
-Returns version of the given 'object' for specified 'academicYear' end date.
-If object doesn't exist at the given time service will return earlier version of it,
+@O.serviceMaybe("hres:academic_year:get_object_version, object, academicYear);@
+
+Returns version of the given @object@ for specified @academicYear@ end date. \
+If @object@ doesn't exist at the given time service will return earlier version of it, \
 in case if object was never modified it will return original object version.
 
 */
@@ -211,6 +210,38 @@ P.implementService("hres:academic_year:get_object_version", function(object, aca
 
 // ----------------------------------------------------------------------------------------------------------------
 // Basic reporting navigation
+
+/*HaploDoc
+node: /hres_schema/academic_years/reporting_features
+title: Reporting features
+--
+
+h2. Reporting features
+
+h3(feature). hres:schema:academic_year_navigation
+
+Where the fact you are using to determine the date is a date, use this feature to enable academic year navigation on a dashboard.
+
+Example:
+<pre>dashboard.use("hres:schema:academic_year_navigation", year, "registrationStart")</pre>
+
+h3(feature). hres:schema:academic_year_navigation_for_ref
+
+Where the fact you are using to determine the date is a ref, use this feature to enable academic year navigation on a dashboard.
+
+Example:
+<pre>dashboard.use("hres:schema:academic_year_navigation_for_ref", year, "academicYear")</pre>
+
+h3(feature). hres:schema:academic_quarter_navigation
+
+Use this feature on a dashboard to enable quarter navigation where quarters line up with the academic year. \
+Quarters are 1, 2, 3, and 4, and should be passed through the url. Q1 is August to October. \
+Parameters are currentYear, currentQuarter, fact.
+
+Example:
+<pre>dashboard.use("hres:schema:academic_quarter_navigation", [Ref of relevant Academic year], 1, "registrationStart");</pre>
+
+*/
 
 P.reporting.registerReportingFeature("hres:schema:academic_year_navigation", function(dashboard, currentYear, fact) {
     var yearNow = O.service("hres:academic_year:for_date", new Date());

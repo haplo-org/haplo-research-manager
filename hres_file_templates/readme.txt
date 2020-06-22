@@ -1,4 +1,4 @@
-title: HRES File Templates
+title: File Templates
 --
 
 File templates allow institutions to manage letterheads and other templates. Templates can be added for a particular institution.

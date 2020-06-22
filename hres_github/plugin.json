@@ -1,0 +1,13 @@
+{
+  "pluginName": "hres_github",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "GitHub integration",
+  "displayDescription": "OAuth integration with GitHub",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase", "pStartOAuth", "pHTTPClient", "pKeychainRead"],
+  "load": [
+      "js/hres_github_integration.js"
+    ],
+  "respond": ["/do/github-integration"]
+}

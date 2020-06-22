@@ -195,7 +195,7 @@ var WORKFLOW_ENTITIES_FEATURE = {
 };
 
 /*HaploDoc
-title: HRes Workflow
+title: HRES Workflow
 node: /hres_workflow
 sort: 20
 --

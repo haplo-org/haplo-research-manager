@@ -5,8 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
 
 
-var root = (function() { return this; })();
-
 P.implementService("haplo:qa-audit:identify-issues", function(audit) {
 
     var labelling = audit.getInformation("descriptive-labelling");
@@ -119,8 +117,8 @@ P.implementService("haplo:qa-audit:identify-issues", function(audit) {
     _.each(O.application.plugins, function(pluginName) {
 
         // Use of hPreObjectDisplay should be carefully audited
-        var plugin  = root[pluginName];
-        if(plugin && plugin.hPreObjectDisplay) {
+        var plugin = O.getPluginInstance(pluginName);
+        if(plugin.hPreObjectDisplay) {
             audit.issue(
                 "use-of-hPreObjectDisplay/"+pluginName,
                 pluginName+" uses hPreObjectDisplay",

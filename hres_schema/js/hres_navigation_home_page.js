@@ -28,7 +28,7 @@ P.element("home_nav", "Home page key links navigation",
             myRecord: {
                 highlight: "primary",
                 elements: [
-                    {label:"My record", href:myRecord.url()}
+                    {label: NAME("hres:schema:my_links:my_record", "My record"), href:myRecord.url()}
                 ]
             },
             myLinks: {

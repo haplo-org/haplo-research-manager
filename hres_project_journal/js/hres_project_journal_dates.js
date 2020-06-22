@@ -44,7 +44,7 @@ The journal helps!
 @"hres:project_journal:dates:scheduled_data:set"@ and @"hres:project_journal:dates:scheduled_data:get"@ provide a convenient place to store this data, and you can implement @"hres:project_journal:dates:get_form_instance_for_scheduled_date_extra_data:NAME"@ to add an additional form to the scheduled date editor to gather this info.
 
 Alerts are project dates. They are related an existing project date. 
-The first alerts for a project date should be given the name of the existing projecct date suffixed by @":alert"@
+The first alerts for a project date should be given the name of the existing project date suffixed by @":alert"@
 Subsequent alerts should have the suffixes @":alert:0"@, @":alert:1"@, @":alert:2"@ and so on 
 */
 
@@ -251,13 +251,16 @@ ProjectDateList.prototype.datesForDisplay = function() {
 // reason describes why this change was made in a structured manner, will be used for
 // displaying history later.
 ProjectDateList.prototype.requestUpdatesThenCommitIfChanged = function(reason) {
-    this.requestUpdates();
-    this._commit(reason, false);
+    this.requestUpdates(true);
+    if(this.changed) {
+        this.requestUpdates(false);
+        this._commit(reason, false);
+    }
     return this;
 };
 
-ProjectDateList.prototype.requestUpdates = function() {
-    O.serviceMaybe("hres:project_journal:dates:request_update", this.ref, this);
+ProjectDateList.prototype.requestUpdates = function(calculateOnly) {
+    O.serviceMaybe("hres:project_journal:dates:request_update", this.ref, this, calculateOnly);
     return this;
 };
 
@@ -369,7 +372,7 @@ Properties of each project date: (ALL READ ONLY, use functions to mutate)
 |scheduled|a scheduled date (may be null). Set with setScheduled(), clear with clearScheduled()|
 |actual|the date when it actually happened (may be null). Set with setActual(), clear with clearActual()|
 |actualIndex|index of actual for repeating events (initialised to 0 for first occurance). Use nextOccurrence() to increment and set for the next occurance. (noop if there isn't an actual date)|
-|latestActual|most recent actual date (may be null)| 
+|latestActual|most recent actual date (may be null)|
 |unfix|function. Takes no argument. Set requiredIsFixed to false. You probably don't want to use this|
 |getDatesForCalculations|function. Takes no argument, returns an object suitable for an input to dates calculations, or undefined if there are no suitable input dates. Only fixed dates will be used as inputs|
 

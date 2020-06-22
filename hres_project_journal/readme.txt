@@ -95,7 +95,7 @@ Used to notify other plugins of changes to the journal. Implementing plugins sho
 
 h3(service). hres:project_journal:get_last_action_by_researcher
 
-Takes 2 arguments: a specification for @hres:project_journal:select@ and a @SecurityPricipal@, preferably of the project researcher.
+Takes 2 arguments: a specification for @hres:project_journal:select@ and a @SecurityPrincipal@, preferably of the project researcher.
 
 Returns the value of the @datetime@ field of the journal entry it finds as a point of contact in the system. Point of contact minimum criteria:
 
