@@ -16,12 +16,15 @@ var getArrayOfKeysForObject = function(object, keyName) {
             execute();
 
     if(res.length !== 0) {
-        obj = {};
         let project = res[0];
         let aYear = project.first(A.AcademicYear);
         obj[keyName] = aYear;
-        array.push(obj);
+    } else {
+        // if we want to display taught students that don't have a project this needs to have a value
+        obj[keyName] = O.service("hres:academic_year:for_date", new Date()).ref;
     }
+
+    array.push(obj);
 
     return array;
 };
@@ -39,7 +42,7 @@ P.implementService("std:reporting:collection:taught_students:setup", function(co
         fact("supervisor",          "ref",          "Supervisor").
         fact("moduleCode",          "text",         "Module").
         useFactAsAdditionalKey("academicYear");
-    collection.filter(collection.FILTER_ALL, function(select) {
+    collection.filter(collection.FILTER_DEFAULT, function(select) {
         select.
             where("isPastStudent", "=", false).
             where("project", "!=", null);
@@ -48,6 +51,9 @@ P.implementService("std:reporting:collection:taught_students:setup", function(co
 
 P.implementService("std:reporting:collection:taught_students:get_facts_for_object", 
     function(object, row) {
+        row.isPastStudent = object.isKindOf(T.PostgraduateTaughtStudentPast) ||
+                            object.isKindOf(T.UndergraduateStudentPast);
+
         var res = O.query().link([T.TaughtProject, T.StudentProject], A.Type).
             or(function(sq) {
                 sq.link(object.ref, A.TaughtStudent).link(object.ref, A.Researcher);
@@ -67,9 +73,6 @@ P.implementService("std:reporting:collection:taught_students:get_facts_for_objec
             var module = project.first(A.CourseModule);
             var moduleCode = module ? module.load().first(A.Code).s() : null;
             row.moduleCode = moduleCode ? moduleCode : null;
-            
-            row.isPastStudent = object.isKindOf(T.PostgraduateTaughtStudentPast) ||
-                                object.isKindOf(T.UndergraduateStudentPast);
         }   
     });
 

@@ -14,12 +14,17 @@ P.hook('hNavigationPosition', function(response, name) {
         var navigation = response.navigation;
 
         var exclude = (O.application.config["hres_navigation:remove_institutes_from_navigation"] || []);
+        var collapsable = O.application.config["hres_navigation:collapse_institutes"];
 
         var doneFirst = false;
         _.each(O.query().link(T.Faculty, A.Type).sortByTitle().execute(), function(institute) {
             if(-1 === exclude.indexOf(institute.ref.toString())) {
                 if(!doneFirst) {
-                    navigation.separator();
+                    if(collapsable) {
+                        navigation.collapsingSeparator();
+                    } else {
+                        navigation.separator();
+                    }
                     var parentRef = institute.firstParent();
                     if(parentRef) {
                         var parent = parentRef.load();

@@ -22,3 +22,17 @@ P.renderSearchResult(T.Person, function(object, renderer) {
     renderer.allValues(A.Telephone, "column", renderer.AUTO, 1, true);
     renderer.preventDefault();
 });
+
+// --------------------------------------------------------------------------
+// Person picker additional info
+
+P.implementService("haplo:people-picker:search-result-info", function(person, infoBlocks, pickerName) {
+    infoBlocks.push({
+            sort: 100,
+            deferred: P.template("people-picker/people-picker-info-block").deferredRender({
+                jobTitle: person.first(A.JobTitle),
+                researchInstitute: person.first(A.ResearchInstitute),
+                email: person.first(A.EmailAddress)
+            })
+        });
+});

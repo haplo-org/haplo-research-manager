@@ -474,7 +474,7 @@ var generateTestData = function(instituteStructureDepth, debug) {
             var users = [], safety = (i.count + 256);
             while((--safety > 0) && (users.length < i.count)) {
                 var u = sourceList[Math.floor(sourceList.length * Math.random())];
-                if(!placedPerson[u.id]) {
+                if(u && !placedPerson[u.id]) {
                     users.push(u);
                     placedPerson[i.id] = true;
                 }

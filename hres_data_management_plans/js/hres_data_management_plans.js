@@ -24,8 +24,8 @@ P.implementService("std:action_panel:research_data", function(display, builder) 
     if(project && P.dmpDocstore.instance(project)) {
         let document = P.dmpDocstore.instance(project).lastCommittedDocument;
         let needsSecuring = false;
-        _.each(document.datasets, (dataset) => {
-            if(!dataset.dataset_id || dataset.dataset_id.identifier !== display.object.ref.toString()) { return; }
+        _.each(document.dataset, (dataset) => {
+            if(!dataset.linkedDataset || dataset.linkedDataset !== display.object.ref.toString()) { return; }
             _.each(["personal_data", "sensitive_data"], (field) => {
                 if(dataset[field] === "yes" || dataset[field] === "unknown") {
                     needsSecuring = true;
@@ -71,7 +71,7 @@ P.respond("GET", "/do/hres-data-management-plans/add-dataset-to-dmp", [
 ], function(E, datasetRef, datasetIndex) {
     let projectRef = datasetRef.load().first(A.Project);
     if(projectRef && P.projectHasDMP(projectRef) && P.canViewAndEditDMP(projectRef)) {
-        let datasets = P.getDMPForProject(projectRef).datasets;
+        let datasets = P.getDMPForProject(projectRef).dataset;
         if(datasets && datasets.length > 0 && _.isNull(datasetIndex)) {
             let options = [{
                 action:"?ref="+datasetRef.toString()+"&datasetIndex=-1",
@@ -80,7 +80,7 @@ P.respond("GET", "/do/hres-data-management-plans/add-dataset-to-dmp", [
                 indicator:"standard"
             }];
             _.each(datasets, (dataset, i) => {
-                if(dataset.dataset_id) { return; }
+                if(dataset.linkedDataset) { return; }
                 options.push({
                     action:"?ref="+datasetRef.toString()+"&datasetIndex="+i,
                     label: dataset.title,

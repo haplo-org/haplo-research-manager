@@ -1,0 +1,19 @@
+
+<h2>"Groups"</h2>
+<table class="groups-table">
+  <tr>
+    <th class="header-column-wide"> "Group" </th>
+    <th class="header-column-wide"> "Members" </th>
+    <th> </th>
+  </tr>
+  each(groupUsers) {
+    <tr>
+      <td rowspan=count> title </td>
+      each(members) {
+        <tr>
+          <td> <a class="_hres_impersonate" data-uid=id href="#"> name </a> </td>
+        </tr>
+      }
+    </tr>
+  }
+</table>

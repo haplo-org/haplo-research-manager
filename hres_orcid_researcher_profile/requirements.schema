@@ -15,5 +15,5 @@ attribute hres:attribute:orcid as ORCID
     data-type plugin
     data-type-options hres:orcid
 
-type std:type:person
+type std:type:person as Person
     attribute hres:attribute:orcid

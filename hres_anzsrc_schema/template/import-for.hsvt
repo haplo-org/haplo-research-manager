@@ -1,0 +1,10 @@
+pageTitle(i("Create ANZSRC Field of Research Taxonomy"))
+
+if(isRunning) {
+    std:ui:request("Currently generating a taxonomy")
+} else {
+  <form method="POST"> std:form:token()
+    std:form(form)
+    <p><input type="submit" value="Confirm and create taxonomy."></p>
+  </form>
+}

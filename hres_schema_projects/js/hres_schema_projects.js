@@ -7,6 +7,9 @@
 var MAX_CO_INVESTIGATORS = P.MAX_CO_INVESTIGATORS =
     O.application.config["hres_funding:maximum_research_coinvestigators"] || 3;
 
+var DISABLE_CREATE_PROJECT_BUTTON = O.application.config["hres_schema_projects:disable_create_project_button"] || false;
+var DISPLAY_PROJECTS_TABLE_TITLE = O.application.config["hres_schema_projects:display_projects_table_title"] || false;
+
 P.CanViewAllResearchProjects = O.action("hres:action:view-all-research-projects").
     title("View all Research Projects").
     allow("role", "Research Director").
@@ -87,10 +90,17 @@ P.respond("GET,POST", "/do/hres-projects/research-projects", [
         backLink: researcher.url(),
         object: researcher
     }).
-        section(100, P.template("research-projects").deferredRender({
+        section(60, P.template("create-project").deferredRender({
             researcher: researcher,
             dashboard: deferredDashboard,
-            canCreateProject: O.currentUser.canCreate(O.labelList(T.Project, researcher.ref))
+            canCreateProject: O.currentUser.canCreate(O.labelList(T.Project, researcher.ref)) && !DISABLE_CREATE_PROJECT_BUTTON
+        })).
+        section(95, P.template("research-projects-title").deferredRender({
+            title: NAME("hres_schema_projects:research_projects:title", "All Projects"),
+            shouldDisplayTitle: !!DISPLAY_PROJECTS_TABLE_TITLE
+        })).
+        section(100, P.template("research-projects").deferredRender({
+            dashboard: deferredDashboard
         })).
         respond(E);
 });

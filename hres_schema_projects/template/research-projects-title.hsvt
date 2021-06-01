@@ -1,0 +1,4 @@
+
+if(shouldDisplayTitle) {
+    <h1> title </h1>
+}

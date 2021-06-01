@@ -1,0 +1,18 @@
+{
+  "pluginName": "hres_workflow_recommended",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Workflow Recommended",
+  "displayDescription": "Recommended workflow features and settings for Haplo Higher Education workflows",
+  "apiVersion": 4,
+  "loadPriority": 1004,
+  "depend": [
+      "std_workflow"
+    ],
+  "use": [
+      "std:workflow"
+    ],
+  "load": [
+      "js/hres_workflow_recommended.js"
+    ]
+}

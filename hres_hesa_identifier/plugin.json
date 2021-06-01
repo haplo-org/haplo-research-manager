@@ -1,0 +1,13 @@
+{
+  "pluginName": "hres_hesa_identifier",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "HESA Identifier",
+  "displayDescription": "HESA Identifier text type and reporting",
+  "installSecret": "937ceeafb4e4213655101d5377ce5ee6d83764d1",
+  "apiVersion": 4,
+  "load": [
+      "js/hres_hesa_identifier.js"
+    ],
+  "respond": ["/do/hres-hesa-identifier"]
+}

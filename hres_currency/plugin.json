@@ -1,0 +1,17 @@
+{
+  "pluginName": "hres_currency",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "HRES Currency",
+  "displayDescription": "Facilitates currency specific schema and data types.",
+  "installSecret": "df19269353985775a0f1f637e8a5e6b19d84808e",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
+  "use": [
+    "std:document_store"
+  ],
+  "load": [
+      "js/hres_currency.js"
+    ],
+  "respond": ["/do/hres-currency"]
+}

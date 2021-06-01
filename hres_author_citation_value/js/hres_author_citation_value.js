@@ -58,7 +58,7 @@ var createAuthorCitationValue = P.implementTextType("hres:author_citation", "Aut
 
 var citationTemplateView = function(value) {
     var view = {value: value};
-    if(value.ref) {
+    if(value.ref && O.currentUser.canRead(O.ref(value.ref))) {
         view.object = O.ref(value.ref).load();
     }
     return view;
@@ -143,7 +143,7 @@ Consuming plugins should know as little about the internal structure of the auth
 posible. To achieve this a number of services are implemented to retrieve or save data to and from \
 this data format.
 
-h3(service). O.service("hres:author_citation:append_citation_to_object", mutableObject, desc, qual, spec)
+h3(service). O.service("hres:author_citation:append_citation_to_object", mutableObject, desc, qual, spec, attrGroup)
 
 Takes data passed in through the @spec@ object and appends an author citation to the @mutableObject@. @desc@ \
 should refer to the shadowed attribute - ie. A.Author or A.Editor. @spec@ can have keys:
@@ -156,8 +156,10 @@ should refer to the shadowed attribute - ie. A.Author or A.Editor. @spec@ can ha
 |middle|Middle name(s)|
 
 @last@, @first@, and @middle@ are ignored if there is an object or ref to link to, or if @cite@ is defined.
+
+@attrGroup@ is the attribute group (ext) to append the citation to (not usually necessary)
 */
-P.implementService("hres:author_citation:append_citation_to_object", function(mutableObject, desc, qual, spec) {
+P.implementService("hres:author_citation:append_citation_to_object", function(mutableObject, desc, qual, spec, attrGroup) {
     var citation;
     var object;
     if("object" in spec) {
@@ -182,7 +184,7 @@ P.implementService("hres:author_citation:append_citation_to_object", function(mu
 
     var unshadowedAttributes = _.invert(shadowedAttributes);
     var citationAttribute = unshadowedAttributes[desc];
-    mutableObject.append(citation, citationAttribute, qual);
+    mutableObject.append(citation, citationAttribute, qual, attrGroup);
 });
 
 /*HaploDoc
@@ -333,6 +335,7 @@ P.hook("hComputeAttributes", function(response, object) {
 });
 
 // Combine all the author values into a single list value
+// Leaves attribute groups to usual rendering
 // hPreObjectDisplay & hPreObjectDisplayPublisher
 var preObjectDisplay = function(response, object) {
     var type = object.firstType();
@@ -343,8 +346,8 @@ var preObjectDisplay = function(response, object) {
             citation = 1*citation;  // JS keys are always strings
             // More compact display of citation attribute as a list
             var entries = [];
-            r.every(citation, function(v,d,q) {
-                if(O.isPluginTextValue(v, "hres:author_citation")) {
+            r.every(citation, function(v,d,q,x) {
+                if(O.isPluginTextValue(v, "hres:author_citation") && !x) {
                     entries.push([v,q]);
                 }
             });
@@ -389,4 +392,56 @@ P.respond("GET", "/api/hres-author-citation-value/fetch", [
 ], function(E, object) {
     E.response.kind = 'text';
     E.response.body = createValueFromObject(object).toString();
+});
+
+// --------------------------------------------------------------------------
+
+P.implementService("haplo:data-import-framework:structured-data-type:add-destination:hres:author-citation", function(model) {
+    model.addDestination({
+        name: "value:hres:author-citation",
+        title: "Citation value (structured value)",
+        displaySort: 999999,
+        pseudo: true,
+        kind: "dictionary",
+        dictionaryNames: {
+            ref: {
+                description: "Ref of the person to cite",
+                type: "ref",
+                refTypes: [TYPE["std:type:person"]]
+            },
+            cite: {
+                description: "Citation as it would be displayed",
+                type: "text"
+            },
+            last: {
+                description: "Last names of the person to cite",
+                type: "text"
+            },
+            middle: {
+                description: "Middle names of the person to cite",
+                type: "text"
+            },
+            first: {
+                description: "First names of the person to cite",
+                type: "text"
+            }
+        },
+        valueTransformerConstructor(batch, specification, sourceDetailsForErrors) {
+            return function(value) {
+                if(typeof(value) !== 'object') { return undefined; }
+                // Prevents issue with JSON.stringify causing a bad ref on creation of citation
+                if("ref" in value) {
+                    value.ref = value.ref.toString();
+                } else if("last" in value) {
+                    // Prefer using ref for preferred citation over this generation
+                    value.cite = makeCiteFromNames({
+                        last: value.last,
+                        middle: value.middle ? value.middle.split(" ") : undefined,
+                        first: value.first ? value.first.split(" ") : undefined
+                    });
+                }
+                return createAuthorCitationValue(value);
+            };
+        }
+    });
 });

@@ -1,0 +1,9 @@
+
+
+template:std:ui:request() {
+    "Please select the access level you wish for your profile. You have currently selected: "
+    chosen.label.title " - " chosen.description
+}
+
+
+template:std:ui:choose()

@@ -6,31 +6,21 @@
     "elements": [
         {
             "type": "repeating-section",
-            "path": "datasets",
+            "path": "dataset",
             "minimumCount": 1,
             "required": true,
             "allowDelete": true,
             "elements": [
                 {
-                    "type": "section",
-                    "path": "dataset_id",
-                    "include": {
-                        "path": "dataset_id.identifier",
+                    "type": "lookup",
+                    "dataSource": "datasets",
+                    "inForm": false,
+                    "path": "linkedDataset",
+                    "label": "Linked dataset:",
+                    "inDocument": {
+                        "path": "linkedDataset",
                         "operation": "defined"
-                    },
-                    "elements": [
-                        {
-                            "type": "lookup",
-                            "path": "identifier",
-                            "label": "Linked to dataset:",
-                            "inForm": false,
-                            "dataSource": "datasets"
-                        },
-                        {
-                            "type": "static",
-                            "text": "This dataset has been deposited."
-                        }
-                    ]
+                    }
                 },
                 {
                     "type": "text",

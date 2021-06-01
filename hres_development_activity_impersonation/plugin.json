@@ -1,0 +1,17 @@
+{
+  "pluginName": "hres_development_activity_impersonation",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Development Activity Impersonation",
+  "displayDescription": "Group and role impersonation feature for Haplo Research Manager application development",
+  "installSecret": "0837277ade33fa1b05cdfe51b5d6f853bd0c0e4b",
+  "apiVersion": 4,
+  "depend": [
+      "haplo_activity_navigation",
+      "hres_schema"
+    ],
+  "load": [
+      "js/hres_development_activity_impersonation.js"
+    ],
+  "respond": ["/do/hres-development-activity-impersonation"]
+}

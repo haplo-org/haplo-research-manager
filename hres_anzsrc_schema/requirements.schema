@@ -1,0 +1,88 @@
+
+feature std:navigation
+    entry plugin hres:anzsrc-fields-of-research
+
+group std:group:administrators as Administrators
+group std:group:everyone as Everyone
+
+# -------- Labels ----------------------------------
+
+label hres:label:anzsrc-field-of-research:calculated
+    title Calculated attribute ANZSRC Field of Research
+    category Restriction
+
+label hres:label:anzsrc-field-of-research:edit
+    title Allow edit of ANZSRC Field of Research
+    category Restriction
+
+label hres:label:anzsrc-field-of-research:can-see-code
+    title Can see the code attribute on ANZSRC Fields of Research
+    category Restriction
+
+label std:label:archived as ARCHIVED
+
+# -------- Restriction -----------------------------
+
+restriction hres:restriction:anzsrc-field-of-research:calculated
+    title Calculated attribute ANZSRC Field of Research
+    label-unrestricted hres:label:anzsrc-field-of-research:calculated
+    # TODO: Uncomment when this is added to the platform
+    # restrict-if-type-annotated hres:annotation:anzsrc-field-of-research:copy-from-researcher
+    restrict-type std:type:project
+    attribute-read-only hres:attribute:anzsrc-field-of-research
+
+restriction hres:restriction:anzsrc-field-of-research:edit
+    title Person ANZSRC Field of Research
+    label-unrestricted hres:label:anzsrc-field-of-research:edit
+    restrict-type std:type:person
+    attribute-read-only hres:attribute:anzsrc-field-of-research
+
+# Hiding the code as it's included in the title and is there for simple programmatic retrieval
+restriction hres:restriction:anzsrc-field-of-research:codes
+    title ANZSRC FoR Code
+    label-unrestricted hres:label:anzsrc-field-of-research:can-see-code
+    restrict-type hres:type:anzsrc-field-of-research
+    attribute-restricted hres:attribute:code
+
+# -------- Attributes ------------------------------
+
+attribute std:attribute:configured-behaviour as ConfiguredBehaviour
+attribute hres:attribute:head as Head
+attribute hres:attribute:researcher as Researcher
+
+attribute hres:attribute:code as Code
+    title: Code
+    search-name: code
+    qualifier std:qualifier:null
+    FORCE-REMOVE data-type text
+    data-type plugin
+    data-type-options hres_anzsrc:for_code
+
+attribute hres:attribute:anzsrc-field-of-research as ANZSRCFieldOfResearch
+    title: ANZSRC Field of Research
+    search-name: anzsrc-field-of-research
+    qualifier std:qualifier:null
+    data-type link
+    linked-type hres:type:anzsrc-field-of-research
+
+# -------- Types -----------------------------------
+
+type hres:type:anzsrc-field-of-research as ANZSRCFieldOfResearch
+    title: ANZSRC Field of Research
+    search-name: anzsrc-field-of-research
+    behaviour hierarchical
+    attribute dc:attribute:title [sort=100]
+    attribute hres:attribute:head [sort=2000]
+    attribute hres:attribute:code [sort=4000]
+    apply-schema-template hres:template-type:list
+    element: std:group:everyone right std:action_panel {"panel":"anzsrc_for_navigation","style":"links"} [sort=20000]
+
+type std:type:project as Project
+    annotation hres:annotation:anzsrc-field-of-research:copy-from-researcher
+
+type hres:type:person:researcher as Researcher
+type std:type:person as Person
+    attribute hres:attribute:anzsrc-field-of-research [sort=1300]
+
+OPTIONAL type hres:type:proposal
+    attribute hres:attribute:anzsrc-field-of-research [sort=2300]

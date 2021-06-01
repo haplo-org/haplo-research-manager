@@ -78,14 +78,14 @@ P.implementService("std:reporting:collection:projects:get_facts_for_object", fun
         row.hasDMP = false;
         return;
     }
-    _.each(dmp.datasets, (dataset) => {
+    _.each(dmp.dataset, (dataset) => {
         _.each(["personal_data", "sensitive_data"], (field) => {
             if(dataset[field] === "yes" || dataset[field] === "unknown") {
                 sensitiveDataExpected = true;
                 if(dataset.dataset_id) {
-                    let datasetRef = O.ref(dataset.dataset_id.identifier);
+                    let datasetRef = O.ref(dataset.linkedDataset);
                     if(!datasetRef) { return; }
-                    
+
                     let datasetObj = datasetRef.load();
                     let accessLevel = "FileAccessLevel" in A ? datasetObj.first(A.FileAccessLevel) : undefined;
                     if(!accessLevel || accessLevel.behaviour === "hres:list:file-access-level:open") { sensitiveDataSecured = false; }
@@ -101,9 +101,9 @@ P.implementService("std:reporting:collection:projects:get_facts_for_object", fun
     row.sensitiveDataExpected = sensitiveDataExpected;
     row.sensitiveDataSecured = sensitiveDataSecured;
     row.largeFilesExpected = largeFilesExpected;
-    row.numberOfDatasetsExpected = dmp.datasets ? dmp.datasets.length : 0;
-    row.numberOfDatasetsLinkedToDMP = _.chain(dmp.datasets).
-        pluck("dataset_id").
+    row.numberOfDatasetsExpected = dmp.dataset ? dmp.dataset.length : 0;
+    row.numberOfDatasetsLinkedToDMP = _.chain(dmp.dataset).
+        pluck("linkedDataset").
         compact().
         size().
         value();

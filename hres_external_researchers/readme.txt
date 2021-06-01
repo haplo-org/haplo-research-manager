@@ -21,6 +21,31 @@ h3(service). "hres_external_researchers:handle_details"
 
 If you implement the above, you should probably implement this service. It handles the details passed into the form returned above on a POST.
 
+h3(service). "hres_external_researchers:setup_account_for_user_object"
+
+Service that allows for automatic account setup with access for a created user object. 
+Parameters: userObject and document (optional). Document parameter should be used if additional document is defined over `hres_external_researchers:details_form`. 
+
+h3(service). "hres_external_researchers:customise_new_user_email"
+
+Service that allows modification of the generic email template sent for new users. Custom email templates can also be sent for new users, in this case the service MUST return a spec object containing 'view' and 'template'.
+
+Parameters: userObject, welcomeUrl, workflowFullName
+
+Unless this email is being changed across an entire system then you must check against workflowFullName to ensure the correct service implementation is in use.
+
+template (optional) - this MUST include welcomeUrl for the user
+toName (optional) - the first name of the user
+view (optional) - this will contain the welcomeUrl by default
+
+View properties:
+> replaceWelcomeToText (optional) - string - default welcome text is 'Welcome to [applicationName]' and is the first line of the email.
+> removeWelcomeText (optional) - removes default welcome text if replaceWelcomeText is not used
+> deferredRenderTop (optional) - deferred render - deferred render to be shown after the introductory and welcome text 
+> deferredRenderBottom (optional) - deferred render - deferred render to be shown after the welcome Link 
+> introductoryText (optional) - string - introductory text to be shown after the welcome text
+> subject (optional) - email subject
+
 h2. Log in
 
 If you use this plugin, you should make sure that you make it possible for external researchers to log in with their email.

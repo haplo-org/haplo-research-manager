@@ -1,0 +1,3 @@
+
+feature std:configuration-data
+    property: {"hres_date_calculation_2020:in_use":true}

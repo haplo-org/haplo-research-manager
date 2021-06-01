@@ -1,0 +1,11 @@
+
+group hres:group:it-support as ItSupport
+
+type hres:type:research-institute as ResearchInstitute
+type hres:type:research-institute:university as University
+
+attribute haplo:attribute:chair as Chair
+attribute haplo:attribute:deputy-chair as DeputyChair
+attribute haplo:attribute:committee-representative as CommitteeRepresentative
+attribute haplo:attribute:committee-member as CommitteeMember
+attribute hres:attribute:head as Head

@@ -226,6 +226,14 @@ attribute hres:attribute:academic-year as AcademicYear
     ui-options dropdown
     linked-type hres:type:academic-year
 
+attribute hres:attribute:financial-year as FinancialYear
+    title: Financial year
+    search-name: financial-year
+    qualifier std:qualifier:null
+    data-type link
+    ui-options dropdown
+    linked-type hres:type:financial-year
+
 attribute haplo:attribute:committee-member as CommitteeMember
 
 attribute haplo:attribute:committee-representative as CommitteeRepresentative
@@ -327,6 +335,13 @@ aliased-attribute hres:aliased-attribute:academic-year-dates as AcademicYearDate
     ui-options d,n,y,n,n
     on-data-type datetime
 
+aliased-attribute hres:aliased-attribute:financial-year-dates as FinancialYearDates
+    title: Financial year dates
+    search-name: financial-year-dates
+    alias-of dc:attribute:date
+    ui-options d,n,y,n,n
+    on-data-type datetime
+
 # -------- Types -----------------------------------
 
 type std:type:intranet-page as IntranetPage
@@ -362,6 +377,7 @@ type hres:type:person:researcher-past as ResearcherPast
     render-category 3
     render-icon E228,2,f,y E413,1,f,y
     REMOVE element: std:group:everyone right std:action_panel {"panel":"doctoral_researcher"} [sort=10000]
+    element: std:group:everyone right std:action_panel {"panel":"researcher_past"} [sort=14000]
     
 type hres:type:person:external-researcher as ExternalResearcher
     title: External Researcher
@@ -491,6 +507,16 @@ type hres:type:academic-year as AcademicYear
     attribute hres:aliased-attribute:academic-year-dates
     render-category 0
     default-subtype hres:type:academic-year
+    create-position normal
+
+type hres:type:financial-year as FinancialYear
+    title: Financial year
+    search-name: financial-year
+    behaviour classification
+    attribute dc:attribute:title
+    attribute hres:aliased-attribute:financial-year-dates
+    render-category 0
+    default-subtype hres:type:financial-year
     create-position normal
 
 type hres:type:organisation:funder as Funder

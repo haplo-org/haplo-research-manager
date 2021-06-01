@@ -1,0 +1,12 @@
+{
+    "specificationVersion": 0,
+    "formId": "select-date",
+    "class": "oforms-no-autofocus",
+    "elements": [
+        {
+            "type": "date",
+            "path": "date",
+            "required": true
+        }
+    ]
+}

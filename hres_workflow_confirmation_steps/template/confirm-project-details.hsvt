@@ -1,4 +1,6 @@
 
+if(useTransitionSteps) { std:workflow:transition-steps:navigation(M "hres:confirm_details") }
+
 within(confirmDetails) {
     template:std:ui:confirm()
 }

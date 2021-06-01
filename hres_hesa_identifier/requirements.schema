@@ -1,0 +1,10 @@
+
+attribute hres:attribute:hesa-identifier as HESAIdentifier
+    title: HESA Identifier
+    search-name: hesa-identifier
+    qualifier std:qualifier:null
+    data-type plugin
+    data-type-options hres:hesa
+
+type std:type:person as Person
+    attribute hres:attribute:hesa-identifier [sort=12000]

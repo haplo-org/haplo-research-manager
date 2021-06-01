@@ -1,0 +1,13 @@
+pageTitle(i("Edit currency codes"))
+
+ifAny(stored committed) {
+    if(stored) {
+        std:ui:notice("Your changes have been saved for later and will not yet display in the system.")
+    } else {
+        std:ui:notice("Your changes have been saved.")
+    }
+}
+
+<form method="POST"> std:form:token()
+render(form)
+</form>  

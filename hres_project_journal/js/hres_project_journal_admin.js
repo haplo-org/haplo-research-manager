@@ -16,12 +16,16 @@ var CanForceDatesUpdate = P.CanForceDatesUpdate = O.action("hres:project_journal
 var CanSeeProjectDatesHistory = P.CanSeeProjectDatesHistory = O.action("hres:project_journal:project_dates_history_access").
     title("Can see project dates history");
 
+var CanManuallyForceDatesUpdate = P.CanManuallyForceDatesUpdate = O.action("hres:project_journal:force_manual_update_dates_access").
+    title("Can force manual project dates calculation as admin").
+    allow("group", Group.Administrators);
+
 P.respond("GET,POST", "/do/hres-project-journal/dates/force-update", [
     {pathElement:0, as:"object"},
     {parameter:"deleteState", as:"int", optional:true}
 ], function(E, project, deleteState) {
     // Should only be visible to Haplo
-    if(!O.currentUser.isMemberOf(Group.Administrators)) { O.stop("Not permitted"); }
+    P.CanManuallyForceDatesUpdate.enforce();
 
     if(E.request.method === "POST") {
         var list = O.service("hres:project_journal:dates", project.ref);
@@ -319,11 +323,13 @@ P.respond("GET,POST", "/do/hres-project-journal/dates/recalculate-all", [
 });
 
 P.backgroundCallback("recalculate_all_dates", function(data) {
+    var currentRef;
     try {
         P.data.dateUpdateStatus = "Status: Updating...";
         if(P.data.datesUpdateError) { delete P.data.datesUpdateError; }
         var allProjects = getProjectsWithStoredDates();
         _.each(allProjects, (ref) => {
+            currentRef = ref;
             var dates = O.service("hres:project_journal:dates", ref);
             var service = !!data.ignorestate ? 
                 "hres:project_journal:dates:request_update_ignoring_state" :
@@ -336,7 +342,7 @@ P.backgroundCallback("recalculate_all_dates", function(data) {
         P.data.dateUpdateStatus = "Last updated: "+new Date().toString();
     }
     catch(e) {
-        P.data.dateUpdateStatus = " Status: Failed";
+        P.data.dateUpdateStatus = " Status: Failed on record "+currentRef;
         P.data.datesUpdateError = e;
     }
 });
@@ -411,14 +417,17 @@ P.respond("GET,POST", "/do/hres-project-journal/dates/alerts", [
             }
         } else { error = "'"+addOrRemoveValue+"' is not a valid behaviour, please check System Management"; }
     }
+    let links = [];
+    O.serviceMaybe("hres_project_journal:gather_alerts_admin_links", links);
     E.render({
         error: error,
         noAlertStatusOrStages: _.map(P.db.noAlertBehaviours.select(), function(noAlert) {
             return {
                 noAlert: noAlert.behaviour, 
                 noAlertTitle: noAlert.title
-                };
-            })
+            };
+        }),
+        links: links
     }, "alerts");
 });
 

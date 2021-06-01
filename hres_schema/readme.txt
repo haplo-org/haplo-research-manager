@@ -19,6 +19,19 @@ h3. hres:annotation:academic-year:apply
 
 When applied to a type definition, this "annotation":https://docs.haplo.org/plugin/schema/requirements-schema/declaration/type#Type_annotations sets the appropriate academic year on objects of this type according to the value in @A.Date@.
 
+h3(service). hres_schema:override_person_permissions
+
+Call this service and provide an object of key-value pairs, where the key is the type schema code and the value is an array of groups schema code that should be able to view the type. If not implemented, everyone can view all people.
+
+Example:
+<pre>
+P.implementService("hres_schema:override_person_permissions", function() {
+    return {
+        "phd:type:person:doctoral-researcher": ["hres:group:admin-staff", "hres:group:external-researchers"]
+    };
+});
+</pre>
+
 h2. Calendar Navigation
 
 h3(feature). hres:schema:calendar_year_navigation

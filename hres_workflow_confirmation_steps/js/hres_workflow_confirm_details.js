@@ -14,11 +14,12 @@ Adds a state into workflows for confirming relevant details about a project are 
 
 Specification includes:
 
- * exitStates: array of possible status to transition to. Consuming plugin should resolve if necessary
+ * selector: a selector defining which states the confirm details should be used in. Only used with transition step UI
+ * exitStates: array of possible status to transition to. Consuming plugin should resolve if necessary. Not used for transition steps UI
  * path: the consuming plugin's respond path
  * actionableBy: who is doing the confirming
  * notifyChangeRequested: role to send notification if detail changes are requested
- * redirect:  optional function giving an alternative url to redirect to after this state
+ * redirect:  optional function giving an alternative url to redirect to after this state. Not used with transition steps UI
  * details: an array of objects containing:
  * * entity: a workflow entity to query
  * * attrs: and array of attributes of the above entity that should be confirmed
@@ -34,40 +35,68 @@ var TEXT = {
 
 P.workflow.registerWorkflowFeature("hres:confirm_details",
     function(workflow, spec) {
+        var useTransitionSteps = spec.selector && O.application.config["std_document_store:use_transition_steps_ui"];
         var plugin = workflow.plugin;
+        if(useTransitionSteps) {
+            let Step = {
+                id: "hres:confirm_details",
+                sort: spec.transitionStepsSort || 100,
+                title: function(M, stepsUI) {
+                    return "Confirm project details";
+                },
+                url: function(M, stepsUI) {
+                    return spec.path+'/confirm-project-details/'+M.workUnit.id;
+                },
+                complete: function(M, stepsUI) {
+                    return stepsUI.data["hres:confirm_details:complete"] || false;
+                }
+            };
 
-        workflow.states({
-            wait_confirm_details: {
-                actionableBy: spec.actionableBy,
-                transitions: [
-                    ["_project_details_confirmed"].concat(spec.exitStates),
-                    ["_changes_requested"].concat(spec.exitStates)
-                ]
-            }
-        });
+            workflow.transitionStepsUI(spec.selector, function(M, step) {
+                step(Step);
+            });
+        } else {
+            workflow.states({
+                wait_confirm_details: {
+                    actionableBy: spec.actionableBy,
+                    transitions: [
+                        ["_project_details_confirmed"].concat(spec.exitStates),
+                        ["_changes_requested"].concat(spec.exitStates)
+                    ]
+                }
+            });
 
-        workflow.text(TEXT);
+            workflow.text(TEXT);
 
-        workflow.actionPanelTransitionUI({state:"wait_confirm_details"}, function(M, builder) {
-            if(M.workUnit.isActionableBy(O.currentUser)) {
-                builder.link("default", spec.path+"/confirm-project-details/"+M.workUnit.id,
-                    "Confirm project details", "primary");
-            }
-            return true;
-        });
+            workflow.actionPanelTransitionUI({state:"wait_confirm_details"}, function(M, builder) {
+                if(M.workUnit.isActionableBy(O.currentUser)) {
+                    builder.link("default", spec.path+"/confirm-project-details/"+M.workUnit.id,
+                        "Confirm project details", "primary");
+                }
+                return true;
+            });
+        }
 
         plugin.respond("GET,POST", spec.path+"/confirm-project-details", [
             {pathElement:0, as:"workUnit", workType:workflow.fullName}
         ], function(E, workUnit) {
             E.setResponsiblePlugin(P);
             var M = workflow.instance(workUnit);
-            if(M.state !== "wait_confirm_details") {
+            let selector = useTransitionSteps ? spec.selector : {state:"wait_confirm_details"};
+            if(!M.selected(selector)) {
                 O.stop("Invalid action");
             }
             if(E.request.method === "POST") {
-                M.transition("_project_details_confirmed");
-                var redirect = spec.redirect ? spec.redirect(M) : null;
-                return E.response.redirect(redirect || M.entities.object.url());
+                if(useTransitionSteps) {
+                    var stepsUI = M.transitionStepsUI;
+                    stepsUI.data["hres:confirm_details:complete"] = true;
+                    stepsUI.saveData();
+                    return E.response.redirect(stepsUI.nextRedirect());
+                } else {
+                    M.transition("_project_details_confirmed");
+                    var redirect = spec.redirect ? spec.redirect(M) : null;
+                    return E.response.redirect(redirect || M.entities.object.url());
+                }
             }
             var displayObject = O.object();
             displayObject.appendType(M.entities.object.firstType());
@@ -80,18 +109,20 @@ P.workflow.registerWorkflowFeature("hres:confirm_details",
                 });
             });
             E.render({
-                pageTitle: "Confirm project details",
+                pageTitle: NAME("hres_workflow_confirm_details:page_title", "Confirm project details"),
                 backLink: M.entities.object.url(),
                 displayObject: displayObject,
                 deferredDates: !spec.disableDatesRender ? 
                     O.serviceMaybe("hres:project_journal:dates:ui:render_overview", 
                         "confirm_details", M.entities.project_refMaybe, {}) : undefined,
+                useTransitionSteps: useTransitionSteps,
+                M: M,
                 confirmDetails: {
-                    text: "Please confirm the details, as shown below, are correct.",
+                    text: NAME("hres_workflow_confirm_details:confirmation_prompt", "Please confirm the details, as shown below, are correct."),
                     backLink: spec.path+"/request-project-detail-change/"+M.workUnit.id,
-                    backLinkText: "Request changes",
+                    backLinkText: NAME("hres_workflow_confirm_details:request_changes_button", "Request changes"),
                     options: [
-                        {label: "The project details are correct"}
+                        {label: NAME("hres_workflow_confirm_details:text", "The project details are correct")}
                     ]
                 }
             });
@@ -103,7 +134,8 @@ P.workflow.registerWorkflowFeature("hres:confirm_details",
         ], function(E, workUnit, changes) {
             E.setResponsiblePlugin(P);
             var M = workflow.instance(workUnit);
-            if(M.state !== "wait_confirm_details") {
+            let selector = useTransitionSteps ? spec.selector : {state:"wait_confirm_details"};
+            if(!M.selected(selector)) {
                 O.stop("Invalid action");
             }
             if(E.request.method === "POST") {
@@ -117,15 +149,31 @@ P.workflow.registerWorkflowFeature("hres:confirm_details",
                     },
                     workflow: M
                 });
-                M.transition("_changes_requested");
+
+                var stepsUI = M.transitionStepsUI;
+                if(useTransitionSteps) {
+                    stepsUI.data["hres:confirm_details:complete"] = true;
+                    stepsUI.saveData();
+                } else {
+                    M.transition("_changes_requested");
+                }
+
                 // TODO replace with service once available
                 M.addTimelineEntry("NOTE", {text:changes});
-                var redirect = spec.redirect ? spec.redirect(M) : null;
-                return E.response.redirect(redirect || M.entities.object.url());
+                
+                if(useTransitionSteps) {
+                    return E.response.redirect(stepsUI.nextRedirect());
+                } else {
+                    var redirect = spec.redirect ? spec.redirect(M) : null;
+                    return E.response.redirect(redirect || M.entities.object.url());
+                }
+
             }
             E.render({
                 pageTitle: "Request changes",
-                backLink: spec.path+"/confirm-project-details/"+M.workUnit.id
+                backLink: spec.path+"/confirm-project-details/"+M.workUnit.id,
+                useTransitionSteps: useTransitionSteps,
+                M: M
             });
         });
 

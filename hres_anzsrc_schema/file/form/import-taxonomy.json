@@ -1,0 +1,42 @@
+{
+    "specificationVersion": 0,
+    "formId": "import-taxonomy",
+    "formTitle": "Import taxonomy",
+    "elements": [
+        {
+            "type": "choice",
+            "path": "year",
+            "label": "Year",
+            "choices": "years",
+            "required": true,
+            "style": "multiple",
+            "minimumCount": 1
+        },
+        {
+            "type": "choice",
+            "path": "maxDepth",
+            "label": "Select the maximum depth field of research you wish to import",
+            "choices": [
+                [2, "2 Digit Codes"],
+                [4, "4 Digit Codes"],
+                [6, "6 Digit Codes"]
+            ],
+            "required": true,
+            "defaultValue": 6
+        },
+        {
+            "type": "boolean",
+            "style": "checkbox",
+            "path": "archived",
+            "label": "Archive this taxonomy",
+            "trueLabel": "This taxonomy was archived."
+        },
+        {
+            "type": "boolean",
+            "style": "checkbox",
+            "path": "includeCodeInTitle",
+            "label": "Include code in title",
+            "trueLabel": "The code was included in the title."
+        }
+    ]
+}

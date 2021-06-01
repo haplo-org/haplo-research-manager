@@ -15,4 +15,14 @@ type std:type:project as Project
 attribute std:attribute:job-title as JobTitle
 attribute std:attribute:email as Email
 attribute hres:attribute:research-institute as ResearchInstitute
+attribute std:attribute:notes as Notes
 
+label hres:label:researcher-profile-visible-by-all as AllUsers
+    title: All users
+    category: Restriction
+    notes: Profile will be visible to anyone, and will show on the public repository
+
+label hres:label:researcher-profile-visible-by-internal as InternalUsersOnly
+    title: Internal/authorised users
+    category: Restriction
+    notes: Profile will only be visible to users logged into the system

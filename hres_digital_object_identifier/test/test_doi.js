@@ -7,7 +7,7 @@
 t.test(function() {
 
     var doi0 = P.DOI.create("12.2345");
-    t.assert(doi0.toString() === "doi:12.2345");
+    t.assert(doi0.toString() === "https://doi.org/12.2345");
 
     // ------------------------------------------------------------------------------
 

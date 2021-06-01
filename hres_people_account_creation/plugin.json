@@ -1,0 +1,26 @@
+{
+  "pluginName": "hres_people_account_creation",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "People Account Creation",
+  "displayDescription": "Creation of one or more people accounts basing on the institution policy",
+  "installSecret": "0a7405d29fe123e60d519efe4e23a50da00f35c4",
+  "apiVersion": 4,
+  "loadPriority": 4000,
+  "privilegesRequired": ["pDatabase"],
+  "depend": [
+      "std_workflow",
+      "std_document_store",
+
+      "haplo_people_picker",
+      "hres_external_researchers"
+    ],
+  "use": [
+      "std:workflow",
+      "std:document_store"
+    ],
+  "load": [
+      "js/hres_people_account_creation.js"
+    ],
+  "respond": ["/do/hres-people-account-creation"]
+}

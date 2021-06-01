@@ -1,0 +1,40 @@
+std:plugin:resources("person-select.css")
+pageTitle(i("Select user account"))
+
+<div id="person-select-container">
+  <div class="person-select-details">
+    <p> <b> i("Name: ") </b> details.firstName " " details.lastName </p>
+    <p> <b> i("Email: ") </b> details.email </p>
+  </div>
+
+  <div id="person-list-select-ui">
+
+    if(noMatch) {
+      std:ui:notice(i("No specific match found. The list below shows users that were created within last 2 weeks. If you believe there are missing users in the list below, check if \"Request external access\" has been completed for those users."))
+    } else {
+      std:ui:notice(i("If the user you're looking for is not on the list below, check if the account was already created and \"Request external access\" has been completed."))
+    }
+
+    <form method="POST"> std:form:token()
+      <div class="person-select-results">
+        each(results) {
+          <label class="person-select-result">
+            <input type="radio" name="person" value=person.ref>
+            std:icon:object(person "small")
+            <div class="person-select-details">
+              <p class="person-select-name">person.title</p>
+              each(infoBlocks) {
+                  <p> std:text:object-value(email) </p>
+              }
+            </div>
+          </label>
+        }
+      </div>
+      <p>
+        <input type="submit" value=i("Select")>
+        " &nbsp; "
+        <input type="submit" name="__skip" value=i("Skip")>
+      </p>
+    </form>
+  </div>
+</div>

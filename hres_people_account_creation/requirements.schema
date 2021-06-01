@@ -1,0 +1,6 @@
+
+type std:type:person as Person
+
+# ---------- Attributes ----------------------------------
+
+attribute std:attribute:email as Email

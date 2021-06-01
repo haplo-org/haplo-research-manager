@@ -31,20 +31,26 @@ P.saveRecalculatedYearRecurringDates = function(project, dates) {
     O.serviceMaybe("hres_date_calculation:gather_year_recurring_implementations", project, projectStart.min, yearRecurringImpl);
 
     var recalculateAlertsForYearRecurringImpl = function(impl, deadline) {
-        var alertMonthsBeforeRequiredMax = [];
+        var alerts = [];
+        var addFn;
+        // Slice returns a copy, so we're not mutating the original data structure
         if(impl.alertMonthsBeforeRequiredMax) {
-            alertMonthsBeforeRequiredMax = impl.alertMonthsBeforeRequiredMax.slice();
+            alerts = impl.alertMonthsBeforeRequiredMax.slice();
+            addFn = "addMonths";
+        } else if(impl.alertWeeksBeforeRequiredMax) {
+            alerts = impl.alertWeeksBeforeRequiredMax.slice();
+            addFn = "addWeeks";
         }
 
-        alertMonthsBeforeRequiredMax.
+        alerts.
             sort().
             reverse();
 
-        _.each(alertMonthsBeforeRequiredMax, function(months, index) {
+        _.each(alerts, function(period, index) {
             var alertName = impl.name+":alert"+(index > 0 ? ":"+(index-1) : "");
             var alertProjectDate = dates.date(alertName);
             if(alertProjectDate.requiredIsFixed) { return; }
-            var alertRequiredMax = deadline.clone().addMonths(-1*months);
+            var alertRequiredMax = deadline.clone()[addFn](-1*period);
             alertProjectDate.setRequiredCalculated(alertRequiredMax.toDate());
         });
     };

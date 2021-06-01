@@ -81,3 +81,28 @@ P.ORCID = {
 P.provideFeature("hres:orcid", function(plugin) {
     plugin.ORCID = P.ORCID;
 });
+
+// --------------------------------------------------------------------------
+
+P.implementService("haplo:data-import-framework:structured-data-type:add-destination:hres:orcid-id", function(model) {
+    model.addDestination({
+        name: "value:hres:orcid-id",
+        title: "ORCID iD value (structured value)",
+        displaySort: 999999,
+        pseudo: true,
+        kind: "dictionary",
+        dictionaryNames: {
+            id: {
+                description: "Identifier",
+                type: "text",
+                required: true
+            }
+        },
+        valueTransformerConstructor(batch, specification, sourceDetailsForErrors) {
+            return function(value) {
+                if(typeof(value) !== 'object' || !value.id) { return undefined; }
+                return P.ORCID.create(value.id);
+            };
+        }
+    });
+});

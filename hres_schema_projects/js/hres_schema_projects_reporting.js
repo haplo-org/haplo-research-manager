@@ -15,7 +15,8 @@ P.implementService("std:reporting:collection:projects:setup", function(collectio
     collection.
         currentObjectsOfType(T.Project).
         fact("createdAt",                   "date",     "Created").
-        fact("principalInvestigator",       "ref",      "Principal Investigator");
+        fact("principalInvestigator",       "ref",      "Principal Investigator").
+        fact("grantID",                     "text",      "Grant ID");
     for(var i=0; i < P.MAX_CO_INVESTIGATORS; i++) {
         collection.fact("coInvestigator"+i, "ref",      "Co-Investigator");
     }
@@ -31,6 +32,9 @@ P.implementService("std:reporting:collection:projects:get_facts_for_object",
             if(i < P.MAX_CO_INVESTIGATORS) { row["coInvestigator"+(i++)] = v; }
         });
         if(object.creationDate) { row.createdAt = object.creationDate; }
+
+        let grantID = object.first(A.GrantID);
+        row.grantID = grantID ? grantID.s() : null;
     });
 
 P.implementService("std:reporting:gather_collection_update_rules", function(rule) {

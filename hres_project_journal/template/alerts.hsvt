@@ -39,3 +39,8 @@ if(error) {
 <p> "For example, to find the behaviour for Graduated (phd:list:doctoral-research-project-stage:graduated):" </p>
 <p> "In System Management, under Schema." </p>
 <p> "Lists -- Doctoral Research Project Stage -- edit Graduated -- Configured Behaviour" </p>
+
+each(links) {
+    <p> "&nbsp;" </p>
+    <p><a href=url> label </a></p>
+}

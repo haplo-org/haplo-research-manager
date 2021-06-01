@@ -1,8 +1,11 @@
+each(staticDeferreds) { render(.) }
 
 pageTitle("Edit " section.title)
-backLink("/do/researcher-profile/edit-section/" profile.ref)
+backLink("/do/researcher-profile/view/" profile.ref)
 
-<form method="POST"> std:form:token()
+if(guidanceNote) { template:std:ui:request() { render(guidanceNote) } }
+
+<form method="POST" id="profile-section-form"> std:form:token()
     std:form(form)
     <p> <input type="submit" value="Save profile"> </p>
 </form>

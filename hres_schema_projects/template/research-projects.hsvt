@@ -1,10 +1,4 @@
 
 std:layout:wide()
 
-if(canCreateProject) { 
-    std:ui:button-link("/do/hres-projects/new-project/" researcher.ref) { "Create new Project" }
-}
-
-<p> "&nbsp;" </p>
-
 render(dashboard)

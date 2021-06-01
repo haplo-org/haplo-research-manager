@@ -53,3 +53,16 @@ P.implementService("hres:orcid:match-to-existing-record-in-list", function(objec
         });
     }
 });
+
+// Change an ORCID iD to ref
+P.implementService("haplo:data-import-framework:filter:hres:orcid-to-ref", function() {
+    return function(value) {
+        if(typeof(value) === "string") {
+            value = P.ORCID.create(value);
+        }
+        if(O.isPluginTextValue(value, "hres:orcid")) {
+            var personQuery = O.query().link(T.Person, A.Type).identifier(value, A.ORCID).limit(1).execute();
+            return !!personQuery.length ? personQuery[0].ref : undefined;
+        }
+    };
+});

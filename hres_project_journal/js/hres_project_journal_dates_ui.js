@@ -92,7 +92,8 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
             displayName: date.displayName,
             hasScheduledActual: !!(date.scheduled || date.actual),
             displayRequiredIsFixed: !!(date.requiredIsFixed && displayAdminOptions),
-            displayGreyedDate: O.serviceMaybe("hres:project_journal:dates:ui:should_grey_out_dates", projectRef, date)
+            displayGreyedDate: O.serviceMaybe("hres:project_journal:dates:ui:should_grey_out_dates", projectRef, date),
+            filteredPreviousActuals: _.filter(date.previousActuals, (value, index) => index !== date.actualIndex)
         };
         var split = date.displayName.split(',');
         if(split.length > 1) {
@@ -111,7 +112,7 @@ var datesTableDeferredRender = P.datesTableDeferredRender = function(projectRef,
         hideDeadlines: options.hideDeadlines,
         editable: !!options.isEditable,
         displayAdminOptions: displayAdminOptions,
-        canForceUpdate: O.currentUser.isMemberOf(Group.Administrators),
+        canForceUpdate: O.currentUser.allowed(P.CanManuallyForceDatesUpdate),
         displayAlerts: displayAlerts,
         context: context, 
         isSuperUser: isSuperUser
@@ -154,9 +155,19 @@ P.implementService("hres:project_journal:get_implementation:PDATE", function() {
         renderSmall: function(row) {
             var defn = P.dateDefinitionsKind[row.kind];
             if(defn) {
-                return P.template("journal/project-date").deferredRender({
-                    defn: defn
-                });
+                if(defn.renderTimelineEntryDeferred) {
+                    return defn.renderTimelineEntryDeferred(row);
+                } else {
+                    return P.template("journal/project-date").deferredRender({
+                        defn: defn
+                    });
+                }
+            }
+        },
+        link: function(row) {
+            var defn = P.dateDefinitionsKind[row.kind];
+            if(defn && defn.link) {
+                return defn.link(row);
             }
         }
     };

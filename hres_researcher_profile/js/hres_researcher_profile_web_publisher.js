@@ -15,6 +15,7 @@ if(O.featureImplemented("std:web-publisher")) {
         deferredRender: function(E, context, options) {
             if(context.object) {
                 var profile = new P.Profile(context.object);
+                if(!profile.userCanView(O.currentUser)) { return; }
                 var sections = profile.applicableSections();
                 if(options.without) {
                     sections = _.compact(_.map(sections, function(section) {
@@ -25,7 +26,7 @@ if(O.featureImplemented("std:web-publisher")) {
                 }
                 var displaySections = [];
                 _.each(sections, function(section) {
-                    var display = section.deferredRenderPublished(profile);
+                    var display = section.deferredRenderPublished(profile, context, options);
                     if(display) {
                         displaySections.push({
                             section: section,

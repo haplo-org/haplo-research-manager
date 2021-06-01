@@ -1,0 +1,24 @@
+{
+  "pluginName": "hres_anzsrc_schema",
+  "pluginAuthor": "Haplo Services Ltd",
+  "pluginVersion": 1,
+  "displayName": "Hres ANZSRC Schema",
+  "displayDescription": "Support for the Australian and New Zealand Standard Research Classification (ANZSRC) codes",
+  "installSecret": "bf814e0fdbcda75e86e78566480c6a1baaabc470",
+  "apiVersion": 4,
+  "privilegesRequired": ["pBackgroundProcessing"],
+  "depend": [
+    "hres_schema",
+    "haplo_user_roles_permissions",
+    "haplo_descriptive_object_labelling",
+    "std_reporting",
+    "std_action_panel"
+  ],
+  "use": [
+    "std:reporting"
+  ],
+  "load": [
+      "js/hres_anzsrc_schema.js"
+    ],
+  "respond": ["/do/hres-anzsrc-schema"]
+}

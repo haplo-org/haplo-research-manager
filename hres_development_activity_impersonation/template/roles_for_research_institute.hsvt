@@ -1,0 +1,19 @@
+
+<tr>
+  <th class=["hierarchy-level" unsafeAttributeValue(unsafeLevelClass)]>
+    std:object:link(ref)
+  </th>
+  each(roles) {
+    <td> 
+      if(.) { 
+        each(.) {
+          <a class="_hres_impersonate" data-uid=id href="#"> name </a> <br>
+        }
+      }
+      else { " - "}
+    </td>
+  }
+</tr>
+each(children) {
+    template:roles_for_research_institute()
+}

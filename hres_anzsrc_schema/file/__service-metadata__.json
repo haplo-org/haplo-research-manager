@@ -1,0 +1,11 @@
+{
+    "haplo:data-import-framework:filter:hres:anzsrc-for-code-to-ref": {
+        "statements": [
+            "conforms-to haplo:data-import-framework:filter"
+        ],
+        "metadata": {
+            "name": "hres:anzsrc-for-code-to-ref",
+            "description": "Convert a field of research code to a Haplo Ref value."
+        }
+    }
+}

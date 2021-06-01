@@ -51,13 +51,16 @@ in case if object was never modified it will return original object version.
 
 */
 
+var S_MONTH = O.application.config["hres:academic_years:start_month"];
+var E_MONTH = O.application.config["hres:academic_years:end_month"];
 
-var START_MONTH = 7;    // August in JS zero-based years
-var START_DAY = 1;      // first day of August
-var END_MONTH = 6;      // July
-var END_DAY = 31;       // last day of July, because platform date ranges include last day
+var START_MONTH = (S_MONTH !== undefined) ? S_MONTH : 7;                        // August in JS zero-based years
+var START_DAY = O.application.config["hres:academic_years:start_day"] || 1;      // first day of August
+var END_MONTH = (E_MONTH !== undefined) ? E_MONTH : 6;                          // July
+var END_DAY = O.application.config["hres:academic_years:end_day"] || 31;         // last day of July, because platform date ranges include last day
 
 var ENSURE_AT_LEAST_YEARS_IN_FUTURE = 2;
+var ENSURE_AT_LEAST_YEARS_IN_PAST = -6;
 
 // An array of objects representing academic years in order, keys:
 //   ref: of academic year object
@@ -129,10 +132,15 @@ var forDate = function(date) {
             // Make new object
             var obj = O.object();
             obj.appendType(T.AcademicYear);
-            obj.appendTitle(""+academicStartYear+" - "+(academicStartYear+1));
+            if(S_MONTH === 0) {
+                obj.appendTitle(academicStartYear);
+            } else {
+                obj.appendTitle(""+academicStartYear+" - "+(academicStartYear+1));
+            }
+            var academicEndYear = (S_MONTH === 0) ? academicStartYear : academicStartYear+1;
             var datetime = O.datetime(
                 new Date(academicStartYear,     START_MONTH, START_DAY),
-                new Date(academicStartYear + 1, END_MONTH,   END_DAY),
+                new Date(academicEndYear, END_MONTH,   END_DAY),
                 O.PRECISION_DAY
             );
             obj.append(datetime, A.Date);
@@ -337,7 +345,8 @@ P.reporting.registerReportingFeature("hres:schema:academic_year_navigation_for_j
 
 var ensureAcademicYearsInFutureAvailable = function() {
     var d = new Date();
-    for(var i = 0; i <= ENSURE_AT_LEAST_YEARS_IN_FUTURE; ++i) {
+    d.setFullYear(d.getFullYear()+ENSURE_AT_LEAST_YEARS_IN_PAST);
+    for(var i = ENSURE_AT_LEAST_YEARS_IN_PAST; i <= ENSURE_AT_LEAST_YEARS_IN_FUTURE; ++i) {
         forDate(d);
         d.setFullYear(d.getFullYear()+1);
     }

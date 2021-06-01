@@ -25,5 +25,11 @@ OPTIONAL attribute hres:attribute:funder as Funder
 OPTIONAL attribute hres:attribute:keywords as Keywords
 OPTIONAL attribute hres:attribute:data-type as DataType
 OPTIONAL attribute hres:attribute:project-dates as ProjectDates
+OPTIONAL attribute hres:attribute:proposal-stage as ProposalStage
+
+OPTIONAL qualifier hres:qualifier:proposal-submitted as Submitted
+OPTIONAL qualifier hres:qualifier:won as Won
+OPTIONAL qualifier hres:qualifier:lost as Lost
+
 
 OPTIONAL group hres:group:repository-editors as RepositoryEditors

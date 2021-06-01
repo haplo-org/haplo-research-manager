@@ -38,12 +38,20 @@ P.webPublication.feature("hres:publication-common:researcher-directory", functio
     publication.respondToDirectory(spec.path, function(E, context) {
         let letter = (E.request.extraPathElements[0] || "A").toUpperCase();
         if(letter.length != 1) { letter = 'A'; }
-        let results = O.query().
-            link(T.Researcher).
+        let resultQuery = O.query().
             freeText(letter+'*', A.Title).   // a little bit of filtering, will select a few extras so need filtering in code as well
-            sortByTitle().
-            execute();
-        results = _.filter(results, (r) => {
+            sortByTitle();
+        if(spec.peopleQuery) {
+            resultQuery = spec.peopleQuery(resultQuery);
+        } else {
+            resultQuery = resultQuery.or((sq) => {
+                sq.link(T.Researcher);
+                if("ResearcherPublishedToRepository" in Label) {
+                    sq.allLabels([T.Person, Label.ResearcherPublishedToRepository]);
+                }
+            });
+        }
+        let results = _.filter(resultQuery.execute(), (r) => {
             let lastName = r.firstTitle().toFields().last;
             return (lastName && (lastName.charAt(0).toUpperCase() === letter));
         });
@@ -92,7 +100,12 @@ P.webPublication.feature("hres:publication-common:research-institute", function(
             context.hint.objectKind = 'research-institute';
 
             let researchers = O.query().
-                link(T.Researcher).
+                or((sq) => {
+                    sq.link(T.Researcher);
+                    if("ResearcherPublishedToRepository" in Label) {
+                        sq.allLabels([T.Person, Label.ResearcherPublishedToRepository]);
+                    }
+                }).
                 link(context.object.ref, A.ResearchInstitute).
                 sortByTitle().
                 execute();
@@ -105,7 +118,7 @@ P.webPublication.feature("hres:publication-common:research-institute", function(
                 pageSize: 40,
                 modifyQuery(query) {
                     query.link(context.object.ref);
-                    if(spec.query.labels) {
+                    if(("query" in spec) && spec.query.labels) {
                         query.anyLabel(spec.query.labels);
                     }
                 }

@@ -6,7 +6,7 @@
 
 /*HaploDoc
 node: /hres_project_journal/dates
-title: Project dates integration
+title: Project dates
 sort: 1
 --
 
@@ -43,9 +43,12 @@ When making a prediction for a date, it may be useful to gather additional data.
 The journal helps! 
 @"hres:project_journal:dates:scheduled_data:set"@ and @"hres:project_journal:dates:scheduled_data:get"@ provide a convenient place to store this data, and you can implement @"hres:project_journal:dates:get_form_instance_for_scheduled_date_extra_data:NAME"@ to add an additional form to the scheduled date editor to gather this info.
 
-Alerts are project dates. They are related an existing project date. 
-The first alerts for a project date should be given the name of the existing project date suffixed by @":alert"@
-Subsequent alerts should have the suffixes @":alert:0"@, @":alert:1"@, @":alert:2"@ and so on 
+Alerts are project dates. They are related an existing project date. \
+The first alerts for a project date should be given the name of the existing project date suffixed by @":alert"@. \
+Subsequent alerts should have the suffixes @":alert:0"@, @":alert:1"@, @":alert:2"@ and so on.
+
+Notifying users on alert dates is usually handled by the [node:/hres/hres_simple_alerts] plugin. If implementing \
+your own alert notifications system use the APIs provided by [node:/hres/hres_project_journal/project_dates_alerts].
 */
 
 // --------------------------------------------------------------------------
@@ -80,35 +83,80 @@ P.db.table("datesScheduledData", {
 
 var dateDefinitions;
 var dateDefinitionsSorted;
-var registerDateDefinition = P.registerDateDefinition = function(defn) {
+var generatedDateDefinitions;
+var registerDateDefinition = P.registerDateDefinition = function(defn, isGeneratedDate) {
     var d = P.dateDefinitions || {},
+        dGenned = generatedDateDefinitions || {},
         dKind = P.dateDefinitionsKind || {};
-    if(!("name" in defn)) { throw new Error("Project date definition must have a name"); }
-    if(!defn.categories) { throw new Error("Project date definition must have categories array"); }
-    if(defn.name in d) { throw new Error("Project date "+defn.name+" has already been defined"); }
+    validateDefinition(defn, isGeneratedDate);
     d[defn.name] = defn;
+    if(isGeneratedDate) { dGenned[defn.name] = defn; }
     dKind['PDATE:'+defn.name] = defn; // for PDATE:name lookups
     dateDefinitionsSorted = _.sortBy(_.values(d), "sort");
     dateDefinitions = P.dateDefinitions = d;
+    generatedDateDefinitions = dGenned;
     P.dateDefinitionsKind = dKind;
     
-    ['editRequired', 'editScheduledActual', 'editPreviousActual'].forEach(function(editProperty) {
-        var action = O.action(getEditActionApiCode(editProperty, defn.name)).
-            title('Can edit the '+defn.displayName+' project date - '+editProperty+' property').
-            allow('hres:project_journal:action', "hres_project_journal:dates:edit_all_dates");
-        if(!!defn[editProperty]) {
-            defn[editProperty](action);
-        }
+    if(!isGeneratedDate) {
+        ['editRequired', 'editScheduledActual', 'editPreviousActual'].forEach(function(editProperty) {
+            var action = O.action(getEditActionApiCode(editProperty, defn.name)).
+                    title('Can edit the '+defn.displayName+' project date - '+editProperty+' property').
+                    allow('hres:project_journal:action', "hres_project_journal:dates:edit_all_dates");
+            if(!!defn[editProperty]) {
+                defn[editProperty](action);
+            }
+        });
+    }
+};
+
+var hasCollectedGeneratedDates;
+var ensureGeneratedDatesDefined = function() {
+    if(hasCollectedGeneratedDates) { return; }
+    var definitions = [];
+    O.serviceMaybe("hres:project_journal:dates:collect_definitions", definitions);
+    _.each(definitions, function(defn) {
+        registerDateDefinition(defn, true);
+    });
+    hasCollectedGeneratedDates = true;
+};
+
+var invalidateGeneratedDatesCacheInThisRuntime = function() {
+    hasCollectedGeneratedDates = false;
+    var d = generatedDateDefinitions || {};
+    _.each(_.keys(d), function(name) {
+        delete dateDefinitions[name];
     });
 };
+
+var invalidateGeneratedDatesCache = O.interRuntimeSignal("hres_project_journal:dates:invalidate_generated_dates_cache", invalidateGeneratedDatesCacheInThisRuntime);
+
+P.implementService("hres:project_journal:dates:invalidate_definitions", function() {
+    invalidateGeneratedDatesCache.signal();
+});
 
 P.provideFeature("hres_project_journal:dates", function(plugin) {
     
     plugin.hresProjectDates = {
-        register: registerDateDefinition
+        register: function(definition) {
+            registerDateDefinition(definition, false);
+        }
     };
 
 });
+
+var validateDefinition = function(defn, isGenerated) {
+    var d = P.dateDefinitions || {};
+    if(!("name" in defn)) { throw new Error("Project date definition must have a name"); }
+    if(!defn.categories) { throw new Error("Project date definition must have categories array"); }
+    if(defn.name in d) { throw new Error("Project date "+defn.name+" has already been defined"); }
+    if(isGenerated) {
+        ['editRequired', 'editScheduledActual', 'editPreviousActual'].forEach(function(editProperty) {
+            if(!(editProperty in defn)) {
+                throw new Error("Generated project date definitions must include "+editProperty);
+            }
+        });
+    }
+};
 
 P.validateDateName = function(name) {
     return decodeURIComponent(name) in dateDefinitions;
@@ -127,7 +175,12 @@ var jsDateIsEqual = P.jsDateIsEqual = function(date1, date2) {
 // in the date definition, or can be managed pluggably using the action directly
 
 var getEditActionApiCode = P.getEditActionApiCode = function(editProperty, name) {
-    return "hres:project_journal:dates:"+editProperty+":"+name;
+    var d = generatedDateDefinitions || {};
+    if(name in d) {
+        return d[name][editProperty].code;
+    } else {
+        return "hres:project_journal:dates:"+editProperty+":"+name;
+    }
 };
 
 var makeEditableGetter = function(editProperty) {
@@ -147,6 +200,8 @@ P.implementService("std:action:check:hres:project_journal:action", function(user
 // --------------------------------------------------------------------------
 
 var ProjectDateList = P.ProjectDateList = function(ref, serialised) {
+    invalidateGeneratedDatesCache.check();
+    ensureGeneratedDatesDefined();
     var projectDateList = this;
     this.ref = ref;
     var list = this.list = [];
@@ -184,6 +239,17 @@ ProjectDateList.prototype.date = function(name) {
     var date = this.$lookup[name];
     if(!date) {
         if(!(name in dateDefinitions)) { throw new Error("Project date "+name+" has not been declared by any plugin"); }
+        date = ProjectDate.unassigned(this, name);
+        this.list.push(date);
+        this.$lookup[name] = date;
+    }
+    return date;
+};
+
+ProjectDateList.prototype.dateMaybe = function(name) {
+    var date = this.$lookup[name];
+    if(!date) {
+        if(!(name in dateDefinitions)) { return undefined; }
         date = ProjectDate.unassigned(this, name);
         this.list.push(date);
         this.$lookup[name] = date;
@@ -374,7 +440,7 @@ Properties of each project date: (ALL READ ONLY, use functions to mutate)
 |actualIndex|index of actual for repeating events (initialised to 0 for first occurance). Use nextOccurrence() to increment and set for the next occurance. (noop if there isn't an actual date)|
 |latestActual|most recent actual date (may be null)|
 |unfix|function. Takes no argument. Set requiredIsFixed to false. You probably don't want to use this|
-|getDatesForCalculations|function. Takes no argument, returns an object suitable for an input to dates calculations, or undefined if there are no suitable input dates. Only fixed dates will be used as inputs|
+|getDatesForCalculations|function. Takes no argument, returns an object suitable for an input to dates calculations, or an empty object if there are no suitable input dates. Only fixed dates will be used as inputs|
 
 */
 ProjectDate.prototype.setRequiredCalculated = function(min, max) {
@@ -509,12 +575,20 @@ ProjectDate.prototype.getDatesForCalculations = function() {
     if(this.actual) {
         d = {
             min: this.actual,
-            max: this.actual
+            max: this.actual,
+            requiredMin: this.requiredMin,
+            requiredMax: this.requiredMax || this.requiredMin
         };
     } else if(this.requiredIsFixed) {
         d = {
             min: this.requiredMin,
             max: this.requiredMax || this.requiredMin
+        };
+    } else if(O.application.config["hres_date_calculation_2020:in_use"] && this.scheduled) {
+        // With new engine, it's safe to calculate dates in the future
+        d = {
+            min: this.scheduled,
+            max: this.scheduled
         };
     }
     if(this.actualIndex > 0) {
@@ -671,6 +745,29 @@ P.implementService("hres:project_journal:dates:get_past_alerts_for_project", fun
     return pastAlerts;
 });
 
+
+var getAlertsForDate = function(date) {
+    var projects = P.getProjectsWithStoredDates();
+    var alertsForDate = [];
+    _.each(projects, (ref) => {
+        var d = P.db.dates.select().
+            where("project","=",ref).
+            order("updated",true).
+            limit(1);
+        var row = d[0];
+        var alerts = createAlertsFromRow(row);
+        _.each(alerts, function(alert) {
+            if(alert.date.requiredMin && !alert.deadlineActual) {
+                var alertDate = new XDate(alert.date.requiredMin).clearTime();
+                if(date.diffDays(alertDate) === 0) {
+                    alertsForDate.push(alert);
+                }
+            }
+        });
+    });
+    return alertsForDate;
+};
+
 /*HaploDoc
 node: /hres_project_journal/project_dates_alerts
 sort: 3
@@ -684,26 +781,11 @@ h4. Usage
 Call the service with no arguments.
 */
 P.implementService("hres:project_journal:dates:get_alerts_for_today", function() {
-    var projects = P.getProjectsWithStoredDates();
-    var alertsForToday = [];
-    var today = new XDate().clearTime();
-    _.each(projects, (ref) => {
-        var d = P.db.dates.select().
-            where("project","=",ref).
-            order("updated",true).
-            limit(1);
-        var row = d[0];
-        var alerts = createAlertsFromRow(row);
-        _.each(alerts, function(alert) {
-            if(alert.date.requiredMin && !alert.deadlineActual) {
-                var alertDate = new XDate(alert.date.requiredMin).clearTime();
-                if(today.diffDays(alertDate) === 0) {
-                    alertsForToday.push(alert);
-                }
-            }
-        });
-    });
-    return alertsForToday;
+    return getAlertsForDate(new XDate().clearTime());
+});
+
+P.implementService("hres:project_journal:dates:get_alerts_for_date", function(date) {
+    return getAlertsForDate(date);
 });
 
 /*HaploDoc
@@ -711,6 +793,13 @@ node: /hres_project_journal/project_dates_alerts
 title: Project dates alerts
 sort: 1
 --
+
+**Note:** This page describes the interfaces and data structures exposed by the @hres_project_journal@ plugin \
+related to project date alerts. However, in most cases you should **not** use these, and instead use the \
+[node:/hres/hres_simple_alerts] plugin to configure alert notifications.
+
+h3. Data structure
+
 An alert is an object with the properties:
 
 |_. Property |_. Value |
@@ -818,7 +907,13 @@ P.implementService("hres:project_journal:dates:scheduled_data:set", function(pro
 // --------------------------------------------------------------------------
 
 P.implementService("hres_project_journal:dates:all_definitions", function() {
+    ensureGeneratedDatesDefined();
     return dateDefinitionsSorted;
+});
+
+P.implementService("hres_project_journal:dates:definition_for_name", function(name) {
+    ensureGeneratedDatesDefined();
+    return dateDefinitions[name];
 });
 
 P.implementService("haplo:qa-audit:gather-information", function(audit) {

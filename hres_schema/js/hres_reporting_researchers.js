@@ -10,12 +10,15 @@ node: /hres_schema/researchers
 title: Researchers collection
 --
 
-The researchers collection contains facts about Researchers and External Researchers. The default filter for \
-the collection excludes External researchers. If a dashboard using this collection needs to include External Researchers\
- one of the filters to include them should be used. These are @includeExternal@, which will include both Researchers \
-and External Researchers in the dashboard, and @excludeInternal@, which will make the dashboard show only External \
-Researchers.
+The researchers collection contains facts about Researchers and External Researchers. The default filter for the collection excludes \
+Past and External researchers.
 
+If a dashboard using this collection needs to include External or Past Researchers one of the filters to include them should be used. \
+These are:
+* @includeExternal@ which will include only External Researchers & Researchers in the dashboard
+* @includePast@ which will include only Past Researchers & Researchers in the dashboard
+* @includeAll@ which will include all Researchers in the dashboard
+* @excludeInternal@ which will make the dashboard show only External Researchers
 */
 
 P.implementService("std:reporting:discover_collections", function(discover) {
@@ -24,15 +27,34 @@ P.implementService("std:reporting:discover_collections", function(discover) {
 
 P.implementService("std:reporting:collection:researchers:setup", function(collection) {
     collection.
-        currentObjectsOfType(T.Researcher, T.ExternalResearcher).
+        currentObjectsOfType(T.Researcher, T.ExternalResearcher, T.ResearcherPast).
         property("hres:row_permissions:additional_labels",  [Label.ActivityIdentity]).
+        fact("isPast",      "boolean",  "Is a past researcher").
         fact("isExternal",  "boolean",  "Is an external researcher").
-        filter(collection.FILTER_DEFAULT, function(select) { select.where("isExternal", "=", null); }).
-        filter("includeExternal", function(select) { }).
+        filter(collection.FILTER_DEFAULT, function(select) {
+            select.where("isExternal", "=", null).
+                where("isPast", "=", null);
+        }).
+        filter("includeExternal", function(select) {
+            select.where("isPast", "=", null).
+                or((sq) => {
+                    sq.where("isExternal", "=", null).
+                        where("isExternal", "=", true);
+                });
+        }).
+        filter("includePast", function(select) {
+            select.where("isExternal", "=", null).
+                or((sq) => {
+                    sq.where("isPast", "=", null).
+                        where("isPast", "=", true);
+                });
+        }).
+        filter("includeAll", function(select) { }).
         filter("excludeInternal", function(select) { select.where("isExternal", "=", true); });
         // TODO: Permissions for Researchers? Does it need different label lists for different purposes?
 });
 
 P.implementService("std:reporting:collection:researchers:get_facts_for_object", function(object, row, collection) {
     if(object.isKindOf(T.ExternalResearcher)) { row.isExternal = true; }
+    if(object.isKindOf(T.ResearcherPast)) { row.isPast = true; }
 });

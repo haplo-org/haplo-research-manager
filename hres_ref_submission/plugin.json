@@ -1,0 +1,25 @@
+{
+  "pluginName": "hres_ref_submission",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Haplo RM REF Submission",
+  "displayDescription": "Facilitates submission to the REF.",
+  "installSecret": "e76c3adecb3eaa5ac1297e838901e321a71e6a8e",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase", "pBackgroundProcessing"],
+  "depend": [
+    "std_reporting",
+    "hres_ref_schema",
+    "hres_schema",
+    "hres_repository",
+    "hres_ref_repository",
+    "hres_ref_process_repository"
+  ],
+  "use": [
+    "std:reporting"
+  ],
+  "load": [
+    "js/hres_ref_submission.js"
+  ],
+  "respond": ["/do/hres-ref-submission"]
+}

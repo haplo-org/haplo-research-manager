@@ -4,11 +4,11 @@ The simple alerts plugin provides functionality for sending reminders based on p
 
 h2. Reminders
 
-Alerts are a type of project date. You define them in the same way that any other project date is defined. The name of the alerts must end with @:alert@ or @:alert:n@ where n is an integer, starting from 0.
+Alerts are a type of [node:/hres/hres_project_journal/dates:Project Date]. You define them in the same way that any other project date is defined. The name of the alerts must end with @:alert@ or @:alert:n@ where n is an integer, starting from 0.
 
 Most alerts should be set up with an associated standard project date. For example, you may have a date called @example:project-end@, and you want an alert six months before this date. You would set up a project date called @example:project-end:alert@. The calculation rules for this date should be based on @example:project-end@. If you wanted another reminder 3 months before, you should set up another called @example:project-end:alert:0@.
 
-The required max of the associated project date will be the deadline for the alert. The deadline is used to determine which dashboards this alert is displayed in, and also changes the display of the row on the project dates page. 
+The @requiredMax@ of the associated project date will be the deadline for the alert. The deadline is used to determine which dashboards this alert is displayed in, and also changes the display of the row on the project dates page. 
 
 If you do not want the reminder to appear on the project dates page, they can be defined alone. They should still end with @:alert@ or @:alert:n@, but are otherwise idenitcal.
 

@@ -39,7 +39,7 @@ if(displayAdminOptions) {
                             " "
                         }
                     }
-                    each(previousActuals) { <i> "(" i("Previous") ") "</i> std:date(.) <br> }
+                    each(^{filteredPreviousActuals}) { <i> "(" i("Previous") ") "</i> std:date(.) <br> }
                     if(actual) {
                         std:date(actual)
                     } else {

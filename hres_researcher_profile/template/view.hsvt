@@ -1,10 +1,31 @@
+each(staticDeferreds) { render(.) }
+std:layout:wide()
+std:plugin:resources(
+    "view-profiles.css"
+    "collapse-sections.js"
+)
 
 pageTitle("Researcher Profile: " researcher.title)
 backLink(std:object:url(researcher))
 
 each(sections) {
     if(show) {
-        <h2> section.title </h2>
-        render(display)
+        <div class="section-title">
+            if(editLink) {
+                std:ui:button-link(editLink) { "Edit" }  "&emsp;"
+            }
+            <h1>
+                section.title
+            </h1>
+            if(display) {
+                "&emsp;" <a class="expand-collapse" data-section=section.title data-expanded=0> "expand" </a>
+            }
+        </div>
+        ifContent() {
+            <div class="collapsible" data-section=section.title>
+                markContent() { render(display) }
+            </div>
+        }
+        <hr>
     }
 }

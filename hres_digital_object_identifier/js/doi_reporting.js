@@ -17,12 +17,29 @@ P.implementService("std:reporting:collection:repository_items:get_facts_for_obje
 
 // ------ De-duplification of repository items -------------------
 
+var matchOnDOI = function(dois) {
+    return function(listObject) {
+        return _.any(dois, (doi) => listObject.has(doi, A.DigitalObjectIdentifierDOI));
+    };
+};
+
 P.implementService("hres:doi:match-to-existing-item-in-list", function(object, list) {
-    let doi = object.first(A.DigitalObjectIdentifierDOI);
-    if(doi) {
-        return _.find(list, (listObject) => {
-            return listObject.has(doi, A.DigitalObjectIdentifierDOI);
-        });
+    let dois = object.every(A.DigitalObjectIdentifierDOI);
+    if(dois.length) {
+        return _.find(list, matchOnDOI(dois));
+    }
+});
+
+P.implementService("hres:repository:find_matching_items_by_identifier", function(object, results) {
+    let dois = object.every(A.DigitalObjectIdentifierDOI);
+    if(dois.length) {
+        O.query().
+            link(SCHEMA.getTypesWithAnnotation("hres:annotation:repository-item"), A.Type).
+            or((sq) => {
+                _.each(dois, (doi) => sq.identifier(doi, A.DigitalObjectIdentifierDOI));
+            }).
+            execute().
+            each((item) => results.push({object: item, matchingDesc: A.DigitalObjectIdentifierDOI}));
     }
 });
 

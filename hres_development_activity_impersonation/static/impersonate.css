@@ -1,0 +1,39 @@
+/* Haplo Research Manager                            https://haplo.org
+ * (c) Haplo Services Ltd 2006 - 2021            https://www.haplo.com
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.         */
+
+
+.groups-table {
+    max-width: 50%;
+}
+
+.header-column {
+    width: 50px;
+}
+
+.header-column-wide {
+    width: 100px;
+}
+
+/*Fallback for levels > 3*/
+#institute-hierarchy th.hierarchy-level {
+    padding-left:100px;
+}
+
+#institute-hierarchy th.hierarchy-level-0 {
+    padding-left:5px;
+}
+
+#institute-hierarchy th.hierarchy-level-1 {
+    padding-left:25px;
+}
+
+#institute-hierarchy th.hierarchy-level-2 {
+    padding-left:45px;
+}
+
+#institute-hierarchy th.hierarchy-level-3 {
+    padding-left:70px;
+}

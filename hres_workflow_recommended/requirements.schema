@@ -1,0 +1,4 @@
+
+feature std:configuration-data
+    property: {"std_workflow:new_transition_ui":true}
+    property: {"std_document_store:use_transition_steps_ui":true}

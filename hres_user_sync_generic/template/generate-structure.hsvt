@@ -14,7 +14,7 @@ if(output) {
   </textarea>
 } else {
   <p style="margin:24px 0">
-    haplo:data-import-framework:documentation("/app/research/institution-structure" "Documentation")
+    haplo:data-import-framework:documentation("/app/research/setup/institution-structure" "Documentation")
   </p>
   <h2> "Example structure" </h2>
   <pre>

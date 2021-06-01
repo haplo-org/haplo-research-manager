@@ -1,0 +1,9 @@
+ifContent() {
+  <p> markContent() { std:text:object-value(jobTitle) } </p>
+}
+ifContent() {
+  <p> markContent() { std:text:object-value(researchInstitute) } </p>
+}
+ifContent() {
+  <p> markContent() { std:text:object-value(email) } </p>
+}

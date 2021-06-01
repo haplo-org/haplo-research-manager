@@ -16,7 +16,10 @@
 var recalculateDates = function(impl, ref, dates, ignorePreviousState, calculateOnly) {
     var flags = [];
     var inputDates = {};
-    _.each(impl.calculationDates, function(name) {
+    var calculationDates = O.service("haplo:date_rule_engine:calculation_dates_for_object_ruleset",
+            impl.ruleSet, ref.load());
+    _.each(calculationDates, function(name) {
+        if(name.endsWith(":previous")) { return; }
         var calculationDate = dates.date(name).getDatesForCalculations();
         if(calculationDate.min) {
             inputDates[name] = [calculationDate.min, calculationDate.max];
@@ -67,9 +70,12 @@ var saveRecalculatedDatesToJournal = function(ref, dates, ignorePreviousState, c
         O.service("hres_date_calculation:get_implementations_for_project", project, impls);
     }
     _.each(impls, function(impl) {
+        var calculationDates = O.service("haplo:date_rule_engine:calculation_dates_for_object_ruleset",
+            impl.ruleSet, project);
         var recalculated = recalculateDates(impl, ref, dates, ignorePreviousState, calculateOnly);
         // result = [start, end <,problem string>]
-        _.each(impl.calculationDates, function(name) {
+        _.each(calculationDates, function(name) {
+            if(name.endsWith(":previous")) { return; }
             var date = dates.date(name);
             if(date.requiredIsFixed || date.actual) { return; }
             var result = recalculated[name];

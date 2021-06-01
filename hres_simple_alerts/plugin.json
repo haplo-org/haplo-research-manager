@@ -24,5 +24,6 @@
   "load": [
       "js/hres_simple_alerts.js",
       "js/alerts_reporting.js"
-    ]
+    ],
+  "respond": ["/do/hres-simple-alerts"]
 }

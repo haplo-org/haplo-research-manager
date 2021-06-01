@@ -51,6 +51,9 @@ var selectJournalEntries = function(specification) {
     if("identifier" in specification) {
         select.where("identifier", "=", specification.identifier);
     }
+    if("ref" in specification) {
+        select.where("ref", "=", specification.ref);
+    }
     if("modify" in specification && typeof specification.modify === 'function') {
         specification.modify(select);
     }
@@ -169,7 +172,6 @@ var saveEntry = function(entry, row) {
     });
 };
 
-
 // Finds the last action by the researcher, given a specification.
 // Uses user argument for fallback determination of whether a journal entry is by the user in question
 P.implementService("hres:project_journal:get_last_action_by_researcher", function(specification, user) {
@@ -260,45 +262,14 @@ P.implementService("hres:project_journal:render", function(specification) {
     });
 });
 
-// --------------------------------------------------------
-// TODO: Delete this Leeds-specific import fix code!
-
-P.respond("GET,POST", "/do/hres-project-journal/fix-imported-nulls", [
-    {parameter:"count", as:"int", optional:true}
-], function(E, count) {
-    if(!O.currentUser.isMemberOf(GROUP["std:group:administrators"])) { O.stop("Not permitted."); }
-    
-    if(E.request.method === "POST") {
-        count = 0;
-        P.db.journal.select().or(function(sq) {
-            sq.where("implementation", "=", "leeds_import:legacy_meeting").
-                where("implementation", "=", "leeds_import:legacy_monthly_report");
-        }).each(function(row, i) {
-            // Check row.data
-            var document = {};
-            var nullsFound = false;
-            _.each(row.data, function(value, key) {
-                if(value === null) {
-                    nullsFound = true;
-                } else {
-                    document[key] = value;
-                }
-            });
-            if(nullsFound) {
-                count++;
-                row.data = document;
-                row.save();
-            }                
-        });
-        E.response.redirect("/do/hres-project-journal/fix-imported-nulls?count="+count);
+P.implementService("hres:project_journal:entry_link", function(entry) {
+    var impl = getImplementation(entry.implementation);
+    if(!impl) { return; }
+    var link;
+    if("link" in impl) {
+        link = impl.link(entry);
+    } else if(entry.ref) {
+        link = entry.ref.load().url();
     }
-    var i = P.locale().text("template");
-    E.render({
-        pageTitle: i["Fix nulls imported into project journal data?"],
-        backLink: "/",
-        text: count ? O.interpolateString(i["Fixed {count} journals"], {count: count}) : "",
-        options: [
-            {label:i["Fix"]}
-        ]
-    }, "std:ui:confirm");
+    return link;
 });

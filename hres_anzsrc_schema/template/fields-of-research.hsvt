@@ -1,0 +1,3 @@
+pageTitle(i("ANZSRC Fields of Research"))
+
+each(fors) { std:object(. "searchresult") }

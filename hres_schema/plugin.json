@@ -29,11 +29,13 @@
       "js/hres_reporting_permissions.js",
       "js/hres_reporting_research_institutes.js",
       "js/hres_reporting_researchers.js",
+      "js/hres_reporting_staff.js",
       "js/hres_reporting_funders.js",
       "js/hres_navigation.js",
       "js/hres_navigation_home_page.js",
       "js/hres_schema_institute_choices.js",
       "js/hres_calendar_years.js",
+      "js/hres_financial_years.js",
       "js/hres_schema_test_data.js"
     ],
   "respond": [

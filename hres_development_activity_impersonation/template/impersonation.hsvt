@@ -1,0 +1,19 @@
+pageTitle(title)
+std:layout:wide()
+std:plugin:resources("impersonate.js" "impersonate.css")
+
+std:ui:notice("Select a user below to impersonate.")
+
+<form id="_hres_impersonate_form" method="POST" action="/do/authentication/impersonate">
+    std:form:token()
+    <input type="hidden" name="uid">
+    <input type="hidden" name="rdr" value="/">
+
+    template:groups_table()
+
+    template:roles_table()
+
+    if(committeeUsers) {
+        template:committees_table()
+    }
+</form>

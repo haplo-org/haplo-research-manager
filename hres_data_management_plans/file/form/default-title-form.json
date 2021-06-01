@@ -21,9 +21,9 @@
             "label": "Language",
             "required": true,
             "choices": [
-                ["en", "English"],
-                ["fr", "French"],
-                ["es", "Spanish"]
+                ["eng", "English"],
+                ["fra", "French"],
+                ["spa", "Spanish"]
             ]
         }
     ]

@@ -7,3 +7,6 @@ OPTIONAL attribute hres:attribute:keywords as Keywords
 type hres:type:person:researcher as Researcher
 type hres:type:research-institute as ResearchInstitute
 type hres:type:research-institute:faculty as Faculty
+type std:type:person as Person
+
+OPTIONAL label hres:label:researcher-published-to-repository as ResearcherPublishedToRepository

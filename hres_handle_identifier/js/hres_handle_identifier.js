@@ -34,12 +34,29 @@ var createHandleValue = P.implementTextType("hres:hdl", "Handle", {
 // --------------------------------------------------------------------------
 // De-duplication of repository items
 
+var matchOnHandle = function(handles) {
+    return function(listObject) {
+        return _.any(handles, (handle) => listObject.has(handle, A.Handle));
+    };
+};
+
 P.implementService("hres:hdl:match-to-existing-item-in-list", function(object, list) {
-    let hdl = object.first(A.Handle);
-    if(hdl) {
-        return _.find(list, (listObject) => {
-            return listObject.has(hdl, A.Handle);
-        });
+    let handles = object.every(A.Handle);
+    if(handles.length) {
+        return _.find(list, matchOnHandle(handles));
+    }
+});
+
+P.implementService("hres:repository:find_matching_items_by_identifier", function(object, results) {
+    let handles = object.every(A.Handle);
+    if(handles.length) {
+        O.query().
+            link(SCHEMA.getTypesWithAnnotation("hres:annotation:repository-item"), A.Type).
+            or((sq) => {
+                _.each(handles, (handle) => sq.identifier(handle, A.Handle));
+            }).
+            execute().
+            each((item) => results.push({object: item, matchingDesc: A.Handle}));
     }
 });
 

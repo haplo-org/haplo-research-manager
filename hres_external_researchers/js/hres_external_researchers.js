@@ -49,14 +49,64 @@ P.implementService("std:action_panel:external_researcher", function(display, bui
     }
 });
 
-P.sendEmail = function(user, template, viewIn) {
-    var view = _.extend({
-        toUser: user,
-        applicationName: O.application.name
-    }, viewIn);
-    O.email.template("hres:email-template:external-user-email").deliver(
-        user.email, user.name, "Welcome to "+O.application.name,
-        P.template("email/"+template).render(view));
+P.implementService("hres_external_researchers:setup_account_for_user_object", function(userObject, document, workflowFullName) {
+    var userDetails = {};
+    var user;
+    var names = userObject.firstTitle().toFields();
+    userDetails.nameFirst = names.first;
+    userDetails.nameLast = names.last;
+    userDetails.email = userObject.first(A.EmailAddress).toString();
+    userDetails.ref = userObject.ref;
+    userDetails.groups = [Group.ExternalResearcherAccount];
+    try {
+        user = O.setup.createUser(userDetails);
+    } catch (exception) {
+        O.stop("Invalid email address");
+    }
+
+    if(user) {
+        if(document) { O.serviceMaybe("hres_external_researchers:handle_details", user, document); }
+        user.data["hres_external_researchers:activation_link_sent"] = new XDate();
+        O.audit.write({
+            auditEntryType: "hres_external_researchers:new_external_user",
+            ref: userObject.ref
+        });
+        P.sendEmail(user, "new_user", {
+            welcomeUrl: user.generateWelcomeURL()
+        }, workflowFullName);
+        return user;
+    }
+});
+
+P.sendEmail = function(user, template, viewIn, workflowFullName) {
+    var view;
+    if(template === "new_user") {
+        var spec = O.serviceMaybe("hres_external_researchers:customise_new_user_email", user, viewIn.welcomeUrl, workflowFullName);
+        var specTemplateMaybe = (spec && spec.template) ? spec.template : P.template("email/"+template);
+        var subject;
+        var userName;
+        if(spec) {
+            userName = spec.toName ? spec.toName : user.name;
+            if(spec.view) {
+                view = spec.view;
+                subject = spec.view.subject ? spec.view.subject : "Welcome to "+O.application.name;
+            }
+        }
+        view = _.extend((view || {}), {
+                toUser: user,
+                applicationName: O.application.name,
+                welcomeUrl: viewIn.welcomeUrl
+            });
+        O.email.template("hres:email-template:external-user-email").deliver(user.email, (userName || user.name), (subject || "Welcome to "+O.application.name), specTemplateMaybe.render(view));
+    } else {
+        view = _.extend({
+            toUser: user,
+            applicationName: O.application.name
+        }, viewIn);
+        O.email.template("hres:email-template:external-user-email").deliver(
+            user.email, user.name, "Welcome to "+O.application.name,
+            P.template("email/"+template).render(view));
+    }
 };
 
 P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
@@ -86,26 +136,8 @@ P.respond("GET,POST", "/do/hres-external-researchers/request-external-access", [
     
     if(E.request.method === "POST") {
         if(O.user(userDetails.email)) { O.stop("An account with this email address already exists"); }
-        userDetails.ref = researcher.ref;
-        userDetails.groups = [Group.ExternalResearcherAccount];
-        try {
-            user = O.setup.createUser(userDetails);
-        } catch (exception) {
-            E.response.redirect("/do/hres-external-researchers/bad-email/" + userDetails.ref.toString());
-            return;
-        }
 
-        if(user) {
-            O.serviceMaybe("hres_external_researchers:handle_details", user, document);
-            user.data["hres_external_researchers:activation_link_sent"] = new XDate();
-            O.audit.write({
-                auditEntryType: "hres_external_researchers:new_external_user",
-                ref: researcher.ref
-            });
-            P.sendEmail(user, "new_user", {
-                welcomeUrl: user.generateWelcomeURL()
-            });
-        }
+        O.serviceMaybe("hres_external_researchers:setup_account_for_user_object", researcher, document);
         E.response.redirect(researcher.url());
     }
     var i = P.locale().text("template");

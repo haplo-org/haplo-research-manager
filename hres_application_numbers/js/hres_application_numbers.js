@@ -27,6 +27,10 @@ var createAppIdValue = P.implementTextType("hres:appid", "Application ID", {
 
 // --------------------------------------------------------------------------
 
+P.implementService("hres:application_numbers:new_application_id", function(appId) {
+    return createAppIdValue([appId]);
+});
+
 P.implementService("hres:application_numbers:new_application_id_for_academic_year", function(prefix, academicYearRef) {
     var year = O.service("hres:academic_year:year_info", academicYearRef);
     var yearNumber = year.start.getFullYear() - 2000;
@@ -35,6 +39,17 @@ P.implementService("hres:application_numbers:new_application_id_for_academic_yea
     var nextProperty = year.ref.toString();
     if(!(nextProperty in nexts)) { nexts[nextProperty] = 1; }
     var appId = prefix+_.sprintf("%02d%02d-%04d", yearNumber, yearNumber+1, nexts[nextProperty]);
+    nexts[nextProperty]++;
+    P.data[dataProperty] = nexts;
+    return createAppIdValue([appId]);
+});
+
+P.implementService("hres:application_numbers:new_application_id_for_calendar_year", function(prefix, fullYear) {
+    var dataProperty = "appID_Next_"+prefix;
+    var nexts = P.data[dataProperty] || {};
+    var nextProperty = fullYear.toString();
+    if(!(nextProperty in nexts)) { nexts[nextProperty] = 1; }
+    var appId = prefix+_.sprintf("%04d-%04d", fullYear, nexts[nextProperty]);
     nexts[nextProperty]++;
     P.data[dataProperty] = nexts;
     return createAppIdValue([appId]);

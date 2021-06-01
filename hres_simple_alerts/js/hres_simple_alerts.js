@@ -39,6 +39,7 @@ P.implementService("hres:project_journal:get_implementation:hres_simple_alerts",
 
 var sendReminders = function(reminders) {
     _.each(reminders, function(reminder) {
+        if(!reminder.deadline) { return; }
         if(-1 !== ALERTS_CONFIG.noReminderEmail.indexOf(reminder.deadlineName)) {
             return;
         }
@@ -101,6 +102,36 @@ P.backgroundCallback("send_reminders", function(data) {
 P.hook("hScheduleDailyEarly", function() {
     if(!ALERTS_CONFIG.sendReminders) { return; }
     O.background.run("hres_simple_alerts:send_reminders", {});    
+});
+
+var CanForceDatesUpdate = O.action("hres:project_journal:force_manual_dates_recalculation");
+
+var dateForm = P.form("select-date", "form/select_date.json");
+
+P.backgroundCallback("send_reminders_for_date", function(data) {
+    var date = new XDate(data.date);
+    var reminders = O.serviceMaybe("hres:project_journal:dates:get_alerts_for_date", date);
+    sendReminders(_.flatten(reminders));
+});
+
+P.respond("GET,POST", "/do/hres-simple-alerts/send-alerts-for-date", [
+    {parameter:"sending", as:"int", optional:true}
+], function(E, sending) {
+    CanForceDatesUpdate.enforce();
+    var document = {};
+    var form = dateForm.handle(document, E.request);
+    if(form.complete) {
+        O.background.run("hres_simple_alerts:send_reminders_for_date", document);
+        return E.response.redirect("/do/hres-simple-alerts/send-alerts-for-date?sending=1");
+    }
+    E.render({
+        sending: !!sending,
+        form: form
+    });
+});
+
+P.implementService("hres_project_journal:gather_alerts_admin_links", function(links) {
+    links.push({ url: "/do/hres-simple-alerts/send-alerts-for-date", label:"Send alerts for a specific date"});
 });
 
 P.implementService("hres:project_journal:dates:get_alerts_deployment_date", function() {

@@ -143,7 +143,7 @@ P.implementService("hres:orcid:integration:delete", function(user, spec) {
         console.log("No existing ORCID record to delete for spec "+JSON.stringify(spec));
         return;
     }
-    O.httpClient(P.template("data-update-url").render({
+    O.httpClient(P.template("orcid-api-url").render({
         prefix: API_PREFIX,
         orcid: authQuery[0].orcid,
         kind: spec.kind,
@@ -193,7 +193,7 @@ P.implementService("hres:orcid:integration:push_data", function(user, spec) {
             firstChildElement(spec.kind).
             attribute("put-code", putCode);
     }
-    O.httpClient(P.template("data-update-url").render({
+    O.httpClient(P.template("orcid-api-url").render({
         apiVersion: spec.apiVersion || "2.1",
         prefix: API_PREFIX,
         orcid: authQuery[0].orcid,
@@ -246,4 +246,43 @@ var Pushed = P.callback("pushed", function(data, client, response) {
         console.log("Response body:", response.body ? response.body.readAsString("UTF-8") : "No body returned");
         console.log(data);
     }
+});
+
+// --------------------------------------------------------------------------
+// Harvesting from ORCID
+// --------------------------------------------------------------------------
+
+P.implementService("hres:orcid:integration:pull_data_all_users", function(callback, spec) {
+    if(ENABLED_APPLICATION !== O.application.hostname) {
+        console.log("Not pulling data from ORCID as hres_orcid:safety_application_hostname is not "+
+            "the current hostname. Is this a cloned live application?");
+        return;
+    }
+    if(!callback) {
+        throw new Error("No callback provided for hres:orcid:integration:pull_data_all_users.");
+    }
+
+    let authQuery = P.db.orcids.select();
+    if(!authQuery.length) { 
+        console.log("No ORCID authenticated users in the system");
+        return;
+    }
+    _.each(authQuery, (row) => {
+        O.httpClient(P.template("orcid-api-url").render({
+            apiVersion: "3.0",
+            prefix: API_PREFIX,
+            orcid: row.orcid,
+            kind: spec.kind,
+        })).
+            method("GET").
+            header("Accept", "application/vnd.orcid+xml").
+            // TODO: New Keychain credential type?
+            header("Authorization", "Bearer "+row.accessToken).
+            request(callback, {
+                user: row.userId,
+                orcid: row.orcid,
+                prefix: API_PREFIX,
+                keychainEntryName: KEYCHAIN_ENTRY
+            });
+    });
 });

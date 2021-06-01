@@ -1,0 +1,12 @@
+pageTitle("Send alerts for date")
+
+if(sending) {
+    std:ui:notice("Reminders are being sent in the background.")
+}
+
+<p> "Use this page to resend alerts for a specific date." </p>
+
+<form method="POST"> std:form:token()
+  std:form(form)
+  <p><input type="submit" value="Send"></p>
+</form>

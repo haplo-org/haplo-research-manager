@@ -1,0 +1,59 @@
+
+# Groups
+
+group hres:group:ref-managers as REFManagers
+
+# Attributes
+
+attribute dc:attribute:type as Type
+attribute dc:attribute:author as Author
+attribute hres:attribute:ref-research as REFResearch
+attribute hres:attribute:ref-submission-intention as SubmissionIntention
+attribute hres:attribute:double-weighting-justification as DoubleWeightingJustification
+attribute hres:attribute:journal-citation as JournalCitation
+attribute std:attribute:isbn as ISBN
+attribute hres:attribute:patent-id as PatentID
+attribute hres:attribute:abstract as Abstract
+attribute std:attribute:notes as Notes
+attribute hres:attribute:research-institute as ResearchInstitute
+attribute hres:attribute:eligible-for-ref as EligibleForREF
+attribute hres:attribute:ref-unit-of-assessment as REFUnitOfAssessment
+OPTIONAL attribute hres:attribute:place-of-publication as PlaceOfPublication
+OPTIONAL attribute hres:attribute:collection-item as CollectionItem
+OPTIONAL attribute hres:attribute:double-weighting-substitute as DoubleWeightingSubstitute
+
+# Types
+
+type hres:type:research-institute as ResearchInstitute
+type hres:type:research-institute:department as Department
+type hres:type:research-institute:faculty as Faculty
+type hres:type:research-institute:school as School
+type std:type:person as Person
+type hres:type:person:researcher as Researcher
+type hres:type:person:researcher-past as ResearcherPast
+type hres:type:person:staff as Staff
+type hres:type:person:staff-past as StaffPast
+type hres:type:person:external-researcher as ExternalResearcher
+type hres:type:ref-unit-of-assessment as REFUnitOfAssessment
+
+OPTIONAL type hres:type:artefact as Artefact
+type std:type:book as Book
+OPTIONAL type hres:type:book-chapter as BookChapter
+OPTIONAL type hres:type:composition as Composition
+OPTIONAL type hres:type:conference-item as ConferenceItem
+OPTIONAL type hres:type:collection as Collection
+OPTIONAL type hres:type:dataset as Dataset
+OPTIONAL type hres:type:design as Design
+OPTIONAL type hres:type:devices-and-products as DevicesAndProducts
+OPTIONAL type hres:type:digital-or-visual-media as DigitalOrVisualMedia
+OPTIONAL type hres:type:exhibition as Exhibition
+OPTIONAL type hres:type:journal-article as JournalArticle
+OPTIONAL type hres:type:other as Other
+OPTIONAL type hres:type:patent as Patent
+OPTIONAL type hres:type:performance as Performance
+OPTIONAL type hres:type:report as Report
+OPTIONAL type hres:type:software as Software
+OPTIONAL type hres:type:website as Website
+OPTIONAL type hres:type:report:working-paper as WorkingPaper
+
+OPTIONAL type hres:type:impact as Impact

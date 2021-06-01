@@ -1,0 +1,13 @@
+
+<h2>"Roles"</h2>
+<table id="institute-hierarchy">
+  <tr>
+    <th class="header-column"> </th>
+    each(roleTitles) {
+      <th class="header-column-wide"> . </th>
+    }
+  </tr>
+  within(roleUsers) {
+    template:roles_for_research_institute()
+  }
+</table>

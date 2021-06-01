@@ -1,0 +1,17 @@
+{
+  "pluginName": "hres_date_calculation_2020",
+  "pluginAuthor": "Haplo Services",
+  "pluginVersion": 1,
+  "displayName": "Date and deadine calculations",
+  "displayDescription": "Handles project deadlines, using calculations from haplo_date_rule_engine_2. Replaces hres_date_calculation, using the 2020 dates engine.",
+  "installSecret": "68cbc91ab99ee5f9a2b5b27165f0a17fb5e62fad",
+  "apiVersion": 4,
+  "privilegesRequired": ["pDatabase"],
+  "depend": [
+      "haplo_date_rule_engine_2",
+      "hres_project_journal"
+    ],
+  "load": [
+      "js/hres_date_calculation_2020.js"
+    ]
+}

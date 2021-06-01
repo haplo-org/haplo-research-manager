@@ -6,7 +6,7 @@
     "elements": [
         {
             "type": "repeating-section",
-            "path": "costs",
+            "path": "cost",
             "minimumCount": 0,
             "required": true,
             "allowDelete": true,
@@ -26,7 +26,6 @@
                     "type": "section",
                     "template": "oforms:join",
                     "label": "Value and currency",
-                    "path": "value",
                     "elements": [
                         {
                             "type": "number",
@@ -44,9 +43,9 @@
                                 "operation": "defined"
                             },
                             "choices": [
-                                ["gbp", "GBP"],
-                                ["eur", "EUR"],
-                                ["usd", "USD"]
+                                ["GBP", "GBP"],
+                                ["EUR", "EUR"],
+                                ["USD", "USD"]
                             ]
                         }
                     ]

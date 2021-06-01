@@ -76,7 +76,7 @@ var dmpDocstore = P.dmpDocstore = P.defineDocumentStore({
                 formTop: ALLOW_PREVIOUS_DATASETS ? P.template("add-dataset-link").deferredRender({key: instance.key}) : undefined
             };
         }
-        if(form.formId === "ethics-form" && P.hasPrefilledEthics(document)) {
+        if(form.formId === "ethics-form" && document.ethicalIssuesPrefilled) {
             return {
                 top: P.template("std:ui:request").deferredRender({
                     message: "This form has some data prefilled from ethics applications related to your project. If anything is incorrect you can edit it here before submitting."
@@ -161,7 +161,7 @@ P.respond("GET,POST", "/do/hres-data-management-plans/edit-dmp", [
     let instance = dmpDocstore.instance(projectRef),
         currentDoc = instance.currentDocument;
     if(!currentDoc.ethical_issues_exist) { P.addEthicsIssues(instance, projectRef); }
-    if(!currentDoc.costs) { P.addCostingInformation(instance, projectRef); }
+    if(!currentDoc.cost) { P.addCostingInformation(instance, projectRef); }
     if(!currentDoc.title) { currentDoc.title = projectRef.load().title; }
 
     instance.handleEditDocument(E, {

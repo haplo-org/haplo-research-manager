@@ -1,0 +1,5 @@
+if(canCreateProject) { 
+    std:ui:button-link("/do/hres-projects/new-project/" researcher.ref) { NAME("hres_schema_projects:new_project_text" "Create new Project") }
+
+    <p> "&nbsp;" </p>
+}

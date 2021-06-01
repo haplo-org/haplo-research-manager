@@ -1,0 +1,13 @@
+{
+    "specificationVersion": 0,
+    "formId": "comments",
+    "formTitle": "Comments",
+    "elements": [
+        {
+            "type": "paragraph",
+            "path": "comments",
+            "label": "Comments",
+            "rows": 12
+        }
+    ]
+}

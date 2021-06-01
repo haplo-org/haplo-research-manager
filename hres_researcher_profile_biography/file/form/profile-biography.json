@@ -1,5 +1,6 @@
 {
     "specificationVersion": 0,
+    "formTitle": "Biography",
     "formId": "biography",
     "renderDocumentOmitEmpty": true,
     "elements": [

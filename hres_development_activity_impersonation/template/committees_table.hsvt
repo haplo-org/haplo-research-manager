@@ -1,0 +1,27 @@
+
+<h2>"Committees"</h2>
+<table>
+  <tr>
+    <th class="header-column"> </th>
+    each(committeeRoleTitles) {
+      <th class="header-column-wide"> . </th>
+    }
+  </tr>
+  each(committeeUsers) {
+    <tr>
+      <th>
+        std:object:link(ref)
+      </th>
+      each(roles) {
+        <td> 
+          if(.) { 
+            each(.) {
+              <a class="_hres_impersonate" data-uid=id href="#"> name </a> <br>
+            }
+          }
+          else { " - "}
+        </td>
+      }
+    </tr>
+  }
+</table>

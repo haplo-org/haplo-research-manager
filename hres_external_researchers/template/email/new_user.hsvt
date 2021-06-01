@@ -1,4 +1,30 @@
-<p> i("Welcome to {}. Your external account has been created, and to get started you need to set your password.") { applicationName } </p>
+#option:no-tag-attribute-quote-minimisation
+
+if(replaceWelcomeToText) {
+  <p> i("{}") { replaceWelcomeToText } </p>
+} else {
+  unless(removeWelcomeText) {
+    <p> i("Welcome to {}.") { applicationName } </p>
+  }
+}
+
+if(deferredRenderTop) {
+  render(deferredRenderTop)
+}
+
+if(introductoryText) {
+  <p> i("{}") { introductoryText } </p>
+}
+
+<p>i("Your external account has been created, and to get started you need to set your password.")</p>
+
 <p><a href=[welcomeUrl]> i("Click here to set password.") </a></p>
+
 <p> i("This link will work only once. Once you've set your password, you can discard this email.") </p>
+
 <p> i("Please use the alternative external user login link on the home page.") </p>
+
+
+if(deferredRenderBottom) {
+  render(deferredRenderBottom)
+}
